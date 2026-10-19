@@ -1,0 +1,17 @@
+{
+  "name": "sinumerik-backplot-grob",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sinumerik 840D sl backplot for GROB machining centres, and CL / CLS to Sinumerik program",
+  "type": "commonjs",
+  "scripts": {
+    "build": "node build.js && node protect.mjs",
+    "build:plain": "node build.js",
+    "serve": "npx --yes serve public -l 3000"
+  },
+  "engines": { "node": ">=18" },
+  "devDependencies": {
+    "javascript-obfuscator": "^4.1.1",
+    "terser": "^5.31.0"
+  }
+}
