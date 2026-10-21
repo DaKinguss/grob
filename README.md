@@ -5,6 +5,7 @@ Live: https://sosgrob.vercel.app
 A browser tool for GROB machining centres with a SINUMERIK 840D sl control:
 - 3D backplot of Sinumerik programs (playback, measure, DXF, tools, analytics, right-click explanations)
 - ESPRIT ListCL (`.lst`, `.cl`) and APT CLS (`.cls`) → Sinumerik program
+- 3D model (STEP, IGES, STL) shown under the toolpath
 
 Single-file app: `src/cnc-backplot.html`. All edits are made there.
 
