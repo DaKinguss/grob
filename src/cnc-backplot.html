@@ -168,6 +168,14 @@ main{flex:1;display:flex;min-height:0}
 #hsplit::after{content:"";position:absolute;left:50%;top:2px;width:34px;height:2px;margin-left:-17px;background:var(--grip);border-radius:1px}
 #hsplit:hover::after,#hsplit.on::after{background:var(--onamber)}
 #right{flex:1;display:flex;flex-direction:column;min-width:0}
+#simwrap{flex:1 1 auto;display:flex;flex-direction:column;min-height:0}
+#simplace{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:14px 16px;background:var(--panel-2);border-bottom:1px solid var(--edge);color:var(--dim)}
+#simplace[hidden]{display:none}
+#right.simout .panes{flex:1 1 auto;height:auto!important}
+body.simwin{margin:0;height:100vh;display:flex;flex-direction:column;background:var(--canvas);overflow:hidden}
+body.simwin #simwrap{flex:1 1 auto;min-height:0}
+body.simwin #hsplit{display:none}
+#simUndock.on{background:var(--btnon);border-color:var(--btnonedge)}
 .bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px 10px;background:var(--panel-2);border-bottom:1px solid var(--edge)}
 .clbar{align-items:center;gap:8px 10px;padding:9px 12px;border-left:3px solid var(--amber)}
 .clbar .cl-info{flex:1 1 200px}
@@ -258,7 +266,15 @@ body.light .ht,body.light .hax{color:#8a5300}body.light .hvar{color:#a3246b}
 #msgs .err{color:var(--err)}
 #msgs .warn{color:var(--amber)}
 #msgs .info{color:var(--dim)}
-#view{flex:1;position:relative;background:var(--canvas);min-height:0}
+#view{flex:1;position:relative;background:var(--canvas);min-height:0;isolation:isolate}
+#mcv{position:absolute;inset:0;z-index:-1;pointer-events:none}
+#mcv[hidden],#showModelWrap[hidden]{display:none}
+.mdl{padding:10px 12px;font-size:13px}
+.mdl .mdlrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin-bottom:9px}
+.mdl .mdlnum{width:64px}
+.mdl .gap{width:14px}
+.mdl .dim{color:var(--dim)}
+.mdl p{margin:4px 0}
 canvas{display:block;width:100%;height:100%;cursor:grab}
 canvas.drag{cursor:grabbing}
 .dro{position:absolute;right:12px;top:10px;font-family:Consolas,monospace;font-size:12px;
@@ -592,6 +608,7 @@ label.chk input{accent-color:var(--lamp);margin:0}
 .foot{padding:8px 12px}
 #play{width:56px;font-size:15px}
 .transport button{height:30px}
+.transport button.on{background:var(--btnon);border-color:var(--btnonedge)}
 
 /* app tabs at the top: keys, the open one latched */
 nav.tabs.top{padding:8px 12px 9px;gap:8px}
@@ -628,6 +645,38 @@ input[type=range]{accent-color:var(--lamp)}
   .transport button{height:38px}
 }
 @media (prefers-reduced-motion:reduce){button,select,.bar label.chk{transition:none}}
+
+/* section panel in the view */
+.secbox{position:absolute;right:10px;bottom:10px;z-index:3;background:var(--panel);border:1px solid var(--edge);border-radius:7px;
+  padding:7px 9px;font-size:12px;box-shadow:0 4px 14px rgba(0,0,0,.3);display:flex;flex-direction:column;gap:6px;min-width:250px}
+.secbox[hidden]{display:none}
+.secbox .secrow{display:flex;align-items:center;gap:7px}
+.secbox #secPos{flex:1}
+.secbox #secVal{width:78px}
+.secbox .seg button{padding:2px 9px}
+#secBtn.on{background:linear-gradient(180deg,var(--lit2),var(--lit1));color:var(--litfg);border-color:var(--litbd)}
+/* compact keys (mouse and pen; touch screens keep the bigger keys) */
+@media (pointer:fine){
+  button,select,input[type=number]{padding:3px 8px;font-size:12px}
+  select{padding-right:22px;background-position:right 7px center,0 0}
+  select:hover{background-position:right 7px center,0 0}
+  button,select{box-shadow:inset 0 1px 0 var(--caphi),0 1px 0 var(--capledge),0 2px 4px var(--capsh);border-radius:5px}
+  .bar{gap:5px;padding:5px 8px}
+  .bar label.chk{padding:2px 8px 2px 6px;font-size:11.5px}
+  .bar .sep{margin:2px 2px}
+  .seg{padding:2px;gap:2px;border-radius:7px}
+  .seg button{padding:2px 9px;border-radius:5px}
+  .foot{padding:5px 10px;gap:8px}
+  .transport{padding:3px;gap:3px;border-radius:8px}
+  .transport button{height:25px}
+  .foot button{width:32px;font-size:13px}
+  .foot button.wide{padding:3px 9px;font-size:12px}
+  #play{width:44px;font-size:13px}
+  .tabs button{padding:3px 10px}
+  nav.tabs.top > button{padding:4px 14px}
+  #msgtabs button{padding:4px 10px}
+  .updated{padding:2px 8px}
+}
 </style>
 </head>
 <body>
@@ -653,9 +702,7 @@ input[type=range]{accent-color:var(--lamp)}
   <section id="left">
     <div class="bar">
 
-      <span class="lbl">Control</span>
       <select id="dialect" hidden><option value="sinumerik" selected>Sinumerik</option></select>
-      <span class="ctlname" title="Programs are read as SINUMERIK 840D sl; CL and CLS files are written for it">SINUMERIK 840D sl</span>
       <select id="examples" title="Load an example program">
         <option value="" selected>Examples…</option>
         <option value="basic">Contour and drilling</option>
@@ -684,7 +731,6 @@ input[type=range]{accent-color:var(--lamp)}
       <span id="clInfo" class="cl-info"></span>
       <span class="cl-actions">
         <button id="clPlot" class="cl-btn" title="Draw the CL's motion. The editor keeps the CL text.">Plot CL</button>
-        <label id="clKinWrap" class="cl-field" hidden>Rotaries <select id="clKin"><option value="bc">B/C (head tilt)</option><option value="ac">A/C (table)</option></select></label>
         <button id="clConvert" class="cl-btn go" title="Write the program for the control in the Control box and replace the CL text">Convert to Sinumerik</button>
         <button id="clKeep" class="cl-btn ghost" title="Hide this bar and keep the file as CL text">Hide</button>
       </span>
@@ -719,6 +765,12 @@ input[type=range]{accent-color:var(--lamp)}
   <div id="split" title="Drag to resize the program panel"></div>
 
   <section id="right">
+    <div id="simplace" hidden>
+      <span>The simulation is in its own window.</span>
+      <button id="simDock2">&#10697; Dock it back here</button>
+      <button id="simFocus">Show that window</button>
+    </div>
+    <div id="simwrap">
     <div class="bar">
       <span class="seg" id="viewseg" role="group" aria-label="View direction">
         <button data-view="iso" title="Isometric view">Iso</button>
@@ -727,6 +779,10 @@ input[type=range]{accent-color:var(--lamp)}
         <button data-view="right" title="Looking at YZ from the right">Right YZ</button>
       </span>
       <button id="fit" title="Fit the whole toolpath in the view">Fit</button>
+      <button id="simUndock" title="Move the simulation to its own window, e.g. on a second monitor (click again to dock it back)">&#10697; Undock</button>
+      <button id="secBtn" title="Section view: cut the model and the toolpath with a plane to look inside">&#9986; Section</button>
+      <button id="modelBtn" title="Open a 3D model (STEP, IGES or STL) to see the toolpath on the part; you can also drop the file on the view">&#9707; 3D model…</button>
+      <input type="file" id="modelFile" accept=".step,.stp,.iges,.igs,.stl" hidden>
       <button id="measBtn" title="Measure on the toolpath: click points, arcs or segments (Esc clears)">&#128207; Measure</button>
       <select id="measMode" hidden title="What to measure">
         <option value="radius">Radius of an arc (click it)</option>
@@ -737,6 +793,7 @@ input[type=range]{accent-color:var(--lamp)}
         <option value="dist">Distance (2 points)</option>
       </select>
       <span class="sep"></span>
+      <label class="chk" id="showModelWrap" hidden><input type="checkbox" id="showModel" checked> model</label>
       <label class="chk"><input type="checkbox" id="showRapid" checked> rapids</label>
       <label class="chk"><input type="checkbox" id="showGrid" checked> grid</label>
       <label class="chk"><input type="checkbox" id="showtool" checked> tool</label>
@@ -751,19 +808,26 @@ input[type=range]{accent-color:var(--lamp)}
         <option value="tool">Colour: by tool</option>
         <option value="z">Colour: by Z depth</option>
       </select>
-      <select id="kin" title="How the tool axis is derived while TCPM or TRAORI is active">
-        <option value="ab" selected>Tool axis: GROB A/B (table-table)</option>
-        <option value="plane">Tool axis: from active plane</option>
-        <option value="bc">Tool axis: B/C rotaries</option>
-        <option value="ac">Tool axis: A/C rotaries</option>
-      </select>
+      <select id="kin" hidden><option value="ab" selected>GROB A/B</option></select>
+
     </div>
 
     <div id="view">
+      <canvas id="mcv" hidden></canvas>
       <canvas id="cv"></canvas>
       <div class="hud" id="hud"></div>
       <div class="dro" id="dro"></div>
       <div class="meas" id="measBox" hidden></div>
+      <div class="secbox" id="secBox" hidden>
+        <div class="secrow"><b>Section</b>
+          <span class="seg" id="secAxis"><button data-a="0">X</button><button data-a="1">Y</button><button data-a="2" class="on">Z</button></span>
+          <button id="secFlip" title="Keep the other side of the plane">&#8645; Flip</button>
+          <button id="secOff" title="Close the section">&#10005;</button></div>
+        <div class="secrow"><input type="range" id="secPos" min="0" max="1" step="0.001" value="0.5">
+          <input type="number" id="secVal" step="0.1" title="Plane position (mm)"></div>
+        <div class="secrow"><label class="chk"><input type="checkbox" id="secPath" checked> cut toolpath</label>
+          <label class="chk"><input type="checkbox" id="secShow" checked> show plane</label></div>
+      </div>
     </div>
 
     <div id="hsplit" title="Drag to resize the bottom panel (double-click to reset)"></div>
@@ -774,6 +838,7 @@ input[type=range]{accent-color:var(--lamp)}
         <button id="play" title="Run (space)">▶</button>
         <button id="stepf" title="One move forward">▶|</button>
         <button id="playtool" class="wide" title="Run to the next tool change">▶ T</button>
+        <button id="clearpath" class="wide" title="Clear the toolpath drawn up to the current line: only the moves after it are drawn">Clear path</button>
       </span>
       <input type="range" id="scrub" min="0" max="0" value="0">
       <span class="speedbox">speed
@@ -783,12 +848,14 @@ input[type=range]{accent-color:var(--lamp)}
       <span id="curline"></span>
     </div>
     <div class="stats" id="stats"></div>
+    </div><!-- /simwrap -->
     <div class="tabs">
       <button data-tab="tools" class="on">Tools</button>
       <button data-tab="axes">Machine</button>
       <button data-tab="planes">Planes &amp; colours</button>
       <button data-tab="vars">Variables</button>
       <button data-tab="analytics">Analytics</button>
+      <button data-tab="model">3D model</button>
       <span class="frameline">active frame <b id="frameinfo">—</b></span>
     </div>
     <div class="panes">
@@ -797,6 +864,7 @@ input[type=range]{accent-color:var(--lamp)}
       <div id="tab-planes" class="pane" hidden></div>
       <div id="tab-vars" class="pane" hidden></div>
       <div id="tab-analytics" class="pane" hidden></div>
+      <div id="tab-model" class="pane" hidden></div>
     </div>
   </section>
 </main></section>
@@ -2622,7 +2690,6 @@ function run(text,dialect,opts){
         setFrame('G52 local X'+(w.X||0)+' Y'+(w.Y||0)+' Z'+(w.Z||0));
       }
       else if(gi===43.4||gi===43.5||(gi===234&&dialect==='haas')){ st.tcpm=true;
-        if(!opts.kin||opts.kin==='plane') warn(b,"TCPM is active — pick the rotary configuration in the tool-axis selector to see the tool orientation","info");
         setFrame('G'+gi+' TCPM on'); }
       else if(gi===49){ if(st.tcpm){ st.tcpm=false; setFrame('G49 TCPM off'); } }
       else if(gi===12.1||gi===7.1||gi===13.1){ if(!lathey&&gi===13.1){ st.polar=false; } }
@@ -2791,13 +2858,10 @@ function run(text,dialect,opts){
     }
     if(rotChanged){
       st.pendingRot={a:st.a-rot0.a,b:st.b-rot0.b,c:st.c-rot0.c};
-      if(st.tcpm && opts.kin && opts.kin!=='plane'){
-        const A=st.a||0,B=st.b||0,C=st.c||0;
-        st.axis = (opts.kin==='ab')
-          ? {x:Math.cos(A*D2R)*Math.sin(B*D2R), y:-Math.sin(A*D2R), z:Math.cos(A*D2R)*Math.cos(B*D2R)}   /* GROB: A about -X, B about -Y */
-          : (opts.kin==='bc')
-          ? {x:Math.sin(B*D2R)*Math.cos(C*D2R), y:Math.sin(B*D2R)*Math.sin(C*D2R), z:Math.cos(B*D2R)}
-          : {x:Math.sin(A*D2R)*Math.sin(C*D2R), y:-Math.sin(A*D2R)*Math.cos(C*D2R), z:Math.cos(A*D2R)};
+      if(st.tcpm){
+        /* GROB G-series, table-table: A about -X, B about -Y (B on A), tool along Z */
+        const A=st.a||0,B=st.b||0;
+        st.axis = {x:Math.cos(A*D2R)*Math.sin(B*D2R), y:-Math.sin(A*D2R), z:Math.cos(A*D2R)*Math.cos(B*D2R)};
       }
     }
     /* X/Y/Z in a transformation block are its parameters, not a move */
@@ -3852,6 +3916,15 @@ const cv=document.getElementById('cv'), ctx2=cv.getContext('2d');
 let SEGS=[], BBOX=null, RESULT=null, TIMES=[0], TRACE=[], TIDX=0, TOOLSTOPS=[], playTo=null;
 const view={rx:-60,rz:-35,roll:0,scale:1,px:0,py:0,cx:0,cy:0,cz:0};
 let showTo=-1;
+/* "Clear path": the moves before PATH_FROM are not drawn, so only what runs after the current line shows */
+let PATH_FROM=0;
+function setPathFrom(k){
+  PATH_FROM=Math.max(0,k|0);
+  const b=document.getElementById('clearpath');
+  if(b){ b.classList.toggle('on',PATH_FROM>0);
+    b.textContent=PATH_FROM>0?'Show all':'Clear path';
+    b.title=PATH_FROM>0?'Show the whole toolpath again':'Clear the toolpath drawn up to the current line: only the moves after it are drawn'; }
+}
 /* while playing, the move in progress: segment k drawn to fraction f, so the tool glides along
    long moves instead of waiting and then jumping to the end of the block                  */
 let PLAYPART=null, PARTNEXT=null;
@@ -3885,7 +3958,7 @@ function proj(x,y,z){
 let DPR=1;
 function isNarrow(){ return window.matchMedia('(max-width:820px)').matches; }
 function resize(){
-  DPR=window.devicePixelRatio||1;
+  DPR=((cv.ownerDocument&&cv.ownerDocument.defaultView)||window).devicePixelRatio||1;
   const r=cv.parentElement.getBoundingClientRect();
   cv.width=r.width*DPR; cv.height=r.height*DPR;
   ctx2.setTransform(DPR,0,0,DPR,0,0);
@@ -3903,6 +3976,13 @@ function bbox(){
   return b;
 }
 function fit(){
+  const mb=modelBBox();
+  if(mb){ const keep=BBOX; BBOX=keep?{x0:Math.min(keep.x0,mb.x0),y0:Math.min(keep.y0,mb.y0),z0:Math.min(keep.z0,mb.z0),
+      x1:Math.max(keep.x1,mb.x1),y1:Math.max(keep.y1,mb.y1),z1:Math.max(keep.z1,mb.z1)}:mb;
+    try{ fitBox(); } finally{ BBOX=keep; } draw(); return; }
+  fitBox();
+}
+function fitBox(){
   if(!BBOX) return;
   view.cx=(BBOX.x0+BBOX.x1)/2; view.cy=(BBOX.y0+BBOX.y1)/2; view.cz=(BBOX.z0+BBOX.z1)/2;
   const c=[];
@@ -4224,7 +4304,7 @@ function drawTool(idx){
     const upto=showTo<0?SEGS.length:showTo+1;
     const stride=Math.max(1,Math.floor(upto/14));
     ctx2.globalAlpha=0.30;
-    for(let i=0;i<upto;i+=stride){
+    for(let i=PATH_FROM;i<upto;i+=stride){
       const s=SEGS[i]; if(s.t==='rapid'||noTool(s.tool)) continue;
       const t=normTool(TOOLS.get(s.tool)||defaultTool(s.tool,s.proc));
       const pos={x:s.x2,y:s.y2,z:s.z2};
@@ -4276,7 +4356,7 @@ function drawToolAxis(upto){
   const stride=Math.max(1,Math.round(upto/60));
   ctx2.strokeStyle='rgba(242,177,52,.65)'; ctx2.lineWidth=1; ctx2.setLineDash([]);
   ctx2.beginPath();
-  for(let i=0;i<upto;i+=stride){
+  for(let i=PATH_FROM;i<upto;i+=stride){
     const s=SEGS[i], v=s.av; if(!v) continue;
     const a=proj(s.x2,s.y2,s.z2), b=proj(s.x2+v.x*L,s.y2+v.y*L,s.z2+v.z*L);
     ctx2.moveTo(a[0],a[1]); ctx2.lineTo(b[0],b[1]);
@@ -4424,7 +4504,7 @@ function drawPos(){
   FASTIDLE=setTimeout(()=>{ if(!PCACHE) return; DRAWFAST=2; try{ draw(); } finally{ DRAWFAST=0; } },160);
 }
 function drawPaths(upto,dim){
-  if(DRAWFAST){ drawPathsFast(upto,dim); return; }
+  if(DRAWFAST&&!PATH_FROM&&!secPathOn()){ drawPathsFast(upto,dim); return; }
   PCACHE=null; clearTimeout(FASTIDLE);
   /* the points for the next arrow key are worked out while nothing else happens */
   if(SEGS.length>=4000){
@@ -4433,7 +4513,7 @@ function drawPaths(upto,dim){
   }
   const showR=document.getElementById('showRapid').checked;
   const groups=new Map();
-  for(let i=0;i<upto;i++){
+  for(let i=PATH_FROM;i<upto;i++){
     const s=SEGS[i];
     if(s.t==='rapid'&&!showR) continue;
     const c=colorOf(s);
@@ -4448,8 +4528,15 @@ function drawPaths(upto,dim){
     ctx2.setLineDash(rap?[4,4]:[]);
     ctx2.beginPath();
     let lx=NaN,ly=NaN;
+    const cut=secPathOn();
     list.forEach(s=>{
-      const a=proj(s.x1,s.y1,s.z1), b=proj(s.x2,s.y2,s.z2);
+      let x1=s.x1,y1=s.y1,z1=s.z1,x2=s.x2,y2=s.y2,z2=s.z2;
+      if(cut){ const f1=secF(x1,y1,z1), f2=secF(x2,y2,z2);
+        if(f1>0&&f2>0) return;
+        if(f1>0||f2>0){ const t=f1/(f1-f2);
+          const xi=x1+(x2-x1)*t, yi=y1+(y2-y1)*t, zi=z1+(z2-z1)*t;
+          if(f1>0){ x1=xi; y1=yi; z1=zi; } else { x2=xi; y2=yi; z2=zi; } } }
+      const a=proj(x1,y1,z1), b=proj(x2,y2,z2);
       if(a[0]!==lx||a[1]!==ly) ctx2.moveTo(a[0],a[1]);
       ctx2.lineTo(b[0],b[1]); lx=b[0]; ly=b[1];
     });
@@ -4457,14 +4544,407 @@ function drawPaths(upto,dim){
   });
   ctx2.globalAlpha=1; ctx2.setLineDash([]);
 }
+/* ===================== 3D model (STEP / IGES / STL) under the toolpath =====================
+   The model is drawn with WebGL on a canvas under the toolpath canvas, with the same
+   orthographic view (rot / scale / pan), so the path sits on the part.
+   Placement: a CL from ESPRIT is in the part frame and is plotted in G55 through the CL's machine
+   setup matrix; the model (exported in the same part frame) is placed with that same matrix
+   ("CL part frame"). Otherwise the model is taken as it is in the file (= G55). Rotation and offset
+   can be added on top. STEP / IGES are read with occt-import-js (OpenCascade, WebAssembly), loaded
+   from jsDelivr the first time; STL (binary or ASCII) is read here.                             */
+const OCCT_URL='https://cdn.jsdelivr.net/npm/occt-import-js@0.0.23/dist/';
+const MODEL={pos:null,nrm:null,tris:0,name:'',bb:null,place:'auto',off:[0,0,0],rot:[0,0,0],alpha:0.85,
+  color:'#9fa9b5',show:true,vbo:null,nbo:null,ver:0,drawn:''};
+let MODEL_CLFRAME=null;      /* {R:[[3]x3],t:[3]}: part -> G55, from the ESPRIT CL being plotted (q = p.R + t) */
+let OCCT_PROMISE=null;
+function loadOcct(){
+  if(OCCT_PROMISE) return OCCT_PROMISE;
+  OCCT_PROMISE=new Promise((res,rej)=>{
+    const sc=document.createElement('script'); sc.src=OCCT_URL+'occt-import-js.js'; sc.async=true;
+    sc.onload=()=>{ try{ occtimportjs({locateFile:f=>OCCT_URL+f}).then(res,rej); }catch(e){ rej(e); } };
+    sc.onerror=()=>rej(new Error('the STEP/IGES reader could not be loaded (no internet connection?)'));
+    document.head.appendChild(sc);
+  });
+  OCCT_PROMISE.catch(()=>{ OCCT_PROMISE=null; });
+  return OCCT_PROMISE;
+}
+/* triangles -> flat arrays: 9 floats per triangle for positions and the same for normals */
+function meshFromTris(pos){
+  const n=pos.length/9, nrm=new Float32Array(pos.length);
+  const bb={x0:Infinity,y0:Infinity,z0:Infinity,x1:-Infinity,y1:-Infinity,z1:-Infinity};
+  for(let t=0;t<n;t++){
+    const o=t*9;
+    const ax=pos[o],ay=pos[o+1],az=pos[o+2],bx=pos[o+3],by=pos[o+4],bz=pos[o+5],cx=pos[o+6],cy=pos[o+7],cz=pos[o+8];
+    const ux=bx-ax,uy=by-ay,uz=bz-az,vx=cx-ax,vy=cy-ay,vz=cz-az;
+    let nx=uy*vz-uz*vy, ny=uz*vx-ux*vz, nz=ux*vy-uy*vx; const l=Math.hypot(nx,ny,nz)||1; nx/=l; ny/=l; nz/=l;
+    for(let k=0;k<3;k++){ nrm[o+k*3]=nx; nrm[o+k*3+1]=ny; nrm[o+k*3+2]=nz;
+      const x=pos[o+k*3],y=pos[o+k*3+1],z=pos[o+k*3+2];
+      if(x<bb.x0)bb.x0=x; if(x>bb.x1)bb.x1=x; if(y<bb.y0)bb.y0=y; if(y>bb.y1)bb.y1=y; if(z<bb.z0)bb.z0=z; if(z>bb.z1)bb.z1=z; }
+  }
+  return {pos,nrm,tris:n,bb};
+}
+function parseSTL(buf){
+  const dv=new DataView(buf);
+  if(buf.byteLength>=84){
+    const n=dv.getUint32(80,true);
+    if(n>0&&84+n*50===buf.byteLength){
+      const pos=new Float32Array(n*9);
+      for(let t=0;t<n;t++){ const o=84+t*50+12; for(let k=0;k<9;k++) pos[t*9+k]=dv.getFloat32(o+k*4,true); }
+      return meshFromTris(pos);
+    }
+  }
+  const txt=new TextDecoder().decode(new Uint8Array(buf));
+  const re=/vertex\s+([-+0-9.eE]+)\s+([-+0-9.eE]+)\s+([-+0-9.eE]+)/g; const v=[]; let m;
+  while((m=re.exec(txt))) v.push(+m[1],+m[2],+m[3]);
+  if(v.length<9) throw new Error('no triangles found in the STL file');
+  return meshFromTris(new Float32Array(v.slice(0,Math.floor(v.length/9)*9)));
+}
+function meshFromOcct(r){
+  if(!r||!r.success) throw new Error('the file could not be read as a model');
+  let total=0;
+  for(const m of r.meshes) total+=(m.index&&m.index.array)?m.index.array.length:(m.attributes.position.array.length/3);
+  const pos=new Float32Array(total*3); let o=0;
+  for(const m of r.meshes){
+    const P=m.attributes.position.array, I=m.index&&m.index.array;
+    if(I){ for(let i=0;i<I.length;i++){ const k=I[i]*3; pos[o++]=P[k]; pos[o++]=P[k+1]; pos[o++]=P[k+2]; } }
+    else for(let i=0;i<P.length;i++) pos[o++]=P[i];
+  }
+  if(!o) throw new Error('the model has no faces (wireframe or empty file?)');
+  return meshFromTris(pos);
+}
+async function loadModelFile(file){
+  const ext=(file.name.split('.').pop()||'').toLowerCase();
+  if(!/^(step|stp|iges|igs|stl)$/.test(ext)){ evt(file.name+': not a STEP, IGES or STL file','err'); setMsgTab('events'); return; }
+  evt('Reading '+file.name+'…'+((ext!=='stl'&&!OCCT_PROMISE)?' (the STEP/IGES reader, about 8 MB, is loaded the first time)':''),'info');
+  setMsgTab('events');
+  try{
+    const buf=await file.arrayBuffer();
+    let mesh;
+    if(ext==='stl') mesh=parseSTL(buf);
+    else{
+      const occt=await loadOcct();
+      await new Promise(r=>setTimeout(r,30));          /* let the message show before the reader blocks */
+      const params={linearUnit:'millimeter',linearDeflectionType:'bounding_box_ratio',linearDeflection:0.0015,angularDeflection:0.2};
+      const r=(ext==='stl')?null:(/^(iges|igs)$/.test(ext)?occt.ReadIgesFile(new Uint8Array(buf),params):occt.ReadStepFile(new Uint8Array(buf),params));
+      mesh=meshFromOcct(r);
+    }
+    Object.assign(MODEL,mesh,{name:file.name,show:true,ver:MODEL.ver+1,drawn:''});
+    document.getElementById('showModel').checked=true;
+    document.getElementById('showModelWrap').hidden=false;
+    const b=mesh.bb, f=v=>(+v.toFixed(3)).toString();
+    evt(file.name+': '+mesh.tris.toLocaleString('en-US')+' triangles, size '+f(b.x1-b.x0)+' × '+f(b.y1-b.y0)+' × '+f(b.z1-b.z0)+' mm. Placement: '+modelPlaceLabel()+'.','info');
+    modelPanel(); showTabName('model');
+    if(!SEGS.length) fit(); else draw();
+  }catch(err){ evt(file.name+': '+(err&&err.message||err),'err'); setMsgTab('events'); }
+}
+function modelPlaceLabel(){
+  const cl=(MODEL.place==='cl'||MODEL.place==='auto')&&MODEL_CLFRAME;
+  return cl?'CL part frame (the machine setup of the CL, as the program)':'as in the file (model zero = G55 zero)';
+}
+/* model -> plot: q = U.(B.p + t) + off   (B from the CL part frame or identity, U the user rotation X, Y, Z) */
+function modelMatrix(){
+  let B=[[1,0,0],[0,1,0],[0,0,1]], t=[0,0,0];
+  if((MODEL.place==='cl'||MODEL.place==='auto')&&MODEL_CLFRAME){
+    const R=MODEL_CLFRAME.R; B=[[R[0][0],R[1][0],R[2][0]],[R[0][1],R[1][1],R[2][1]],[R[0][2],R[1][2],R[2][2]]];
+    t=MODEL_CLFRAME.t.slice();
+  }
+  const rx=MODEL.rot[0]*D2R, ry=MODEL.rot[1]*D2R, rz=MODEL.rot[2]*D2R;
+  const X=[[1,0,0],[0,Math.cos(rx),-Math.sin(rx)],[0,Math.sin(rx),Math.cos(rx)]];
+  const Y=[[Math.cos(ry),0,Math.sin(ry)],[0,1,0],[-Math.sin(ry),0,Math.cos(ry)]];
+  const Z=[[Math.cos(rz),-Math.sin(rz),0],[Math.sin(rz),Math.cos(rz),0],[0,0,1]];
+  const mm=(A,C)=>A.map(r=>[0,1,2].map(j=>r[0]*C[0][j]+r[1]*C[1][j]+r[2]*C[2][j]));
+  const U=mm(Z,mm(Y,X));
+  const M=mm(U,B);
+  const T=[0,1,2].map(i=>U[i][0]*t[0]+U[i][1]*t[1]+U[i][2]*t[2]+MODEL.off[i]);
+  return {M,T};
+}
+/* the model's box in the plot frame (for Fit) */
+function modelBBox(){
+  if(!MODEL.pos||!MODEL.show) return null;
+  const {M,T}=modelMatrix(), b=MODEL.bb;
+  const r={x0:Infinity,y0:Infinity,z0:Infinity,x1:-Infinity,y1:-Infinity,z1:-Infinity};
+  for(const x of [b.x0,b.x1]) for(const y of [b.y0,b.y1]) for(const z of [b.z0,b.z1]){
+    const q=[0,1,2].map(i=>M[i][0]*x+M[i][1]*y+M[i][2]*z+T[i]);
+    r.x0=Math.min(r.x0,q[0]); r.x1=Math.max(r.x1,q[0]); r.y0=Math.min(r.y0,q[1]); r.y1=Math.max(r.y1,q[1]); r.z0=Math.min(r.z0,q[2]); r.z1=Math.max(r.z1,q[2]);
+  }
+  return r;
+}
+/* ---- WebGL ---- */
+let MGL=null;
+function modelGL(){
+  if(MGL) return MGL;
+  const c=document.getElementById('mcv');
+  const gl=c.getContext('webgl',{alpha:true,antialias:true,premultipliedAlpha:false});
+  if(!gl){ MGL={none:true}; return MGL; }
+  const vs=`attribute vec3 p; attribute vec3 n;
+    uniform mat3 M; uniform vec3 T, C, Ru, Rv, Rw; uniform vec2 S, P; uniform float K;
+    uniform vec4 Q;
+    varying float L, D, F;
+    void main(){ vec3 g=M*p+T; vec3 q=g-C; float u=dot(Ru,q), v=dot(Rv,q), w=dot(Rw,q);
+      D=dot(Q.xyz,g)-Q.w;
+      vec3 m=normalize(M*n); vec3 nv=vec3(dot(Ru,m),dot(Rv,m),dot(Rw,m)); F=nv.z;
+      L=0.30+0.50*abs(dot(nv,normalize(vec3(0.35,0.45,0.82))))+0.20*abs(nv.z);
+      gl_Position=vec4(u*S.x+P.x, v*S.y+P.y, -w*K, 1.0); }`;
+  const fs=`precision highp float; uniform vec4 col; uniform float on; varying float L, D, F;
+    void main(){ if(on>0.5&&D>0.0) discard;
+      if(on>0.5&&F<0.0) gl_FragColor=vec4(0.93,0.55,0.18,1.0);
+      else gl_FragColor=vec4(col.rgb*L, col.a); }`;
+  const sh=(t,s)=>{ const o=gl.createShader(t); gl.shaderSource(o,s); gl.compileShader(o);
+    if(!gl.getShaderParameter(o,gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(o)); return o; };
+  const pr=gl.createProgram(); gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs)); gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs)); gl.linkProgram(pr);
+  const U={}; ['M','T','C','Ru','Rv','Rw','S','P','K','col','Q','on'].forEach(k=>U[k]=gl.getUniformLocation(pr,k));
+  MGL={gl,pr,U,ap:gl.getAttribLocation(pr,'p'),an:gl.getAttribLocation(pr,'n'),c,ver:-1};
+  return MGL;
+}
+function modelDraw(){
+  const c=document.getElementById('mcv'); if(!c) return;
+  const on=!!(MODEL.pos&&MODEL.show&&!view.lathe);
+  if(!on){
+    if(MODEL.drawn&&MGL&&MGL.gl){ const gl=MGL.gl; gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT); }
+    MODEL.drawn=''; c.hidden=true; return;
+  }
+  c.hidden=false;
+  if(c.width!==cv.width||c.height!==cv.height){ c.width=cv.width; c.height=cv.height; MODEL.drawn=''; }
+  const {M,T}=modelMatrix();
+  const key=[c.width,c.height,view.rx,view.rz,view.roll,view.scale,view.px,view.py,view.cx,view.cy,view.cz,MODEL.ver,MODEL.alpha,MODEL.color,M.join(),T.join(),SECT.on,SECT.axis,SECT.pos,SECT.flip].join('|');
+  if(key===MODEL.drawn) return;
+  const G=modelGL(); if(G.none){ if(!MODEL.warned){ MODEL.warned=true; evt('WebGL is not available in this browser: the model cannot be drawn','err'); } return; }
+  const gl=G.gl;
+  if(G.ver!==MODEL.ver){
+    G.vbo=G.vbo||gl.createBuffer(); G.nbo=G.nbo||gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER,G.vbo); gl.bufferData(gl.ARRAY_BUFFER,MODEL.pos,gl.STATIC_DRAW);
+    gl.bindBuffer(gl.ARRAY_BUFFER,G.nbo); gl.bufferData(gl.ARRAY_BUFFER,MODEL.nrm,gl.STATIC_DRAW);
+    G.ver=MODEL.ver;
+  }
+  gl.viewport(0,0,c.width,c.height);
+  gl.clearColor(0,0,0,0); gl.clearDepth(1); gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+  gl.enable(gl.DEPTH_TEST); gl.depthFunc(gl.LEQUAL);
+  gl.enable(gl.BLEND); gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+  gl.useProgram(G.pr);
+  const rz=view.rz*D2R, rx=view.rx*D2R, cr=Math.cos(view.roll*D2R), sr=Math.sin(view.roll*D2R);
+  const a=[Math.cos(rz),-Math.sin(rz),0], yr=[Math.sin(rz),Math.cos(rz),0];
+  const vv=[yr[0]*Math.cos(rx),yr[1]*Math.cos(rx),-Math.sin(rx)], w=[yr[0]*Math.sin(rx),yr[1]*Math.sin(rx),Math.cos(rx)];
+  const Ru=[0,1,2].map(i=>a[i]*cr-vv[i]*sr), Rv=[0,1,2].map(i=>a[i]*sr+vv[i]*cr);
+  const W2=c.width/DPR/2, H2=c.height/DPR/2;
+  /* depth range: the model's bounding sphere seen from the view centre */
+  const b=MODEL.bb, mc=[(b.x0+b.x1)/2,(b.y0+b.y1)/2,(b.z0+b.z1)/2], rad=Math.hypot(b.x1-b.x0,b.y1-b.y0,b.z1-b.z0)/2;
+  const q=[0,1,2].map(i=>M[i][0]*mc[0]+M[i][1]*mc[1]+M[i][2]*mc[2]+T[i]);
+  const K=1/(Math.hypot(q[0]-view.cx,q[1]-view.cy,q[2]-view.cz)+rad+1);
+  gl.uniformMatrix3fv(G.U.M,false,new Float32Array([M[0][0],M[1][0],M[2][0],M[0][1],M[1][1],M[2][1],M[0][2],M[1][2],M[2][2]]));
+  gl.uniform3fv(G.U.T,T); gl.uniform3fv(G.U.C,[view.cx,view.cy,view.cz]);
+  gl.uniform3fv(G.U.Ru,Ru); gl.uniform3fv(G.U.Rv,Rv); gl.uniform3fv(G.U.Rw,w);
+  gl.uniform2fv(G.U.S,[view.scale/W2,view.scale/H2]); gl.uniform2fv(G.U.P,[view.px/W2,-view.py/H2]); gl.uniform1f(G.U.K,K);
+  const hx=MODEL.color.replace('#',''), col=[0,2,4].map(i=>parseInt(hx.substr(i,2),16)/255);
+  /* while cutting the model is drawn opaque, so the inside (section colour) is not tinted by the faces in front */
+  gl.uniform4fv(G.U.col,[col[0],col[1],col[2],SECT.on?1:MODEL.alpha]);
+  { const n=[0,0,0]; n[SECT.axis]=SECT.flip?-1:1;
+    gl.uniform4fv(G.U.Q,[n[0],n[1],n[2],SECT.flip?-SECT.pos:SECT.pos]); gl.uniform1f(G.U.on,SECT.on?1:0); }
+  gl.bindBuffer(gl.ARRAY_BUFFER,G.vbo); gl.enableVertexAttribArray(G.ap); gl.vertexAttribPointer(G.ap,3,gl.FLOAT,false,0,0);
+  gl.bindBuffer(gl.ARRAY_BUFFER,G.nbo); gl.enableVertexAttribArray(G.an); gl.vertexAttribPointer(G.an,3,gl.FLOAT,false,0,0);
+  gl.drawArrays(gl.TRIANGLES,0,MODEL.tris*3);
+  MODEL.drawn=key;
+}
+/* ---- the Model tab ---- */
+function showTabName(name){ const b=document.querySelector('.tabs button[data-tab="'+name+'"]'); if(b) b.click(); }
+function modelPanel(){
+  const el=document.getElementById('tab-model'); if(!el) return;
+  if(!MODEL.pos){
+    el.innerHTML='<div class="mdl"><p>No model loaded. <button id="mdlOpen2">Open 3D model…</button> STEP, IGES or STL, in mm. '+
+      'The toolpath is drawn on the model. For a CL from ESPRIT, export the model in the same part coordinates as in ESPRIT.</p></div>';
+    document.getElementById('mdlOpen2').onclick=()=>document.getElementById('modelFile').click();
+    return;
+  }
+  const b=MODEL.bb, f=v=>(+(+v).toFixed(3)).toString();
+  el.innerHTML='<div class="mdl">'+
+    '<div class="mdlrow"><b></b> <span class="dim">'+MODEL.tris.toLocaleString('en-US')+' triangles · '+f(b.x1-b.x0)+' × '+f(b.y1-b.y0)+' × '+f(b.z1-b.z0)+' mm</span></div>'+
+    '<div class="mdlrow"><label>Placement <select id="mdlPlace">'+
+      '<option value="auto">Automatic: CL part frame when the program comes from a CL</option>'+
+      '<option value="file">As in the file (model zero = G55 zero)</option></select></label>'+
+      ' <span class="dim" id="mdlPlaceNow"></span></div>'+
+    '<div class="mdlrow">Rotate'+['X','Y','Z'].map((a,i)=>' <label>'+a+' <input type="number" step="90" class="mdlnum" data-r="'+i+'" value="'+MODEL.rot[i]+'"></label>').join('')+' °'+
+      '<span class="gap"></span>Move'+['X','Y','Z'].map((a,i)=>' <label>'+a+' <input type="number" step="1" class="mdlnum" data-o="'+i+'" value="'+MODEL.off[i]+'"></label>').join('')+' mm</div>'+
+    '<div class="mdlrow"><label>Opacity <input type="range" id="mdlAlpha" min="0.15" max="1" step="0.05" value="'+MODEL.alpha+'"></label>'+
+      ' <label>Colour <input type="color" id="mdlColor" value="'+MODEL.color+'"></label>'+
+      ' <button id="mdlFit">Fit to model</button> <button id="mdlOpen2">Open another…</button> <button id="mdlRemove">Remove</button></div>'+
+    '<p class="dim">The toolpath is drawn over the model; lower the opacity to see the moves behind it.</p></div>';
+  el.querySelector('.mdlrow b').textContent=MODEL.name;
+  const pl=document.getElementById('mdlPlace'); pl.value=MODEL.place==='file'?'file':'auto';
+  const now=()=>{ document.getElementById('mdlPlaceNow').textContent='now: '+modelPlaceLabel(); };
+  now();
+  pl.onchange=()=>{ MODEL.place=pl.value; now(); draw(); };
+  el.querySelectorAll('.mdlnum').forEach(inp=>inp.oninput=()=>{
+    const v=parseFloat(inp.value)||0;
+    if(inp.dataset.r!==undefined) MODEL.rot[+inp.dataset.r]=v; else MODEL.off[+inp.dataset.o]=v;
+    draw(); });
+  document.getElementById('mdlAlpha').oninput=e=>{ MODEL.alpha=+e.target.value; draw(); };
+  document.getElementById('mdlColor').oninput=e=>{ MODEL.color=e.target.value; draw(); };
+  document.getElementById('mdlFit').onclick=()=>{ const r=modelBBox(); if(r){ const keep=BBOX; BBOX=r; fit(); BBOX=keep; draw(); } };
+  document.getElementById('mdlOpen2').onclick=()=>document.getElementById('modelFile').click();
+  document.getElementById('mdlRemove').onclick=()=>{ Object.assign(MODEL,{pos:null,nrm:null,tris:0,name:'',bb:null,ver:MODEL.ver+1});
+    if(MGL&&MGL.gl){ const gl=MGL.gl; gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+      if(MGL.vbo){ gl.deleteBuffer(MGL.vbo); MGL.vbo=null; } if(MGL.nbo){ gl.deleteBuffer(MGL.nbo); MGL.nbo=null; } MGL.ver=-1; }
+    MODEL.drawn=''; evt('3D model removed.','info');
+    document.getElementById('showModelWrap').hidden=true; modelPanel(); draw(); };
+}
+
+/* ===================== undock: the simulation in its own window =====================
+   "Undock" opens a pop-up window of this page's origin and moves the simulation block (#simwrap:
+   view toolbar, 3D view, transport, stats) into it; the program, messages and tabs stay here. The
+   elements keep their listeners and state, so everything works the same; closing that window, or
+   "Dock back", brings the block home. Lookups by id / selector also search the other window.      */
+let SIMWIN=null;
+const SIMWRAP=document.getElementById('simwrap');
+function simRAF(f){ const w=(SIMWIN&&!SIMWIN.closed)?SIMWIN:window; return w.requestAnimationFrame(f); }
+{ const gid=document.getElementById.bind(document), qs=document.querySelector.bind(document), qsa=document.querySelectorAll.bind(document);
+  const other=()=>(SIMWIN&&!SIMWIN.closed&&SIMWIN.document)||null;
+  document.getElementById=id=>{ const e=gid(id); if(e) return e; const d=other(); return d?d.getElementById(id):null; };
+  document.querySelector=sel=>{ const e=qs(sel); if(e) return e; const d=other(); return d?d.querySelector(sel):null; };
+  document.querySelectorAll=sel=>{ const a=qsa(sel), d=other(); if(!d) return a; const b=d.querySelectorAll(sel); return b.length?[...a,...b]:a; };
+}
+function simMirrorTheme(){
+  if(!SIMWIN||SIMWIN.closed) return;
+  const de=SIMWIN.document.documentElement;
+  [...de.attributes].forEach(a=>{ if(!document.documentElement.hasAttribute(a.name)) de.removeAttribute(a.name); });
+  [...document.documentElement.attributes].forEach(a=>de.setAttribute(a.name,a.value));
+  SIMWIN.document.body.className='simwin '+document.body.className;
+}
+new MutationObserver(simMirrorTheme).observe(document.documentElement,{attributes:true});
+new MutationObserver(simMirrorTheme).observe(document.body,{attributes:true,attributeFilter:['class']});
+function simUndock(){
+  if(SIMWIN&&!SIMWIN.closed){ SIMWIN.focus(); return; }
+  const r=SIMWRAP.getBoundingClientRect();
+  const w=window.open('','gm_sim','popup=yes,width='+Math.round(Math.max(700,r.width))+',height='+Math.round(Math.max(500,r.height))+
+    ',left='+Math.round((window.screenX||0)+40)+',top='+Math.round((window.screenY||0)+40));
+  if(!w){ evt('The browser blocked the new window: allow pop-ups for this site, then click Undock again.','err'); setMsgTab('events'); return; }
+  const d=w.document;
+  d.open(); d.write('<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Simulation · '+document.title+'</title></head><body></body></html>'); d.close();
+  document.querySelectorAll('head style, head link[rel~="icon"], head link[rel="stylesheet"]').forEach(n=>d.head.appendChild(d.importNode(n,true)));
+  SIMWIN=w; simMirrorTheme();
+  stopDragging();
+  d.body.appendChild(d.adoptNode(SIMWRAP));
+  document.getElementById('simplace').hidden=false;
+  document.getElementById('right').classList.add('simout');
+  const b=document.getElementById('simUndock'); b.classList.add('on'); b.innerHTML='&#10697; Dock back'; b.title='Bring the simulation back into the main window';
+  /* the orbit drag, Esc and the shortcuts listen on the main window: hand them the events from this one */
+  const fwd=type=>w.addEventListener(type,e=>{
+    if(type==='keydown'){
+      const t=e.target, typing=t&&/^(INPUT|SELECT|TEXTAREA)$/.test(t.tagName);
+      if(e.key===' '&&!typing&&!(t&&t.tagName==='BUTTON')){ e.preventDefault(); document.getElementById('play').click(); return; }
+      const k=new KeyboardEvent('keydown',{key:e.key,code:e.code,ctrlKey:e.ctrlKey,metaKey:e.metaKey,shiftKey:e.shiftKey,altKey:e.altKey,repeat:e.repeat,bubbles:true,cancelable:true});
+      if(!window.dispatchEvent(k)) e.preventDefault();
+    } else {
+      window.dispatchEvent(new MouseEvent(type,{clientX:e.clientX,clientY:e.clientY,screenX:e.screenX,screenY:e.screenY,button:e.button,buttons:e.buttons,
+        shiftKey:e.shiftKey,ctrlKey:e.ctrlKey,altKey:e.altKey,metaKey:e.metaKey,bubbles:true,cancelable:true}));
+    }
+  });
+  ['mousemove','mouseup','keydown'].forEach(fwd);
+  w.addEventListener('resize',()=>resize());
+  w.addEventListener('pagehide',()=>simDock(true));
+  clearInterval(simUndock.watch); simUndock.watch=setInterval(()=>{ if(SIMWIN&&SIMWIN.closed) simDock(true); },700);
+  setTimeout(()=>{ resize(); fit(); },60);
+  evt('The simulation is in its own window: move it to the other monitor. Close it, or click Dock back, to bring it home.','info');
+}
+function simDock(closing){
+  if(!SIMWIN) return;
+  const w=SIMWIN; SIMWIN=null; clearInterval(simUndock.watch);
+  stopDragging();
+  const place=document.getElementById('simplace');
+  place.parentNode.insertBefore(document.adoptNode(SIMWRAP),place.nextSibling);
+  place.hidden=true;
+  document.getElementById('right').classList.remove('simout');
+  const b=document.getElementById('simUndock'); b.classList.remove('on'); b.innerHTML='&#10697; Undock';
+  b.title='Move the simulation to its own window, e.g. on a second monitor (click again to dock it back)';
+  if(!closing&&!w.closed) w.close();
+  setTimeout(()=>{ resize(); draw(); },30);
+}
+function stopDragging(){ try{ window.dispatchEvent(new MouseEvent('mouseup',{bubbles:true})); }catch(e){} }
+document.getElementById('simUndock').onclick=()=>{ if(SIMWIN&&!SIMWIN.closed) simDock(false); else simUndock(); };
+document.getElementById('simDock2').onclick=()=>simDock(false);
+document.getElementById('simFocus').onclick=()=>{ if(SIMWIN&&!SIMWIN.closed) SIMWIN.focus(); };
+window.addEventListener('pagehide',()=>{ if(SIMWIN&&!SIMWIN.closed) SIMWIN.close(); });
+
+document.getElementById('clearpath').onclick=()=>{
+  if(PATH_FROM>0){ setPathFrom(0); draw(); return; }
+  if(!SEGS.length) return;
+  const part=(PLAYPART&&SEGS[PLAYPART.k])?PLAYPART:null;
+  const upto=part?part.k:(showTo<0?SEGS.length:showTo+1);
+  /* with the whole program shown (no current line yet) the cursor goes to the end, so nothing is left drawn */
+  if(showTo<0&&!part){ showTo=SEGS.length-1; }
+  setPathFrom(upto); draw();
+};
+
+/* ===================== section view =====================
+   A plane normal to X, Y or Z cuts the 3D model (WebGL discard; the inside faces show in the section
+   colour) and, optionally, the toolpath (segments clipped at the plane). The side with coordinate
+   greater than the plane position is removed (Flip keeps that side instead).                       */
+const SECT={on:false,axis:2,pos:0,flip:false,path:true,show:true};
+function secRange(){
+  let b=BBOX?{...BBOX}:null; const m=(typeof modelBBox==='function')?modelBBox():null;
+  if(m) b=b?{x0:Math.min(b.x0,m.x0),y0:Math.min(b.y0,m.y0),z0:Math.min(b.z0,m.z0),x1:Math.max(b.x1,m.x1),y1:Math.max(b.y1,m.y1),z1:Math.max(b.z1,m.z1)}:m;
+  return b;
+}
+function secLimits(){ const b=secRange(); if(!b) return [-50,50]; const k='xyz'[SECT.axis]; return [b[k+'0'],b[k+'1']]; }
+/* signed distance to the removed side: > 0 is cut away */
+function secF(x,y,z){ const v=SECT.axis===0?x:(SECT.axis===1?y:z); return SECT.flip?(SECT.pos-v):(v-SECT.pos); }
+function secPathOn(){ return SECT.on&&SECT.path; }
+function secUI(){
+  const box=document.getElementById('secBox'); if(!box) return;
+  box.hidden=!SECT.on; document.getElementById('secBtn').classList.toggle('on',SECT.on);
+  if(!SECT.on) return;
+  document.querySelectorAll('#secAxis button').forEach(b=>b.classList.toggle('on',+b.dataset.a===SECT.axis));
+  const [a,b]=secLimits(), sl=document.getElementById('secPos');
+  sl.value=String(b>a?(SECT.pos-a)/(b-a):0.5);
+  document.getElementById('secVal').value=(+SECT.pos.toFixed(3)).toString();
+  document.getElementById('secPath').checked=SECT.path; document.getElementById('secShow').checked=SECT.show;
+}
+function secSetAxis(ax){ SECT.axis=ax; const [a,b]=secLimits(); SECT.pos=(a+b)/2; secUI(); draw(); }
+function secToggle(on){
+  SECT.on=(on===undefined)?!SECT.on:on;
+  if(SECT.on){ const [a,b]=secLimits(); if(!(SECT.pos>=a&&SECT.pos<=b)) SECT.pos=(a+b)/2; }
+  secUI(); draw();
+}
+/* the plane as a dashed frame over the extents of the other two axes */
+function drawSectionPlane(){
+  if(!SECT.on||!SECT.show) return;
+  const b=secRange(); if(!b) return;
+  const P=SECT.pos, c=[];
+  if(SECT.axis===0) c.push([P,b.y0,b.z0],[P,b.y1,b.z0],[P,b.y1,b.z1],[P,b.y0,b.z1]);
+  else if(SECT.axis===1) c.push([b.x0,P,b.z0],[b.x1,P,b.z0],[b.x1,P,b.z1],[b.x0,P,b.z1]);
+  else c.push([b.x0,b.y0,P],[b.x1,b.y0,P],[b.x1,b.y1,P],[b.x0,b.y1,P]);
+  const q=c.map(v=>proj(v[0],v[1],v[2]));
+  ctx2.save(); ctx2.strokeStyle='rgba(242,177,52,.85)'; ctx2.fillStyle='rgba(242,177,52,.06)'; ctx2.lineWidth=1.2; ctx2.setLineDash([7,4]);
+  ctx2.beginPath(); q.forEach((p,i)=>i?ctx2.lineTo(p[0],p[1]):ctx2.moveTo(p[0],p[1])); ctx2.closePath(); ctx2.fill(); ctx2.stroke(); ctx2.restore();
+}
+document.getElementById('secBtn').onclick=()=>secToggle();
+document.getElementById('secOff').onclick=()=>secToggle(false);
+document.getElementById('secFlip').onclick=()=>{ SECT.flip=!SECT.flip; draw(); };
+document.querySelectorAll('#secAxis button').forEach(b=>b.onclick=()=>secSetAxis(+b.dataset.a));
+document.getElementById('secPos').oninput=e=>{ const [a,b]=secLimits(); SECT.pos=a+(b-a)*(+e.target.value); document.getElementById('secVal').value=(+SECT.pos.toFixed(3)).toString(); draw(); };
+document.getElementById('secVal').onchange=e=>{ const v=parseFloat(e.target.value); if(isFinite(v)){ SECT.pos=v; secUI(); draw(); } };
+document.getElementById('secPath').onchange=e=>{ SECT.path=e.target.checked; draw(); };
+document.getElementById('secShow').onchange=e=>{ SECT.show=e.target.checked; draw(); };
+
+function setClFrame(fr){ MODEL_CLFRAME=fr||null; MODEL.drawn=''; if(document.getElementById('mdlPlaceNow')) modelPanel(); }
+document.getElementById('modelBtn').onclick=()=>document.getElementById('modelFile').click();
+document.getElementById('modelFile').onchange=e=>{ const f=e.target.files&&e.target.files[0]; e.target.value=''; if(f) loadModelFile(f); };
+document.getElementById('showModel').onchange=e=>{ MODEL.show=e.target.checked; draw(); };
+modelPanel();
+{ const vw=document.getElementById('view');
+  vw.addEventListener('dragover',e=>{ if(e.dataTransfer&&[...e.dataTransfer.items||[]].some(i=>i.kind==='file')) e.preventDefault(); });
+  vw.addEventListener('drop',e=>{ const f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];
+    if(f&&/\.(step|stp|iges|igs|stl)$/i.test(f.name)){ e.preventDefault(); loadModelFile(f); } }); }
+
 function draw(){
+  modelDraw();
   ctx2.clearRect(0,0,cv.width,cv.height);
   const part=(PLAYPART&&SEGS[PLAYPART.k])?PLAYPART:null;
   const upto = part?part.k:(showTo<0?SEGS.length:showTo+1);
   const curIdx = part?part.k:(showTo<0?0:showTo);
+  if(PATH_FROM>0&&upto<PATH_FROM) setPathFrom(0);
   if(document.getElementById('showGrid').checked) drawGrid();
   drawPlane(curIdx);
   drawPaths(upto,1);
+  drawSectionPlane();
   if(part){                                            // the move in progress, up to the tool
     const s=SEGS[part.k], q=partPoint();
     if(s.t!=='rapid'||document.getElementById('showRapid').checked){
@@ -4767,7 +5247,6 @@ document.getElementById('showtool').onchange=draw;
 document.getElementById('showplane').onchange=draw;
 document.getElementById('ghosts').onchange=draw;
 document.getElementById('toolaxis').onchange=draw;
-document.getElementById('kin').onchange=plot;
 document.getElementById('colormode').onchange=draw;
 document.getElementById('file').onchange=e=>{
   const f=e.target.files[0]; if(!f)return;
@@ -4775,331 +5254,16 @@ document.getElementById('file').onchange=e=>{
   r.onload=()=>loadProgramText(f.name,r.result,null);
   r.readAsText(f);
 };
-/* ---- Esprit ListCL (text export from Hexagon ESPRIT) -> G-code ----
-   Pass 1 reads the records into events (feed, spindle, tool, rapid, point, segment, XY arc).
-   Pass 2 writes Haas-style G-code in mm, part coordinates, G90 G17. A move takes the feed in
-   force; if none is set yet, the next feed of the same operation (Point rows come before their
-   feed line). Spindle direction is written as M3: the sign of "Spindle Direction" in the file
-   is not confirmed. Arcs in planes other than XY are reported as a warning, not converted. */
+/* ESPRIT ListCL detection (the conversion is the GROB post below) */
 function isEspritCL(text){
   return /NC Output Unit\(\d+\)/.test(text)&&/OperationName\(\d+\)/.test(text)&&
          /Segment\(2\)|Arc XY Plane|BEGIN CYCLE\(/.test(text);
 }
-/* ESPRIT's Work Offset Transformation (a rotation R and origin t): the CL's part points are written in the rotated
-   work frame, local = R.p + t. The post (G68.2) maps them back with the inverse, G = R^T, as Euler Z, X', Z''. */
-function wotApply(R,t,p){ return [R[0][0]*p[0]+R[0][1]*p[1]+R[0][2]*p[2]+t[0],
-                                  R[1][0]*p[0]+R[1][1]*p[1]+R[1][2]*p[2]+t[1],
-                                  R[2][0]*p[0]+R[2][1]*p[1]+R[2][2]*p[2]+t[2]]; }
-function wotEuler(G){            // G = Rz(I).Rx(J).Rz(K), degrees
-  const r=G, D=180/Math.PI;
-  const b=Math.acos(Math.max(-1,Math.min(1,r[2][2])));
-  const sb=Math.sin(b);
-  if(Math.abs(sb)>1e-9) return [Math.atan2(r[0][2],-r[1][2])*D, b*D, Math.atan2(r[2][0],r[2][1])*D];
-  return [0, b*D, Math.atan2(r[1][0],r[0][0])*D];
-}
-function espritToNc(text){
-  const N='(-?\\d+(?:\\.\\d+)?)', S='\\s*,\\s*';
-  const T3=tag=>new RegExp(tag+'\\(\\s*'+N+S+N+S+N+'\\s*\\)');
-  const RE_SP=T3('SP'), RE_EP=T3('EP'), RE_SPa=T3('Sp'), RE_CP=T3('Cp'), RE_EPa=T3('Ep'), RE_XYZ=T3('XYZ');
-  const RE_RXY=new RegExp('\\(X\\s+'+N+'\\s+Y\\s+'+N+'\\)'), RE_RZ=new RegExp('\\(Z\\s+'+N+'\\)');
-  const RE_PT=new RegExp('^X\\s+'+N+'\\s+Y\\s+'+N+'\\s+Z\\s+'+N);
-  const ev=[]; let machine=null, unit=null, inTool=false, tool={}, segSP=null, arc=null, ptEnd=false;
-  /* 5-axis CL dump ("Fiveaxis Point" with XYZ / IJK, "Motion Auxiliary Axis" #1 = C, #2 = B):
-     the rotary positions are the machine's own, so they are taken as they are */
-  let aux=null, fiveNext=false, axName=null, rotNames=[], mhome={};
-  let wotHdr=0, wotRows=[], wotR=null, wotT=[0,0,0], hadWot=false;
-  const SIN=!!espritToNc.sinu;   /* Sinumerik: CYCLE800 takes the origin t, the points are written as R.(p-t) */
-  const tw=p=>{ if(!wotR) return p;   /* CL part points into the work frame; links are already there */
-    if(!SIN) return wotApply(wotR,wotT,p);
-    return wotApply(wotR,[0,0,0],[p[0]-wotT[0],p[1]-wotT[1],p[2]-wotT[2]]); };
-  for(const raw of text.split(/\r?\n/)){
-    const s=raw.trim(); let m;
-    if(/Set WorkOffset Transformation\(\d+\)/.test(s)){ wotHdr=1; wotRows=[]; continue; }
-    if(wotHdr&&(m=s.match(/^(U|V|W|Po)\s+(-?[\d.]+)\s+(-?[\d.]+)\s+(-?[\d.]+)/))){
-      wotRows.push([+m[2],+m[3],+m[4]]);
-      if(m[1]==='Po'){
-        wotHdr=0;
-        const R=wotRows.slice(0,3), t=wotRows[3]||[0,0,0];
-        const id=R.every((r,i)=>r.every((v,j)=>Math.abs(v-(i===j?1:0))<1e-9))&&t.every(v=>Math.abs(v)<1e-9);
-        const prev=wotR?JSON.stringify([wotR,wotT]):'none';
-        if(id){ wotR=null; wotT=[0,0,0]; } else { wotR=R; wotT=t; hadWot=true; }
-        const now=wotR?JSON.stringify([wotR,wotT]):'none';
-        if(now!==prev) ev.push({k:'wot',R:wotR,t:wotT});
-      }
-      continue;
-    }
-    if(wotHdr&&/^(Matrix|Inverse Matrix)$/.test(s)) continue;
-    if(/Machine Name\(\d+\)\s*<([^>]*)>/.test(s)&&(m=s.match(/Machine Name\(\d+\)\s*<([^>]*)>/))){ machine=m[1]; continue; }
-    /* axis definitions in the machine setup: the table rotaries (in order: #1, #2 of the auxiliary axis) and the home */
-    if((m=s.match(/Axis Name\(\d+\)\s*<([^>]*)>/))){ axName=m[1]; continue; }
-    if(/Axis Type\(\d+\)\s+TableRotary/.test(s)){ if(axName&&rotNames.indexOf(axName)<0) rotNames.push(axName); continue; }
-    if((m=s.match(/Axis Home Position\(\d+\)\s+(-?[\d.]+)/))&&axName&&/^[XYZ]$/.test(axName)){ mhome[axName]=+m[1]; continue; }
-    if((m=s.match(/Motion Auxiliary Axis\(\d+\)\s*\(#1=(-?[\d.]+),\s*#2=(-?[\d.]+)\)/))){
-      aux={names:(rotNames.length?rotNames:['B','C']).slice(0,2), v:[+m[1],+m[2]]}; continue; }
-    /* CL-frame points: the start point of an operation, the 5-axis rapids and the 5-axis points */
-    if((m=s.match(/(Fiveaxis (Point|Rapid)|Start Point 2)\(\d+\)/))){ fiveNext=m[2]==='Point'?'point':'rapid'; continue; }
-    if(fiveNext&&(m=s.match(RE_XYZ))){ const isRapid=fiveNext==='rapid'; fiveNext=false;
-      ev.push({k:'pt5',p:tw([+m[1],+m[2],+m[3]]),ab:aux,rapid:isRapid}); continue; }
-    if((m=s.match(/NC Output Unit\(\d+\)\s+(-?[\d.]+)/))){ unit=+m[1]; continue; }
-    if((m=s.match(/OperationName\(\d+\)\s*<([^>]*)>/))){ ev.push({k:'op',name:m[1]}); continue; }
-    if((m=s.match(/BEGIN CYCLE\(\d+\)\s*Cycle=([A-Z_0-9]+)/))){ ev.push({k:'cycle',name:m[1]}); continue; }
-    if((m=s.match(/Spindle Speed RPM\(\d+\)\s+(-?[\d.]+)/))){ ev.push({k:'spindle',v:+m[1]}); continue; }
-    if((m=s.match(/XY Feedrate PM\(\d+\)\s+(-?[\d.]+)/))){ ev.push({k:'feed',v:+m[1]}); continue; }
-    if(/BEGIN TOOL CHANGE/.test(s)){ inTool=true; tool={}; continue; }
-    if(/END TOOL CHANGE/.test(s)){ inTool=false; ev.push({k:'tool',t:tool}); continue; }
-    if(inTool){
-      if((m=s.match(/ToolID\(\d+\)\s*<([^>]*)>/))) tool.id=m[1];
-      else if((m=s.match(/Tool Number\(\d+\)\s+([\d.]+)/))) tool.num=Math.round(+m[1]);
-      else if((m=s.match(/Tool Diameter\(\d+\)\s+(-?[\d.]+)/))) tool.dia=+m[1];
-      else if((m=s.match(/ChamferAngle\/Tool Radius\(\d+\)\s+(-?[\d.]+)/))) tool.cr=+m[1];
-      else if((m=s.match(/Number of Flutes\(\d+\)\s+([\d.]+)/))) tool.fl=Math.round(+m[1]);
-      continue;
-    }
-    if(/Link Rapid Position/.test(s)){
-      const xy=s.match(RE_RXY), z=s.match(RE_RZ), ab=aux;
-      if(xy) ev.push({k:'rapid',x:+xy[1],y:+xy[2],ab:ab});
-      if(z) ev.push({k:'rapid',z:+z[1],ab:ab});
-      continue;
-    }
-    if((m=s.match(RE_XYZ))){ ev.push({k:'rapid',x:+m[1],y:+m[2],z:+m[3]}); continue; }
-    if((m=s.match(RE_SP))){ segSP=tw([+m[1],+m[2],+m[3]]); continue; }
-    if((m=s.match(RE_EP))){ ev.push({k:'seg',sp:segSP,p:tw([+m[1],+m[2],+m[3]])}); continue; }
-    if(/Point\(\d+\)/.test(s)){
-      ptEnd=/End Point/.test(s);
-      const l=ev[ev.length-1];  // the Point row just before End Point is the retract: rapid
-      if(ptEnd&&l&&l.k==='pt'){ l.k='rapid'; l.x=l.p[0]; l.y=l.p[1]; l.z=l.p[2]; }
-      continue;
-    }
-    if((m=s.match(RE_PT))){ if(!ptEnd) ev.push({k:'pt',p:tw([+m[1],+m[2],+m[3]])}); continue; }
-    if((m=s.match(/Arc (XY|XZ|YZ) Plane (CCW|CW)/))){
-      arc = m[1]==='XY' ? {ccw:m[2]==='CCW'} : null;
-      if(!arc) ev.push({k:'warn',msg:'arc in '+m[1]+' plane not converted'});
-      continue;
-    }
-    if(arc && (m=s.match(/Start,End Angles \(\s*(-?[\d.]+)\s*,\s*(-?[\d.]+)\s*\)/))){ arc.angs=[+m[1],+m[2]]; continue; }
-    if(arc && (m=s.match(RE_SPa))){ arc.sp=tw([+m[1],+m[2],+m[3]]); continue; }
-    if(arc && (m=s.match(RE_CP))){ arc.cp=tw([+m[1],+m[2],+m[3]]); continue; }
-    if(arc && (m=s.match(RE_EPa))){
-      /* every arc in these files is labelled CCW, but a labelled sweep over 180 deg is a corner
-         the other way round (the outline R13 corners): take the short arc between the same ends */
-      const ep=tw([+m[1],+m[2],+m[3]]), ang=q=>Math.atan2(q[1]-arc.cp[1],q[0]-arc.cp[0]);
-      const ccwSweep=((ang(ep)-ang(arc.sp))*180/Math.PI%360+360)%360;
-      const labelled=arc.ccw?ccwSweep:360-ccwSweep;
-      /* the CL's own Start,End Angles give the sweep and its direction (ESPRIT writes (450,200) for a 250 deg
-         clockwise arc, which the post writes as G2); without them the labelled-sweep rule above applies */
-      const dA=arc.angs?arc.angs[1]-arc.angs[0]:0;
-      if(Math.abs(dA)>1e-6&&Math.abs(dA)<=360){
-        ev.push({k:'arc',sp:arc.sp,cp:arc.cp,p:ep,ccw:dA>0,flip:false});
-      } else
-      ev.push({k:'arc',sp:arc.sp,cp:arc.cp,p:ep,ccw:labelled>180?!arc.ccw:arc.ccw,flip:labelled>180});
-      arc=null; continue;
-    }
-  }
-
-  /* The links are in the machine frame, but the 5-axis points can be in the CL's own axes. The tool must be at the
-     first point when the link ends, so when the first point is not there, the points are mapped to the link frame:
-     X = a - X, Y = Z, Z = Y - b, with a and b taken from that first link (the post of the reference file: 2f8e037e). */
-  espritToNc.frameNote=null;
-  espritToNc.hadWot=hadWot;   /* the CL sets a work frame: CYCLE800 holds it, as the 840D post does */
-  espritToNc.rotNames=rotNames.length?rotNames.slice(0,2):['B','C'];
-  espritToNc.mhome=mhome;
-  const fi=ev.findIndex(e=>e.k==='pt5');
-  if(fi>0&&!hadWot){
-    const lp=[null,null,null];
-    ev.slice(0,fi).forEach(e=>{ if(e.k==='rapid'){ if(e.x!==undefined) lp[0]=e.x; if(e.y!==undefined) lp[1]=e.y; if(e.z!==undefined) lp[2]=e.z; } });
-    const p0=ev[fi].p;
-    if(lp.every(v=>v!==null)&&Math.hypot(lp[0]-p0[0],lp[1]-p0[1],lp[2]-p0[2])>0.5){
-      if(Math.abs(lp[1]-p0[2])<0.01){
-        const a=lp[0]+p0[0], b=p0[1]-lp[2], mp=q=>[a-q[0],q[2],q[1]-b];
-        ev.forEach(e=>{ if(e.k==='pt5'||e.k==='pt'||e.k==='seg'){ e.p=mp(e.p); if(e.sp) e.sp=mp(e.sp); } });
-        const arcs=ev.some(e=>e.k==='arc');
-        espritToNc.frameNote='CL points mapped to the link frame (X = '+a.toFixed(4)+' - X, Y = Z, Z = Y - '+b.toFixed(4)+
-          '), as the first link shows the CL axes do not match the machine'+(arcs?'; arcs in the CL were not mapped, check them':'');
-      }else espritToNc.frameNote='the first point is not where the link ends, and no axis map fits: check the CL axes against the machine';
-    }
-  }
-  const out=[]; const fmt=v=>String(+v.toFixed(4));
-  const TOL=1e-3; /* mm: the link rows are rounded to 5 decimals, the path to 6 */
-  const dist=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]);
-  const same=(a,b)=>!!a&&a.every((v,i)=>Math.abs(v-b[i])<TOL);
-  const xyz=p=>'X'+fmt(p[0])+' Y'+fmt(p[1])+' Z'+fmt(p[2]);
-  let cur=null, feed=null, spindle=null, warnedFeed=false, lastRot='', curTool=1, tcOnEmitted=false, frameOn=false;
-  const rotOf=ab=>ab?ab.names.map((n,i)=>n+fmt(ab.v[i])).join(' '):'';
-  const feedAt=i=>{
-    if(feed!==null) return feed;
-    for(let j=i+1;j<ev.length&&ev[j].k!=='op';j++) if(ev[j].k==='feed') return ev[j].v;
-    if(!warnedFeed){ out.push('(WARNING: no feed in CL, F1000 used)'); warnedFeed=true; }
-    return 1000;
-  };
-  const jump=p=>{ /* rapid to a point the path does not reach by itself */
-    if(cur&&dist(cur,p)>TOL) out.push('(WARNING: gap in CL path)');
-    out.push('G0 '+xyz(p)); cur=[...p];
-  };
-  /* the work frame is written at its first move, after the rotaries that set it (the post does the same) */
-  let pendingFrame=null, frameRot='';
-  const startFrame=()=>{ if(pendingFrame!==null){ out.push(pendingFrame); pendingFrame=null; frameOn=true; frameRot=lastRot; } };
-  for(let i=0;i<ev.length;i++){
-    const e=ev[i];
-    switch(e.k){
-      case 'wot': {
-        if(frameOn){ out.push('G69'); frameOn=false; }
-        cur=null; pendingFrame=null;
-        if(e.R){
-          const G=[[e.R[0][0],e.R[1][0],e.R[2][0]],[e.R[0][1],e.R[1][1],e.R[2][1]],[e.R[0][2],e.R[1][2],e.R[2][2]]];
-          const eu=wotEuler(G);
-          const o=SIN?e.t:[0,0,0];
-          if(!SIN&&e.t.some(v=>Math.abs(v)>1e-6)) out.push('(WARNING: the work frame has an origin, not written: check the G68.2 origin)');
-          pendingFrame='G68.2 X'+fmt(o[0])+' Y'+fmt(o[1])+' Z'+fmt(o[2])+' I'+fmt(eu[0])+' J'+fmt(eu[1])+' K'+fmt(eu[2])+' (CL work offset transformation)';
-        }
-        break; }
-      case 'op': out.push('(OP '+e.name+')'); break;
-      case 'cycle': out.push('(CYCLE '+e.name+')'); break;
-      case 'warn': out.push('(WARNING: '+e.msg+')'); break;
-      case 'feed': feed=e.v; break;
-      case 'spindle': spindle=e.v; break;
-      case 'tool': {
-        const t=e.t, n=t.num!=null?t.num:1;
-        const c=['T'+n, t.id||'TOOL', t.dia!=null?'D'+fmt(t.dia):'', t.cr!=null?'R'+fmt(t.cr):'', t.fl?t.fl+'FL':''].filter(Boolean).join(' ');
-        if(tcOnEmitted){ out.push('G49'); tcOnEmitted=false; }   /* tool-axis control ends before the change */
-        curTool=n;
-        out.push('('+c+')'); out.push('T'+n+' M6');
-        if(spindle!==null) out.push('S'+fmt(spindle)+' M3');
-        break;
-      }
-      case 'rapid': {
-        const p=cur?[...cur]:[null,null,null], w=[];
-        /* XY before any Z: lift first, own block (not with 5-axis points: the start block of the control retracts Z first) */
-        if(p[2]===null&&(e.x!==undefined||e.y!==undefined)&&!ev.some(q=>q.k==='pt5')){
-          for(let j=i+1;j<ev.length&&!['op','pt','seg','arc'].includes(ev[j].k);j++){
-            if(ev[j].k==='rapid'&&ev[j].z!==undefined){ out.push('G0 Z'+fmt(ev[j].z)); p[2]=ev[j].z; cur=[...p]; break; }
-          }
-        }
-        ['x','y','z'].forEach((k,j)=>{ if(e[k]!==undefined&&(p[j]===null||Math.abs(e[k]-p[j])>TOL)){ w.push('XYZ'[j]+fmt(e[k])); p[j]=e[k]; } });
-        const rk=rotOf(e.ab);
-        if(pendingFrame!==null&&rk&&rk!==lastRot){ out.push('G0 '+rk); lastRot=rk; }
-        startFrame();
-        if(rk&&rk!==lastRot){ w.push(rk); lastRot=rk; }          /* rotary positions before the tool-axis control */
-        if(w.length){ out.push('G0 '+w.join(' ')); cur=p; }
-        break;
-      }
-      case 'pt5': {
-        /* a point of the 5-axis path: X Y Z with the machine's B and C; G43.4 (tool-axis control) starts before it.
-           Inside a G68.2 frame with no rotary words of its own it is a 3+2 point: written in the work frame, no TCPM */
-        startFrame();
-        const rk=rotOf(e.ab);
-        const inFrame=frameOn&&rk===frameRot;
-        if(!inFrame&&!tcOnEmitted){ out.push('G43.4 H'+curTool); tcOnEmitted=true; }
-        if(e.rapid||!cur){                                        /* the start point and the 5-axis rapids */
-          if(!cur||!same(cur,e.p)||rk!==lastRot){ out.push('G0 '+xyz(e.p)+(rk?' '+rk:'')); cur=[...e.p]; lastRot=rk; }
-          break;
-        }
-        if(!same(cur,e.p)||rk!==lastRot){ out.push('G1 '+xyz(e.p)+(rk?' '+rk:'')+' F'+fmt(feedAt(i))); cur=[...e.p]; lastRot=rk; }
-        break;
-      }
-      case 'pt':
-        startFrame();
-        if(!cur) jump(e.p);
-        else if(!same(cur,e.p)){ out.push('G0 '+xyz(e.p)); cur=[...e.p]; }   /* a CL Point row is a rapid move (lead-in, retract, plunge), as the ESPRIT post writes it */
-        break;
-      case 'seg':
-        startFrame();
-        if(!cur||dist(cur,e.sp)>TOL) jump(e.sp);
-        if(!same(cur,e.p)){ out.push('G1 '+xyz(e.p)+' F'+fmt(feedAt(i))); cur=[...e.p]; }
-        break;
-      case 'arc': {
-        startFrame();
-        if(!cur||dist(cur,e.sp)>TOL) jump(e.sp);
-        const ij=' I'+fmt(e.cp[0]-e.sp[0])+' J'+fmt(e.cp[1]-e.sp[1]);
-        if(e.flip) out.push('(CL arc labelled CCW sweeps over 180 deg: short arc written)');
-        out.push((e.ccw?'G3 ':'G2 ')+xyz(e.p)+ij+' F'+fmt(feedAt(i)));
-        cur=[...e.p];
-        break;
-      }
-    }
-  }
-  const head=['(ESPRIT CL converted for CNC Tools - check against the CL and on the machine)',
-    '(machine '+(machine||'?')+', CL NC output unit '+unit+' taken as mm)',
-    'G21 G17 G40 G49 G80 G90'];
-  if(tcOnEmitted) out.push('G49');
-  if(frameOn) out.push('G69');
-  if(hadWot) espritToNc.frameNote=(espritToNc.frameNote?espritToNc.frameNote+'; ':'')+(SIN?'the CL is in a rotated work frame: written as CYCLE800 with the frame origin':'the CL is in a rotated work frame: written as G68.2');
-  return head.concat(out,['M5','M30','']).join('\n');
-}
-/* ---- APT CL file (CLS, e.g. MAX-AB / MaxPac output for APT) -> G-code, 5-axis ----
-   GOTO/x,y,z,i,j,k gives the tool-tip point and the tool-axis vector. The vector becomes the
-   rotary words the app models for its tool axis:
-     B/C: tool axis = Rz(C)*Ry(B)*Z  ->  B = acos(k), C = atan2(j,i)
-     A/C: tool axis = (sinA*sinC, -sinA*cosC, cosA)  ->  A = acos(k), C = atan2(i,-j)
-   C is unwrapped so it never jumps 360 degrees between points. Output is G43.4 (TCPM; G234 for
-   Haas) with X Y Z at the tool tip. The H offset must hold the real tool length on the machine.
-   RAPID applies to the next GOTO. FEDRAT, SPINDL, CUTTER and TOOL NUMBER are used.
-   opts: { kin: 'bc' | 'ac', dialect: 'fanuc' | 'haas' } */
+/* APT CLS detection (the conversion is the GROB post below) */
 function isAptCL(text){
   return /^GOTO\/-?[\d.]+,-?[\d.]+,-?[\d.]+,-?[\d.]+,-?[\d.]+,-?[\d.]+/m.test(text)&&
          /^(MULTAX|CUTTER\/|FEDRAT\/|PARTNO)/m.test(text);
 }
-function aptToNc(text,opts){
-  opts=opts||{};
-  const ac=opts.kin==='ac', tcp=opts.dialect==='haas'?'G234':'G43.4';
-  const ev=[]; let rapidNext=false, cutter=null, toolNo=null, spindleSet=null, spinDir='CLW', partno=null;
-  for(const raw of text.split(/\r?\n/)){
-    const s=raw.trim(); let m;
-    if((m=s.match(/^PARTNO\s+(.*)$/))){ partno=m[1]; continue; }
-    if((m=s.match(/^CUTTER\/\s*(-?[\d.]+)\s*,\s*(-?[\d.]+)/))){ cutter={dia:+m[1],cr:+m[2]}; continue; }
-    if((m=s.match(/^PPRINT\s+TOOL NUMBER\s+(\d+)/))){ toolNo=+m[1]; continue; }
-    if((m=s.match(/^SPINDL\/\s*([\d.]+)\s*,\s*(CLW|CCW)/))){ ev.push({k:'spindle',v:+m[1],dir:m[2]}); continue; }
-    if((m=s.match(/^FEDRAT\/\s*([\d.]+)/))){ ev.push({k:'feed',v:+m[1]}); continue; }
-    if(/^RAPID\b/.test(s)){ rapidNext=true; continue; }
-    if((m=s.match(/^GOTO\/([^$]*)/))){
-      const v=m[1].split(',').map(Number);
-      ev.push({k:rapidNext?'rapid':'move', p:v.slice(0,3), ijk:v.slice(3,6)});
-      rapidNext=false; continue;
-    }
-    if((m=s.match(/^PPRINT\s+(END PASS.*)$/))){ ev.push({k:'comment',t:m[1].replace(/[()]/g,'')}); continue; }
-  }
-
-  const out=[]; const fmt=v=>String(+v.toFixed(4));
-  const RAD=180/Math.PI;
-  let feed=null, started=false, prevC=null;
-  const angles=(ijk)=>{
-    const [i,j,k]=ijk, n=Math.hypot(i,j,k)||1;
-    const R=Math.acos(Math.max(-1,Math.min(1,k/n)))*RAD;          /* B or A */
-    let C=(Math.abs(i)+Math.abs(j)>1e-9)
-      ? (ac?Math.atan2(i,-j):Math.atan2(j,i))*RAD
-      : (prevC!==null?prevC:0);
-    if(prevC!==null){ while(C-prevC>180) C-=360; while(C-prevC<-180) C+=360; }
-    prevC=C;
-    return {R,C};
-  };
-  const word=(p,v)=>'X'+fmt(p[0])+' Y'+fmt(p[1])+' Z'+fmt(p[2])+' '+(ac?'A':'B')+fmt(v.R)+' C'+fmt(v.C);
-  for(const e of ev){
-    switch(e.k){
-      case 'feed': feed=e.v; break;
-      case 'spindle': spindleSet=e.v; spinDir=e.dir; break;
-      case 'comment': out.push('('+e.t+')'); break;
-      case 'rapid': case 'move': {
-        if(!started){
-          const tn=toolNo!==null?toolNo:1;
-          if(cutter) out.push('(T'+tn+' BALL D'+fmt(cutter.dia)+' R'+fmt(cutter.cr)+')');
-          out.push('T'+tn+' M6');
-          if(spindleSet!==null) out.push('S'+fmt(spindleSet)+' '+(spinDir==='CCW'?'M4':'M3'));
-          out.push(tcp+' H'+tn);
-          started=true;
-        }
-        const v=angles(e.ijk);
-        if(e.k==='rapid') out.push('G0 '+word(e.p,v));
-        else out.push('G1 '+word(e.p,v)+' F'+fmt(feed!==null?feed:1000));
-        break;
-      }
-    }
-  }
-  const head=['(MAX-AB APT CL converted for CNC Tools - 5-axis, TCPM, '+(ac?'A/C':'B/C')+' from the tool vector)',
-    '(PARTNO '+(partno||'?')+')',
-    '(check the tool length H offset and the '+(ac?'A/C':'B/C')+' sign convention of the machine)',
-    'G21 G17 G40 G49 G80 G90'];
-  return head.concat(out,['G49','M5','M30','']).join('\n');
-}
-
 /* ==================== GROB G-series post: CL / CLS -> SINUMERIK 840D sl ====================
    Written from the GROB G550 sample (ESPRIT ListCL GrobCLTEMP.LST and its post output Grob.nc).
    Kinematics (table-table, from the CL machine setup): A turns about -X, B about -Y (B sits on A),
@@ -5414,7 +5578,7 @@ function espritToGrob(text){
   }
   W.blank();
   if(mach&&!/GROB/i.test(mach)) notes.push('the CL is for "'+mach+'", not a GROB machine: the GROB start/end blocks and A/B kinematics were used');
-  return {text:W.out.join('\n'),notes};
+  return {text:W.out.join('\n'),notes,frame:gdml?{R:gdml.R,t:gdml.t.map((v,i)=>v-ms[i])}:null};
 }
 
 /* ---- APT CL (CLS) -> GROB Sinumerik ----
@@ -5558,11 +5722,10 @@ function clKind(text){
 function loadProgramText(name,txt,handle){
   FILEH=handle||null; setName(name);
   const kind=clKind(txt);
+  setClFrame(null);
   codeEl.value=txt; syncGutter();
   if(kind){
     CL_PENDING={kind:kind,name:name}; CL_PLOT_SRC=null;
-    document.getElementById('clKin').value='bc';
-    document.getElementById('clKinWrap').hidden=true;
     clSetTag(kind);
     clUpdateTarget();
     document.getElementById('clInfo').textContent=name;
@@ -5585,7 +5748,7 @@ function clPlot(){
   const p=CL_PENDING; if(!p) return;
   const g=clGrob(p.kind,codeEl.value);
   if(g.err){ evt(g.err,'err'); setMsgTab('events'); return; }
-  CL_PLOT_SRC=g.text;
+  CL_PLOT_SRC=g.text; setClFrame(g.frame);
   document.getElementById('kin').value='ab';
   clSetButtons();
   evt(p.name+' - plotted (the editor keeps the CL text).'+(g.notes.length?' Notes: '+g.notes.join('; ')+'.':''),g.notes.length?'warn':'info');
@@ -5596,6 +5759,7 @@ function convertPendingCl(){
   const p=CL_PENDING; if(!p) return;
   const target=document.getElementById('dialect').value;
   const res=clConvertTo(p.kind,codeEl.value);
+  if(!res.err) setClFrame(res.frame);
   const info=document.getElementById('clInfo');
   if(res.err){ evt(res.err,'err'); setMsgTab('events'); return; }        /* keep the bar and the CL text */
   CL_PENDING=null; CL_PLOT_SRC=null;
@@ -5611,7 +5775,6 @@ function convertPendingCl(){
 }
 document.getElementById('clConvert').onclick=convertPendingCl;
 document.getElementById('clPlot').onclick=clPlot;
-document.getElementById('clKin').onchange=()=>{ if(CL_PENDING&&CL_PLOT_SRC!==null) clPlot(); };
 document.getElementById('clKeep').onclick=()=>{ CL_PENDING=null; CL_PLOT_SRC=null; document.getElementById('clbar').hidden=true;
   document.getElementById('clKeep').textContent='Keep as text'; };
 
@@ -5783,7 +5946,7 @@ function tick(ts){
     playTo=null;
     return;
   }
-  requestAnimationFrame(tick);
+  simRAF(tick);
 }
 function startPlay(){
   if(!SEGS.length) return;
@@ -5791,7 +5954,7 @@ function startPlay(){
   playing=true;
   document.getElementById('play').textContent='\u275a\u275a';
   playPrev=performance.now();
-  requestAnimationFrame(tick);
+  simRAF(tick);
 }
 document.getElementById('play').onclick=()=>{
   if(playing){ stopPlay(); return; }
@@ -6909,7 +7072,7 @@ function plot(){
   catch(e){ res={segs:[],msgs:[{cls:'err',line:0,text:e.message}],cutLen:0,rapidLen:0,time:0,tools:[],hash:new Map(),rp:new Map(),named:new Map(),hhq:new Map(),vlog:[],trace:[],blocks:0,nTurn:0,nMill:0,mode:process,frames:[{at:0,W:matI(),label:'—'}],toolUse:new Map(),limitedMoves:0,freeTime:0}; }
   if(res.revFeed||(res.segs||[]).some(s=>s.proc==='turn')) turnTimes(res);
   applyWaits(res);
-  RESULT=res; SEGS=res.segs; BBOX=bbox(); showTo=-1;
+  RESULT=res; SEGS=res.segs; BBOX=bbox(); showTo=-1; setPathFrom(0);
   TIMES=new Array(SEGS.length); let acc=0;
   for(let i=0;i<SEGS.length;i++){ acc+=(res.W[i]||0)+(SEGS[i].dt||0); TIMES[i]=acc; }
 
@@ -6972,472 +7135,6 @@ document.getElementById('examples').onchange=e=>{
 /* comment syntax: Sinumerik */
 function commentMode(){ return defaultComments('sinumerik'); }
 
-/* ---- trimNum: number formatting used by the converter ---- */
-function trimNum(v){ const x=(Math.abs(v)<5e-4?0:v); let t=x.toFixed(3).replace(/\.?0+$/,'');
-  if(t===''||t==='-0'||t==='-'||t==='0') return '0';
-  if(t.indexOf('.')<0) t+='.';
-  return t; }
-/* --------------------- convert to Sinumerik ---------------------- */
-/* ---- writing the interpreted path out for another control ----
-   The path is written as the control would need it to reproduce the same tool
-   movement: arcs stay arcs, a tilted plane is written as that control's own plane
-   command with the points in the tilted system, machine-coordinate moves stay in
-   machine coordinates, the spindle and coolant M codes are kept, and a lathe
-   program is written in diameter with the feed per revolution. What cannot be
-   written is listed in convertProgram.notes.                                   */
-/* Long code: the path as the interpreter understood it, written for the target
-   control. Families: 'iso' (Fanuc, Haas, Mazak, Okuma), 'sinu', 'hh' (Klartext)
-   and 'hhiso' (Heidenhain ISO on the TNC).                                     */
-const CONV_TARGETS={
-  fanuc:{fam:'iso',name:'Fanuc'}, haas:{fam:'iso',name:'Haas'}, mazak:{fam:'iso',name:'Mazak EIA'},
-  okuma:{fam:'iso',name:'Okuma OSP'}, sinumerik:{fam:'sinu',name:'Sinumerik'},
-  heidenhain:{fam:'hh',name:'Heidenhain Klartext'}, hhiso:{fam:'hhiso',name:'Heidenhain ISO'}
-};
-/* a motion code (G0, G1, G2, G3) that is the same as the one before is left out, as the posts do: only the first
-   of a run of G1 lines carries G1. Comments and blank lines keep the state; any other line ends it */
-function dropRepeatedG(lines){
-  let last=null;
-  return lines.map(l=>{
-    const m=l.match(/^(G0?[0-3])\s/);
-    if(m){ const code='G'+(+m[1].slice(1));
-      /* Sinumerik G0 SUPA blocks keep their G0: SUPA is not valid on its own */
-      if(code===last&&!/\bSUPA\b/.test(l)) return l.slice(m[1].length+1);
-      last=code; return l; }
-    if(/^\s*(\(|;|$)/.test(l)) return l;
-    last=null; return l;
-  });
-}
-function convertProgram(target,segs,res,home,opts){
-  segs=segs||SEGS; res=res||(typeof RESULT!=='undefined'?RESULT:null)||{};
-  home=home||(typeof HOME!=='undefined'?HOME:{x:0,y:0,z:0});
-  opts=opts||{};
-  const notes=[]; convertProgram.notes=notes;
-  const note=t=>{ if(!notes.includes(t)) notes.push(t); };
-  if(!segs.length) return null;
-  const TG=CONV_TARGETS[target]||CONV_TARGETS.fanuc;
-  const hh=(TG.fam==='hh'), sn=(TG.fam==='sinu'), hi=(TG.fam==='hhiso');
-  const okm=(target==='okuma'), haas=(target==='haas');
-  const tnc=hh||hi;
-  const lathe=segs.some(s=>s.proc==='turn');
-  /* CL files (ESPRIT, APT): the start and end blocks of the reference Sinumerik post are written for every control */
-  const CLM=!!opts.cl&&!lathe;
-  if(tnc&&lathe){
-    note('a turning program is not written for the TNC here (FUNCTION MODE TURN is not supported); choose one of the ISO controls or Sinumerik');
-    return null;
-  }
-  const frames=res.frames||[];
-  const I3=matI();
-  const out=[];
-  let n=0;
-  const num=()=>hh?(n++)+' ':'';
-  const f3=v=>trimNum(v);   /* 4. is 4., J0 is J0, J0.5 is J0.5 */
-  const f4=v=>(+v.toFixed(4)).toString();
-  const sg=v=>{ const t=f3(v); return (t[0]==='-'?'':'+')+t; };
-  const ang=v=>(+(Math.abs(v)<5e-7?0:v).toFixed(4)).toString();
-  const sang=v=>{ const t=ang(v); return (t[0]==='-'?'':'+')+t; };
-  const Wof=s=>(frames[s.fi]&&frames[s.fi].W)||s.Wm||I3;
-  const isRot=M=>{ const m=M.m;
-    for(let r=0;r<3;r++) for(let c=0;c<3;c++){
-      const d=m[r*3]*m[c*3]+m[r*3+1]*m[c*3+1]+m[r*3+2]*m[c*3+2];
-      if(Math.abs(d-(r===c?1:0))>1e-7) return false; }
-    const det=m[0]*(m[4]*m[8]-m[5]*m[7])-m[1]*(m[3]*m[8]-m[5]*m[6])+m[2]*(m[3]*m[7]-m[4]*m[6]);
-    return det>0; };
-  const tiltOf=M=>{ const m=M.m, L=Math.hypot(m[2],m[5],m[8])||1; return Math.hypot(m[2],m[5])/L>1e-9; };
-  const sig=M=>M.m.concat(M.t).map(v=>v.toFixed(7)).join(',');
-  const invC=new Map(); const inv=M=>{ const k=sig(M); let I=invC.get(k); if(!I){ I=matInv(M); invC.set(k,I);} return I; };
-  /* the plane commands, shared with the macro translator */
-  const planeOn=M=>planeCommands(target,M,note).on.map(l=>hh?num()+l:l);
-  /* the frame the plane command really sets up, which the points are written in */
-  const planeFrame=M=>planeCommands(target,M,()=>{}).F;
-  const planeOff=()=>planeCommands(target,null,note).off.map(l=>hh?num()+l:l);
-  /* Heidenhain ISO blocks are numbered and end with * */
-  let hn=0;
-  const put=l=>{ if(hi){ hn+=10; out.push('N'+hn+' '+l+' *'); } else out.push(l); };
-
-  /* ---- header ---- */
-  const firstRev=segs.some(s=>s.fm==='rev'&&s.t!=='rapid');
-  const latheFeed=rev=>okm?(rev?'G95':'G94'):(rev?'G99':'G98');
-  if(hh){ out.push('0 BEGIN PGM CONVERT MM'); n=1; }
-  else if(hi){ out.push('%CONVERT G71 *'); }
-  else if(sn){ if(!CLM){ out.push('; converted path'); out.push(lathe?('G71 G90 G18 DIAMON '+(firstRev?'G95':'G94')):'G71 G90 G17 G94'); } }
-  else {
-    if(!okm) out.push('%');
-    out.push((haas?'O00001':'O0001')+' (CONVERTED PATH)');
-    out.push(lathe?('G21 G18 G40 '+latheFeed(firstRev)):(okm?'G90 G17 G40 G80 G94':'G21 G90 G17 G40 G80 G94'));
-  }
-  if(okm) note('Okuma OSP: the tool length is called with G56 H and the tool-axis control with G169 H / G170 (as the sample post); check the T code format on your machine');
-  let pl=lathe?18:17, fm=firstRev?'rev':'min';
-  let dOn=lathe, lastT=null, lastS=null, lastCss=null, lastF=null, tilt=null, tcpm=false, needTLO=false;
-  let xyzSeen=false;
-  let rot={a:0,b:0,c:0};
-  /* CL files: ESPRIT unwinds the C rotary (raw 157 .. -10926). It is written 0..360 */
-  const rawW={a:null,b:null,c:null};       // the raw CL value at the last written rotary
-  /* the full-turn C axis is written 0..360 (as the sample posts do); the tilt axes (A, B) keep their sign */
-  const rawToOut=(k,raw)=>{ if(!(CLM&&!sn&&k==='c')) return raw;
-    return ((raw%360)+360)%360; };
-  const rotW=(k,v)=>rawToOut(k,v);
-  let hhM=[];                                    // Klartext M codes ride on the next block
-  const mWords=ms=>ms.map(m=>'M'+m).join(' ');
-  /* CL files: the start and end blocks own the first spindle start, the program stop and the tool-change M codes */
-  let spinPending=CLM;
-  const clFilter=ms=>{ if(!CLM||!ms) return ms;
-    let r2=ms.filter(m=>m!==2&&m!==5&&m!==6&&m!==30);
-    if(spinPending&&r2.some(m=>m===3||m===4)){ r2=r2.filter(m=>m!==3&&m!==4); spinPending=false; }
-    return r2; };
-  const pushM=ms=>{ ms=clFilter(ms); if(!ms||!ms.length) return; if(hh) hhM=hhM.concat(ms); else put(mWords(ms)); };
-  const takeHM=()=>{ const t=hhM.length?(' '+mWords(hhM)):''; hhM=[]; return t; };
-  /* G43 H cancels TCPM on Fanuc-type controls (same modal group as G43.4), so no length call while TCPM is on */
-  const tlo=()=>{ if(!needTLO) return ''; needTLO=false; if(tcpm) return ''; return (okm?'G56 H':'G43 H')+lastT+' '; };
-
-  const X=(s,p)=>(s.proc==='turn'&&s.dm)?2*p.x:p.x;
-  const wantY=(s,p)=>!(s.proc==='turn'&&Math.abs(p.y)<1e-6);
-  const AX={17:['x','y','z'],18:['x','z','y'],19:['y','z','x']};
-  const CL={x:'I',y:'J',z:'K'};
-  const tcOn=()=>hh?null:(sn?(CLM?'STOPRE\nTRAORI\nG54':'TRAORI'):hi?'M128':okm?'G169 H'+lastT:(haas?'G234 H'+lastT:'G43.4 H'+lastT));
-  const tcOff=()=>hh?null:(sn?'TRAFOOF':hi?'M129':okm?'G170':'G49');
-  if(okm&&segs.some(s=>s.tc)) note('Okuma OSP: TCPM is written as G43.4; check the code your OSP uses');
-
-  /* ---- CL files: start block. The Sinumerik start of the reference post (2f8e037e): the program modes, the
-     transformations off, tool change, Z and then X Y to the machine zero (SUPA), D1, G54, coolant, spindle.
-     The other controls take the same order: tool-axis control off, Z and XY to the machine zero (G53 or
-     the Heidenhain M91 blocks), tool, spindle and coolant. The rotary head is positioned by the first
-     move, before the tool-axis control (TRAORI, G43.4, M128) is switched on. ---- */
-  /* the rotary axes (as the CL names them) and the machine home: the CL's own home where it has one, else the sample post's */
-  const rn=(opts.rot&&opts.rot.length)?opts.rot:(sn?['A','C']:['B','C']);
-  const HDEF=sn?{X:400,Y:799,Z:549}:hh?{X:400,Y:800,Z:550}:haas?{X:-600,Y:-87,Z:0}:okm?{X:-410,Y:0,Z:680}:{X:0,Y:0,Z:0};
-  /* Heidenhain and Haas: the sample post's retract and park, not the CL's zero (the CL home is not the machine's park) */
-  const HM=Object.assign({},HDEF,(hh||haas)?{}:(opts.mh||{}));
-  const hv=v=>trimNum(v);
-  const hX=()=>hv(HM.X), hY=()=>hv(HM.Y), hZ=()=>hv(HM.Z);
-  const rzero=()=>rn.map(k=>k+'0').join(' ');
-  if(CLM){
-    note('start and end blocks follow the Sinumerik 840D reference post, with the machine home from the CL (where the CL defines one): check the home and the M codes on your machine');
-    const t=segs[0].tool, sf=(segs.find(s=>s.s)||{}).s, sv=(sf!==undefined)?(+sf.toFixed(3)):null;
-    const sCode=sv!==null?String(sv):null;
-    lastT=t; lastS=sf!==undefined?sf:null; lastCss=false;
-    if(sn){
-      out.push('G40 G17 G71 G90','G64','CYCLE800( )','TRAFOOF');
-      out.push('T'+t,'M6');
-      out.push('G0 SUPA Z'+hZ()+' D0','G0 SUPA X'+hX()+' Y'+hY(),'D1','G54');
-      if(sCode!==null) out.push('G94 S'+sCode+' M'+(segs.some(s=>s.m&&s.m.includes(4))?4:3));
-    }else if(hh){
-      out.push(num()+'TOOL CALL '+t+' Z'+(sCode!==null?' S'+Math.round(sv):''));
-      out.push(num()+'L Z'+hZ()+' R0 FMAX M91');
-      out.push(num()+'L X'+hX()+' R0 FMAX M91');
-      out.push(num()+'L Y'+hY()+' R0 FMAX M91');
-      out.push(num()+'L '+rn[0]+'0 '+rn[1]+'0 R0 FMAX M03 M126');   /* the sample's rotary pre-position */
-      out.push(num()+'M8');
-    }else if(hi){
-      put('G00 G40 G90 Z'+hZ()+' M91');
-      put('T'+t+' G17'+(sCode!==null?' S'+Math.round(sv):''));
-      put('G00 G40 G90 X'+hX()+' Y'+hY()+' M91');
-      put('M3'); put('M8');
-    }else if(okm){
-      /* Okuma: retract to the home, tool change, spindle (the sample post's order) */
-      out.push('G00 Z'+hZ());
-      out.push('X'+hX()+' Y'+hY());
-      out.push('M06 T'+t);
-      if(sCode!==null) out.push('M03 S'+sCode);
-      out.push('M08');
-      needTLO=true;
-    }else{
-      /* the machine zero, the rotary zero, then the tool: Mazak (G91 G28 Z0, G90 G53 B C), Haas (C unwind,
-         then the zero), Fanuc (the Doosan sample: zero, XY zero, rotaries to zero) */
-      if(target==='mazak'){ out.push('G91 G28 Z0','G90 G53 '+rzero()); }
-      else if(haas){ if(rn.length>1) out.push('G91 G28 '+rn[1]+'0','G90'); out.push('G53 G0 Z'+hZ(),'G53 G0 X'+hX()+' Y'+hY()); }
-      else { out.push('G53 G0 Z'+hZ(),'G53 G0 X'+hX()+' Y'+hY(),'G91 G28 '+rzero(),'G90'); }
-      out.push('T'+t+' M6');
-      if(sCode!==null) out.push('S'+sCode+' M3');
-      out.push('M8');
-      needTLO=true;
-    }
-  }
-
-  for(let i=0;i<segs.length;i++){
-    const s=segs[i];
-    const M=Wof(s);
-    const tl=tiltOf(M)&&!s.mach&&!s.tc;
-    if(tl&&!isRot(M)){ note('a tilted plane combined with scaling or mirroring is written in base coordinates, without a plane command'); }
-    const useTilt=tl&&isRot(M);
-    const key=useTilt?sig(M):null;
-    /* tool change: before the plane command */
-    if(s.tool!==lastT){
-      if(tilt){ planeOff().forEach(l=>put(l)); tilt=null; }
-      lastT=s.tool;
-      if(hh) out.push(num()+'TOOL CALL '+lastT+' Z'+(s.s?' S'+Math.round(s.s):''));
-      else if(hi){ put('T'+lastT+' G17'+(s.s?' S'+Math.round(s.s):'')); }
-      else if(lathe){ const t=String(Math.round(lastT));
-        if(sn) put('T'+t+' D1');
-        else if(okm){ const p2=t.padStart(2,'0'); put('T'+p2+p2+p2); }
-        else put('T'+(t.length<=2?t.padStart(2,'0').repeat(2):t.padStart(4,'0'))); }
-      else if(sn){ put('T'+lastT+' D1'); put('M6'); }
-      else { put('T'+lastT+' M6'); needTLO=true; }
-      if(tnc) lastS=s.s;
-    }
-    if(key!==tilt){
-      if(tilt) planeOff().forEach(l=>put(l));
-      if(key) planeOn(M).forEach(l=>put(l));
-      tilt=key;
-      rot={a:rawToOut('a',s.a||0),b:rawToOut('b',s.b||0),c:rawToOut('c',s.c||0)};        // the plane command sets the head itself
-      ['a','b','c'].forEach(k=>{ rawW[k]=s[k]||0; });
-    }
-    /* TCPM */
-    if(CLM&&sn&&s.tc&&!tcpm&&!useTilt&&!opts.wot){   /* CL files, Sinumerik: the rotary head is set before TRAORI, as the post does */
-      const pre=[];
-      ['a','b','c'].forEach(k=>{ const v=s[k]||0; if(Math.abs(v-rot[k])>5e-4){ pre.push(k.toUpperCase()+(k==='c'?'=DC('+f3(v)+')':f3(v))); rot[k]=v; } });
-      if(pre.length) put('G0 '+pre.join(' '));
-    }
-    if(s.tc&&!tcpm){ if(hh) hhM.push(128); else put(tcOn()); tcpm=true; }
-    if(!s.tc&&tcpm){ if(hh) hhM.push(129); else put(tcOff()); tcpm=false; }
-    /* spindle speed and constant surface speed */
-    if(s.s&&(s.s!==lastS||(!tnc&&!!s.css!==lastCss))){
-      if(hh) out.push(num()+'TOOL CALL Z S'+Math.round(s.s));
-      else put((lathe?(s.css?'G96 ':'G97 '):'')+'S'+(+s.s.toFixed(3)));
-      lastS=s.s; lastCss=!!s.css;
-    }
-    pushM(s.m);
-    /* Sinumerik: X is a diameter only for the turning moves of a mill-turn job */
-    if(sn&&lathe&&s.t!==undefined){ const want=(s.proc==='turn'&&!!s.dm);
-      if(want!==dOn){ put(want?'DIAMON':'DIAMOF'); dOn=want; } }
-    /* feed per minute or per revolution */
-    if(!tnc&&s.t!=='rapid'&&s.fm&&s.fm!==fm&&(lathe||s.fm==='rev')){
-      put(sn?(s.fm==='rev'?'G95':'G94'):(lathe?latheFeed(s.fm==='rev'):(s.fm==='rev'?'G95':'G94')));
-      fm=s.fm; lastF=null;
-    }
-    const PF=useTilt?planeFrame(M):null;
-    const P=p=>useTilt?matApply(inv(PF),p):p;
-    const a0=P({x:s.x1,y:s.y1,z:s.z1});
-    let e=P({x:s.x2,y:s.y2,z:s.z2});
-    const rapid=(s.t==='rapid');
-    const feedWord=()=>{
-      if(rapid) return '';
-      if(s.f===lastF) return '';
-      lastF=s.f;
-      if(tnc) return ' F'+Math.max(1,Math.round(s.f||300));
-      const fv=s.f||300;
-      return ' F'+(s.fm==='rev'?f4(s.f||0.1):(fv>=10?Math.round(fv):+fv.toFixed(3)));   /* 4774.8 is F4775 */
-    };
-
-    /* ---- machine coordinates ---- */
-    if(s.mach){
-      const w=[];
-      ['x','y','z'].forEach(k=>{ if(Math.abs(s[k+'2']-s[k+'1'])>1e-7)
-        w.push(k.toUpperCase()+(tnc?sg(s[k+'2']-home[k]):f3(s[k+'2']-home[k]))); });
-      if(!w.length) continue;
-      if(hh){ const fw=rapid?'FMAX':feedWord().trim();          /* F only when it changes (modal) */
-        out.push(num()+'L '+w.join(' ')+' R0'+(fw?' '+fw:'')+' M91'+takeHM()); }
-      else if(hi) put((rapid?'G00 ':'G01 ')+'G40 G90 '+w.join(' ')+(rapid?'':feedWord())+' M91');
-      else put((sn?'SUPA ':'G53 ')+(rapid?'G0 ':'G1 ')+w.join(' ')+(rapid?'':feedWord()));
-      continue;
-    }
-
-    /* ---- an arc, rebuilt from its moves ---- */
-    let used=false;
-    if(s.arc&&!rapid&&s.arc.c){
-      const [A,B,C]=AX[s.pl]||AX[17];
-      const cL=s.arc.c;
-      const cc=useTilt?matApply(inv(PF),matApply(M,cL)):matApply(M,cL);
-      /* the centre is held in the programmed system; bring it into the output system */
-      const r0=Math.hypot(a0[A]-cc[A],a0[B]-cc[B]);
-      let j=i, sweep=0, prev=a0, ok=r0>1e-3, sgn=0, end=a0;
-      while(ok&&j<segs.length){
-        const q=segs[j];
-        if(q.arc!==s.arc||q.fi!==s.fi||q.pl!==s.pl||q.t!==s.t||q.f!==s.f||q.tool!==s.tool||(j>i&&q.m)) break;
-        const qe=P({x:q.x2,y:q.y2,z:q.z2});
-        if(Math.abs(Math.hypot(qe[A]-cc[A],qe[B]-cc[B])-r0)>0.002) break;
-        const ra={a:prev[A]-cc[A],b:prev[B]-cc[B]}, rb={a:qe[A]-cc[A],b:qe[B]-cc[B]};
-        const d=Math.atan2(ra.a*rb.b-ra.b*rb.a, ra.a*rb.a+ra.b*rb.b);
-        if(Math.abs(d)<1e-12){ break; }
-        if(sgn&&Math.sign(d)!==sgn) break;
-        sgn=Math.sign(d); sweep+=d; prev=qe; end=qe; j++;
-      }
-      const helix=Math.abs(end[C]-a0[C])>1e-6;
-      if(j-i>=2&&Math.abs(sweep)<2*Math.PI+1e-6){
-        const cw=sweep<0;
-        if(tnc){
-          if(s.pl===17&&!helix){
-            if(hh){
-              out.push(num()+'CC X'+sg(cc.x)+' Y'+sg(cc.y));
-              out.push(num()+'C X'+sg(end.x)+' Y'+sg(end.y)+' DR'+(cw?'-':'+')+' R0'+feedWord()+takeHM());
-            }else{
-              put('I'+sg(cc.x)+' J'+sg(cc.y));
-              put((cw?'G02':'G03')+' X'+sg(end.x)+' Y'+sg(end.y)+feedWord());
-            }
-            used=true;
-          }else note('Heidenhain: arcs outside the XY plane and helices are written as short straight moves');
-        }else{
-          const g=(cw?'G2':'G3');
-          if(s.pl!==pl){ put('G'+s.pl); pl=s.pl; }
-          /* CL files: an axis that does not change from the point before is left out (modal, as the post writes it) */
-          const ax=[];
-          if(!CLM||Math.abs(X(s,end)-X(s,a0))>5e-4||Math.abs(end.x-a0.x)>5e-4) ax.push('X'+f3(X(s,end)));
-          if(wantY(s,end)&&(!CLM||Math.abs(end.y-a0.y)>5e-4)) ax.push('Y'+f3(end.y));
-          if(!CLM||Math.abs(end.z-a0.z)>5e-4||!ax.length) ax.push('Z'+f3(end.z));
-          let line=g+(ax.length?' '+ax.join(' '):'');
-          if(s.proc==='turn'){
-            const R=r0*(Math.abs(sweep)>Math.PI+1e-9?-1:1);
-            line+=sn?(' CR='+f3(R)):(' R'+f3(R));
-          }else{
-            line+=' '+CL[A]+f3(cc[A]-a0[A])+' '+CL[B]+f3(cc[B]-a0[B]);
-          }
-          put(tlo()+line+feedWord());
-          used=true;
-        }
-        if(used){ i=j-1; continue; }
-      }
-    }
-
-    /* ---- a straight move ---- */
-    const rw=[];
-    if(!useTilt){
-      /* CL files: a rotary is written when it moves by a visible amount (0.0005 deg is below the 3 decimals written) */
-      ['a','b','c'].forEach(k=>{ const raw=s[k]||0, v=rotW(k,raw); if(Math.abs(v-rot[k])>(CLM?5e-4:1e-7)){
-        rw.push(k.toUpperCase()+(CLM&&sn&&k==='c'?'=DC('+f3(v)+')':(tnc?sg(v):f3(v)))); rot[k]=v; rawW[k]=raw; } });
-    }
-    if(!rw.length&&Math.hypot(e.x-a0.x,e.y-a0.y,e.z-a0.z)<1e-6) continue;   // nothing moves
-    /* Sinumerik with a CL work frame: the rotaries before the first cut are set by CYCLE800 (its swivel data), so a
-       rotary-only move there is left out, as the 840D post does; the rotary position is kept for the moves after */
-    const moved=Math.hypot(e.x-a0.x,e.y-a0.y,e.z-a0.z)>1e-6;
-    if(CLM&&sn&&opts.wot&&!xyzSeen&&!moved) continue;
-    if(moved) xyzSeen=true;
-    if(hh){
-      const fw=rapid?'FMAX':feedWord().trim();                  /* F only when it changes (modal) */
-      /* CL files: only the axes that move (the Klartext L block keeps the others) */
-      const mv=(k,lab)=>(!CLM||Math.abs(e[k]-a0[k])>5e-4)?(' '+lab+sg(e[k])):'';
-      out.push(num()+'L'+mv('x','X')+mv('y','Y')+mv('z','Z')+(rw.length?' '+rw.join(' '):'')+' R0'+
-               (fw?' '+fw:'')+takeHM());
-    }else if(hi){
-      const mvI=(k,lab)=>(!CLM||Math.abs(e[k]-a0[k])>5e-4)?(' '+lab+sg(e[k])):'';
-      put((rapid?'G00':'G01')+mvI('x','X')+mvI('y','Y')+mvI('z','Z')+(rw.length?' '+rw.join(' '):'')+feedWord());
-    }else{
-      let line=(rapid?'G0':'G1');
-      if(CLM){   /* CL files: only the axes that move, as the reference post writes them (modal) */
-        const w=[];
-        if(Math.abs(e.x-a0.x)>5e-4) w.push("X"+f3(X(s,e)));
-        if(wantY(s,e)&&Math.abs(e.y-a0.y)>5e-4) w.push('Y'+f3(e.y));
-        if(Math.abs(e.z-a0.z)>5e-4) w.push("Z"+f3(e.z));
-        if(w.length) line+=' '+w.join(' ');
-      }else{
-        line+=' X'+f3(X(s,e));
-        if(wantY(s,e)) line+=' Y'+f3(e.y);
-        line+=' Z'+f3(e.z);
-      }
-      if(rw.length) line+=' '+rw.join(' ');
-      put(tlo()+line+feedWord());
-    }
-  }
-  if(CLM){
-    /* end block: spindle and coolant off, the transformations off, back to the machine zero */
-    if(tilt&&!sn) planeOff().forEach(l=>put(l));   /* Sinumerik: the footer writes CYCLE800() itself */
-    if(hh){
-      out.push(num()+'M9 M5'+(tcpm?' M129':''));
-      out.push(num()+'L Z'+hZ()+' R0 FMAX M91');
-      out.push(num()+'L X'+hX()+' R0 FMAX M91');
-      out.push(num()+'L Y'+hY()+' R0 FMAX M91');
-      out.push(num()+'L '+rzero()+' R0 FMAX M126');   /* rotaries back to zero, as the sample does */
-      out.push(num()+'M127');
-      out.push(n+' END PGM CONVERT MM');
-    }else if(hi){
-      put('M9'); put('M5'); if(tcpm) put('M129');
-      put('G00 G40 G90 Z'+hZ()+' M91'); put('G00 G40 G90 X'+hX()+' Y'+hY()+' M91');
-      put('M30'); out.push('N99999999 %CONVERT G71 *');
-    }else if(sn){
-      put('M5'); put('CYCLE800()');
-      put('G0 SUPA Z'+hZ()+' D0'); put('G0 SUPA X'+hX()+' Y'+hY()+' D0'); put('D1');
-      if(rn.length) put(rn.map(k=>k==='C'?'C=DC(0.)':k+'0.').join(' '));
-      put('M30');
-    }else if(okm){
-      /* Okuma: the tool-axis control off, Z home, XY home, program end (the sample post's order) */
-      if(tcpm) put(tcOff());
-      put('M9'); put('M5');
-      put('G00 Z'+hZ()); put('G00 X'+hX()+' Y'+hY());
-      put('M30'); out.push('%');
-    }else{
-      /* Fanuc, Haas, Mazak: the coolant and the tool-length offset off, spindle off, machine zero, rotaries to zero */
-      if(tcpm) put(tcOff());
-      put('M9'); put('M5');
-      put('G53 G0 Z'+hZ()); put('G53 G0 X'+hX()+' Y'+hY());
-      if(rn.length&&!haas) put('G53 G0 '+rzero());   /* the Haas sample leaves the rotaries where they are */
-      put('M30'); out.push('%');
-    }
-    return dropRepeatedG(out).join('\n');
-  }
-  if(tcpm){ if(hh) hhM.push(129); else put(tcOff()); }
-  if(tilt) planeOff().forEach(l=>put(l));
-  pushM(res.tailM||[]);
-  if(hh){ if(hhM.length) out.push(num()+takeHM().trim());   /* M codes left over: a block of their own */
-    out.push(n+' END PGM CONVERT MM'); }
-  else if(hi){ put('M30'); out.push('N99999999 %CONVERT G71 *'); }
-  else if(sn) out.push('M30');
-  else if(okm) out.push('M02');
-  else { out.push('M30'); out.push('%'); }
-  return dropRepeatedG(out).join('\n');
-}
-/* The tilted-plane commands of each control, from a frame matrix (rotation plus
-   the origin). Returns {on:[...], off:[...]} with Klartext blocks unnumbered.  */
-function planeCommands(target,M,note){
-  const TG=CONV_TARGETS[target]||CONV_TARGETS.fanuc;
-  const D=180/Math.PI;
-  const f3=v=>(Math.abs(v)<5e-4?0:v).toFixed(3);
-  const f3s=v=>trimNum(v);
-  const sg=v=>{ const t=f3(v); return (t[0]==='-'?'':'+')+t; };
-  const ang=v=>(+(Math.abs(v)<5e-7?0:v).toFixed(4)).toString();
-  const sang=v=>{ const t=ang(v); return (t[0]==='-'?'':'+')+t; };
-  note=note||(()=>{});
-  const off = TG.fam==='sinu'?['CYCLE800()']
-            : TG.fam==='hh'?['PLANE RESET TURN FMAX','CYCL DEF 7.0 DATUM SHIFT','CYCL DEF 7.1 X+0',
-                             'CYCL DEF 7.2 Y+0','CYCL DEF 7.3 Z+0']
-            : TG.fam==='hhiso'?['G80','G54 X+0 Y+0 Z+0'] : ['G69'];
-  if(!M) return {on:[],off};
-  const m=M.m, o={x:M.t[0],y:M.t[1],z:M.t[2]};
-  /* spatial angles, rotations about the fixed axes X then Y then Z (R = Rz.Ry.Rx) */
-  const spatial=()=>({B:-Math.asin(Math.max(-1,Math.min(1,m[6])))*D, A:Math.atan2(m[7],m[8])*D, C:Math.atan2(m[3],m[0])*D});
-  if(TG.fam==='sinu'){
-    /* CYCLE800 MODE 27 = 00011011: axis by axis, rotary sequence ZYX (the manual's example, and the sample post):
-       _A = 1st rotation about Z, _B = 2nd about Y, _C = 3rd about X. The plane is R = Rz(A).Ry(B).Rx(C). */
-    const B=Math.asin(Math.max(-1,Math.min(1,-m[6])))*D;
-    const A=Math.atan2(m[3],m[0])*D, C=Math.atan2(m[7],m[8])*D;
-    note('CYCLE800 is written with MODE 27 (ZYX) and the swivel data record "TC1"; change it to the one set up on the machine');
-    return {F:M,on:['CYCLE800(0,"TC1",200000,27,'+[o.x,o.y,o.z].map(f3s).join(',')+','+[A,B,C].map(v=>trimNum(v,4)).join(',')+',0,0,0,1,,1)'],off};
-  }
-  if(TG.fam==='hh'){
-    const {A,B,C}=spatial();
-    return {F:M,on:['CYCL DEF 7.0 DATUM SHIFT','CYCL DEF 7.1 X'+sg(o.x),'CYCL DEF 7.2 Y'+sg(o.y),'CYCL DEF 7.3 Z'+sg(o.z),
-                'PLANE SPATIAL SPA'+sang(A)+' SPB'+sang(B)+' SPC'+sang(C)+' TURN FMAX'],off};
-  }
-  if(TG.fam==='hhiso'){
-    /* G80 is cycle 19: spatial angles, the same convention as PLANE SPATIAL */
-    const {A,B,C}=spatial();
-    return {F:M,on:['G54 X'+sg(o.x)+' Y'+sg(o.y)+' Z'+sg(o.z),'G80 A'+sang(A)+' B'+sang(B)+' C'+sang(C)],off};
-  }
-  if(target==='okuma'){
-    /* the three dimensional G68: turn by R about the vector I J K through X Y Z */
-    const tr=m[0]+m[4]+m[8];
-    const th=Math.acos(Math.max(-1,Math.min(1,(tr-1)/2)));
-    let ax=[m[7]-m[5],m[2]-m[6],m[3]-m[1]];
-    const s2=Math.hypot(ax[0],ax[1],ax[2]);
-    if(s2<1e-9){
-      /* 0 or 180 degrees: the axis is the column of R+I with the largest length */
-      const c=[[m[0]+1,m[3],m[6]],[m[1],m[4]+1,m[7]],[m[2],m[5],m[8]+1]];
-      ax=c.reduce((a,b)=>Math.hypot(...b)>Math.hypot(...a)?b:a);
-    }
-    const L=Math.hypot(ax[0],ax[1],ax[2])||1;
-    ax=ax.map(v=>v/L);
-    /* G68 turns about the point given, so the frame it sets up is not the source frame
-       unless the shift happens to lie in the plane of the turn: the points are
-       written through the frame G68 really makes                                */
-    const Rm={m:M.m.slice(),t:[0,0,0]};
-    const F=matAboutPoint(Rm,o);
-    return {F,on:['G68 X'+f3(o.x)+' Y'+f3(o.y)+' Z'+f3(o.z)+' I'+(+ax[0].toFixed(6))+' J'+(+ax[1].toFixed(6))+
-                ' K'+(+ax[2].toFixed(6))+' R'+ang(th*D)],off};
-  }
-  /* G68.2 P0, Euler Z X' Z''  (R = Rz(I).Rx(J).Rz(K)) */
-  const J=Math.acos(Math.max(-1,Math.min(1,m[8])))*D;
-  let I, K;
-  if(Math.abs(Math.sin(J/D))<1e-9){ I=Math.atan2(m[3],m[0])*D; K=0; }
-  else { I=Math.atan2(m[2],-m[5])*D; K=Math.atan2(m[6],m[7])*D; }
-  return {F:M,on:['G68.2 X'+f3(o.x)+' Y'+f3(o.y)+' Z'+f3(o.z)+' I'+ang(I)+' J'+ang(J)+' K'+ang(K),'G53.1'],off};
-}
 function dq(id){ return document.getElementById(id); }
 /* ------------------------------- saving -------------------------------- */
 let FILEH=null, FILENAME='untitled.nc', DIRTY=false, FSNOTE=false;
