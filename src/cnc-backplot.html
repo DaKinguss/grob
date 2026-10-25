@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-  Sinumerik Backplot · GROB (derived from CNC Tools 3.41)
+  Sinumerik Backplot · GROB, version 1.8 (derived from CNC Tools 3.41)
   Copyright (c) 2026 Engineering Projects Europe.
   All rights reserved.
 
@@ -19,6 +19,7 @@
 <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAAZmUlEQVR42u2daXRUx5WAq97aq6TW1tp3hEAIsyrsMkOIsSfGLF6wiYlD7GSIk0w8jsc5mZyTc+bEmUw8wYmxjW1MvGEwtvG+gHFAgBEYITBIgNC+Ly211t7eWvNDBIRAUr/u1096Ut0fHCR1v1ev7vfuvVV1bxWMtieCEAhC6LqfIQAIQgiwBN2xAEAEhvRuaHqWUhcICAACAMCbNReToYZAONC/1/c8uIaLiqBQKhoJeKXhWDQnZhAuQ9QxZnCo2A4s6pkWOKAahAAECAShGgpjMaERARAhFKiaKIzFhEcEoCtaU6oyKsD7YdFdDKtcCNx3WIKCAw2EN1gmhPivTb/cCnYlEzAQwW4FS8jdChYMBxYs/sExdG0Hy8SNT5UFpAiNryA0JoxYOcuQl0rFR5IdvXJVq7jnqKfPi/ENbXwKQ7Rkr5bE24jH11jXLTQN+b3LJ79ywPXsZ26s3dAJabKEjc+WRZjhf6yxbt0ckZfK3PhXhoILclgTA7++xGMthkioGz3QmDsUAw03rzT95HvmMBM58icfuc1SXMV/dY7DilQl+Bii+vHlVkgC3LfE9Mvvm2Mj/F306XHLi590eHkcf4TYrYyt2bhjrmH7Ftv6RSazQcEA28BAUULfVGDnor7xGBeWI38K89t7rDPTmMC+7uHkxU86ej3YeITMcoyJ2ZieRD79o4jH14TZI8iAL0JT0ECBIxew8VDZeIyZ5UiKIn691nrnfKMqRAoiKvito61HxtpV33JobDZum23Y/XhUbgqj1k1JAtosxJff4mGLmsZjDNZWnlhr2b7FxtIqs7huoSk7kcKqVVEIjc1GwQx2y+3WUGG3xoo1GrxAOJCVrK3lICD4/YYQTsiuuMWQl0pj7apCyBU4NIs1shOotNjQWv7f3RuGFatK4PFPy6GVT4mzkaG+xfwpzPI8Fus2eM8CACCAhpnD8TYtvNgTa60451WVQQuh5bRia7cW8xA5SfTqfANWbvB+RdOA9PglzuXTgo//XBdGkVi/wQppslihViGpjEBiJJkX6BqK/2I1Es5++VydgBUczHiF0DhV9LnPXIKoxS1/tdpqZHDoEZRfIU3mMC3DN5cPhRnhnMyQGw8DA3lBPlWJjUcwlkPzLPPnP3f1ebSIPH66yhJuwsYjKMth1XilnhMACeGiaSGfjaApSJPw2EW8GhegEGOS+rXjoKuzT9LgRpuWm+IicOFWQF4FwrHJPpdk4OXk5TNDPhtBEjDcRBzEGciBWY6xuvHuo97GTlGDG61baEy340mPgF6tsapbQQB09cmr5ho1MI8JkcSnxT6sbN1YDgDAx8W+8iYthporZxnxUr7O4AAA/O/7/drcCC/l6w+OI2VccaUWWePzpzAFM/BSvq7gAAD84Z0+bW705DqcRKiTgPSqOHrlaUlUZnzIY4LoMPJ8nVDnkLDWdWM5BiIPWdZiFn/VbJznoTc4atul9094NbjRilswHHqDAwCw9aN+DZbyI60EgVfidAdHW4/8xmFPqO/S7BRlXG6tOzgAAC980e/hQruUf6lJxCrXJRzdLvTyfldIb/G3T/qxynUJBwBgx0FPjztUxuOLEm9dO7YcuoXDy6O/hublPlXhO1/HFz4VOysdL7LoEw4AwBuHPM1Odd9vdOyiL95GPbk+PCqMnJ2B4fBXxuNWk10uedUcdZbyS+v5Pg+ancGGm6+8Bn0etP8MXr7Xp+UAAHx8ylfTFqzxqGkTS+v4vFRmSsJ1pgJbDn3DgRB46t3AV+MaO4UzNVy6/ebVU0nRVEwYzirVLRwAgMOlgSzld/ZJxRVcvI2ak8GOkDg9CxsPXcMBAPif9xQYD49POlXhsxiI+dksRY4yQz4bD1j0G5AOSFuPLIpg1PIWjpeKKwWbmchKYEbFYkDcHProGxyT6hkOAEBxFT81kcoaJtVDluXTVRxFEdOTGSOrwASGGYkdB/FxCzqHAwDw2Wmfo0fOS6OH7Hl9rpb38Sg3lbUaFXtGIws/KfZ2u/ASnM7hAACUNQi7Cj3lzXxli/hNBd/gEAGEeWmMzRJ4NUppPX+pEU+lhxKO8PDwhMTEtNRUo8mEZJnjQlVYJsqgskUqbxZ+UGC+M98UGx5skVKPC03UgzhUVIrivf1Y1nDr8uXLlhUsWLAgLDx88J/6entPnDhx7NjRwsOHOU79iK/XjTr61FmWmzGxylhCpBQFe5/TNH3XmjWbNz8cExs78ic7HI4dO3Z8/NEHkqRyNi+E4KkfhG9YagryOrKMcn/Rxul/846QKsVftxIdHf3sc8+vW3+32Wwe9cNms3npsmXz8/OLioo8HpXzuw6VcplxVHYiHRxksOgS3+TUdyZ6qJXiFxwzZszc/uJL6ekZipoeFxd32/duKy09397erm6nfPmtLy+VTrcHtd9tdZt4ukrHpkMDpYwOR0pyyvMvvhgVFRXAA5jN5qXLCo4eKezt7VWxXxAC+8/4clOC4sPDyfqtrtZGKcSoF9r67DabzRbwY0RGRm7967P+2D1Fwotgy/buUxWBh+KzMhidkqGZUkaxHL9+4omFCxcF+TARERGsgT1RVKRuH0ky+LzEtzSXDeyUJzNL7CvS5cnFmillJMsRn5Bw15p1qjzPurXrExPVPxLKw6FNzzirWgMMHWbr0HhoqZSR4Fi//m6SVGdPHNZgWLtufSg6q9eDNm7tCowPPa7da6mUkeC49dblKj6Vule7bgTfK2/c2hXAJlJ6XLvXUinDwpGdnZ2alqZiO1LT0tS94FA+/tLl6FE2b5GTxLC6wkNjpQwPx9Spqj9bXl5e6DquySlt3KqMDwMDpyXpiQ6NlTIsHFFR0aq3IxTXHCzVbeLGrV2KyqL0lW+ssVKGhyM6SvV2WK0h31unuk3c9IzT7ffBHbPS9TRg0Vgpw8Lh6lO/8ozntFglL2sQN2/r9pMPfVkOjZUyLBydTqfq7QjFNW8qxZX85m3dnDD6BJe+KhU0Vsqw/eIMQTucWsExwMeW7d2iNDofOprt0Fgpw8JRVnoeqXo2IEKo9Pw5LbuysIx7bGfPqHzoaLZDY6WMZDkuXChVsR1nS0q6uro07s3PTvse29kz8m50OppE11gpI7nb1159TcV27N6ze0w69LPTvv/aNdLa9C3pjI6OGtVSKSPBcaTwcElJiSqNOHfu2yOFh8eqQ/d+7f3z+8PWzxkYqKNjFbRUyiiB+o6XXlSlHduff35s+/TF/e4R9nzS14BWM6WMks/R2tpiDbPm5c0MphF79rz1/r73xrxPv6ngWQrMm3KT+srOXvlQqW4qFTRTyuhpgidPnMjKylKaq3hVPv/80z/98Y/jpFuPl/P2CPLGugSShLuPenRkPLRRil8JxgcPfilJ0vz5+QEYwL/839PjqlsPlXI38hFlJV464JJkHeGhhVL8LU04e/bM1NxZsTFRNO2Xe/Z4vcdPFv/pqf8eh916Y3GDTisVQq0UBdnbjc0tzu7e9NSkKRnpFsuwZUUul6eytq62rtHjGaeV7AiBx3b2mA1wed61rdBnZdAnK3igNwmpUpSl9suyXF3bUF3bYLWY7bExFrOJNbAMTfGCyPk4l9vT3tHZ3+8a/30qyWDL9u7tW2xX+dDvXmGhU0qAdR/9Lne/S99bXAwUN7zxq8j8bBbouVIhdEqZ1Fun8SLYvK27tF4AAMSEkUlReCM5DMfgGI1Dm55xDvAxW//GA8OhsvR6rhS/4F0G1Yk5dCR0XBJjT6DtCYw9nrYnUGERkGUgxUKKgjQNKRrSNEHRvyfdP0nbM33DYxLHAYGXRQEJArryr4hEDnG82NcjtLfw7a18e7PQ1iK0N2M49GMGLWHGrGmGzGwmLnkABSY2zl/7AayvsD8CAJAsC1jWz4U43tEmtLfw7S18a6OvptJbdUl29WE4xg0NmTmGKTnGjKmGzKlMbHwwV+smIpR+hYmNY2LjzHlzruHS3uqtLvfVXPZWlfuqL+uaFWoy0xAKYezxjD0+fNHyCcCKbuBgUzIt8xZa5i4yTZ0BSd2kX1xlBUmSp7zUVXKiv+Q431CL4VCHCduqtdb8JXRUjK49ICRJc+4sc+4s+6YtvKPNVXKi5+BHvtpKDIdiQQRhnb8k8s57LbmzJ94ogImNi7x9beTta91lZ5wfv9NffAxiOPx6wwwm2213Rd6xfhzGE6qLecYc84w5XEtj16fv9BQeQF43hmMYawGA7bvfj33wZ1RYOJhMwiYkx//k8ZgND7e/vq3n0BcQwzHU0ialJTz6G1NOHpisQoWFJ/7id7aVd7U8/ye+qW5cjA3H3o+wbOymn2U+8/pkJuOqmHLyMp95PfYH/wZZdrLDYZm7KOu5PdFrN0KKwmRceVsoKnr9g1nP7bHMXTR54aBsUXGPPEZH2zEQNwodbY975DHKFjUp4YAw6ck/MvYEzMGwcZg9IemJP4CxK8cbMzii120yTZ2BCRglBJk2M3rdpskFB2TYqLs2YN37I5F33QcZdhLBYc1fQlrDsOL9isys4db8JZMIDkPaFKx1/4VNTB3vcEiispofghj24kxSKla5AuMx/ErCCJ0cvBIVXJrzKTuAgmFYAG4eaXvKzmKVK+j5YRdvIaMwHFGkRAVweH2KS41Zg+Gmv3eXncEq91MQQq5vT93cOxsNSq/m9XpCA4fyA7kMw8DB1VV5Ksqw4v0Rz4Wzwy21GFjjeIGD83kVW47hFwhatz+NBAHrfhSzIQhtO54Z9t3TteVgDcOizdVVOd5+Bat/ZGl/4wWuoWbYqI5VDIcvRHD4lFuOCFvkCH91vr+r4+2dmIDhpOPtnV2fvjPCB2zKV158Xu94gSMhMWmU59/79859b2IObpTOfW927P37yJ+JT0weN27FqxiOOD9a79j1YtWj93sqLmAgrkSgFReqHr3fsWv0XeESkpLGi1txdnYobYrdHkf5kajBtzTU/uanbX9/Vua4yYyFzHHtr26r/c1P+ZaGUT9MUVR0TKzSWyhSooIUm/bWFo7jWCUZShAScQmJTQ31N4zBwgvyH05JmOXx9dQ2FpdWHOh3tXd9srev6HDk6g22760mDcZJhYXk83Yf/Nj5wW6puxMCYLXY87JvS0+ebzJE1DefPVr8io8bWg0Vn5QCobLpUZ7nHEoOgFZwlj0A4J4HHsrIylbUoNPfFP3jwKeDf0MS9C8f+jg2KvPqb0RJOH/ps8Mnt3d21wIACEtY1L/ebbvj7omaaWziiDvP2SCCEoEkIAteF9fnFAVOkngIYbg13mKOgQACiCCACAGvr6fw5MvHTl83uFt5++o58xcoum9VRfm+t9/w//P+bhg3IGHhEWnpmYoaFGO3l5wqkqRrU/orFj6aN3XVdb6NIONjcxbNeTDBPr3f5ejurPVcONu1f5/U28OmZJAm8wSDQ6AQT4LULpaSISMTBsJgMUaGWWLCrXHh1jiWMUMIIQQQQAAAhICmDZzgLr38+aA5AsPq9fcpXVg5d7a4ubEhVHAAhGbOnqeoQSRJ8jw32LPcc8efDezNTweKicyYm7c+O32px9vd4ajwVlzo+mSvr7EO8Rxpi54Yvkbo6e4/UVhxYGcyjI8I8zcRjqbY4yWvX/3xOwuXpmUoXtk+dvgrV7+CYl1lab3NTY2iKFCUsk1OFiwuuHD+2/6+K7vTWy2jhFEpCbMeXPtCh7Pm2OmdZ8o+7C861F90CEFonDLdOm+xZd4iY7r+Vvy9tZWukiJX8XFP5UWIEABg38W6f3/oY4oaZTshBABEwGK6dhKbNSw8f9EypQ0QRaGtRdmGIgotB0Bp6VnhEcpOUacoKiEp5fzZ0wM/Tsv6bphl9DDbbLJNy1qRP+t+AFB7Z6Uk8aKzw1Na0nPgw66Dn/CtjQhBKjqWGMdp6xLHuc6ecn7ydsv2p7s+3O0pLRGdHRAAlrEsmffQutv+YGAto0eFCAAImtvLTpe+O/CL+zb+yBYZqbQxDfW1ZeeUrXcqC0gBAEtuXbl4WSDn3h45dODk10cAAHlTb39g9d8UfZfjvRW1haWX95fXHBaEQYvOJMUmprKpGWxqJpuSaUjN8H+3llAI72jz1dfwDdW+hhquvoZrqgPStaOQGdqYk/kveVNXZacXMLRhkGUY/cq7Pvz5hcovAQBLClYsLlgRQNu+Lvzq+NFDoYUjMjLqkZ8/HljfvbPr1dqaSgDAknmbby94giAU76TAC77LNYWll78YSsnV5zGYDKkZdIydskVTUbFUZDQdFUNHxaib5s63twjODsHZIXZ1ik6H2N0pdLT76mvQzbIaGNo4LWvFjOxV2enLrjFxLYobCDuH8SgASLL4ReGfj595DQCQkTX1ngd+GFibX972l+5uZ2jhAACsvXdjdk5uAO1DCBUdKzx+5CuEUGR48rL8h+fkrqVpQyDqEXwVtUdKL39RXn2YF/yauiXDIyhbNGmxQoaFFE3QNKAYgqYARRMUDWlmoLAKiSISeFkUgCjIgghEXh7YHIznJFe/2N0p9fb4czuGNk7L/G5ezqrstKWBPaMsicWl7x499UpXbyOEcOnylQsWF8CAKhXKL5Z+9N4epd8KBI64+MQfPvJowK9dc2P9B++85Xa7AABmU+TiOQ8tmH2/0RDglMY/KdlfXn3IT0pCKgxtmpa5QjETNziXfnfnc2+s6XM5AABmi3XtvRsTk1ICbtUr2//q7HBoAQcAYMODP05VOOExZKqu7NzZM6dPDrSYoU3fuWXD4nkPhVsDjxhESXA4q1vaL7Y6Lra0X2xxXOIFtyY0mBPt0+Pt0xNjc+PtObGRWSRJKbep1zkXWZaef3Ndi+NSdIx9bv6C6XmzGSbwPVJrqivefeu1AL4YIByp6ZkbHvxx8D3b2FBXfuF8S0tTW3MTQVCzp69eNv/h2Ois4K+MEHL21De3XWztGGDlotujzvGDZlNUoj03wT49IXZafOz0qIgUqEZRWp/LcXUQd/rC27WdX0zLnZmUrEIm9p7XdzTU12oHBwBg08OPxickqvgKtjY3Njc2uD2uGOuM7KQ7oiPUn8zw+Lo43u3leiXJx/Eujnd7+V5R9HKCm+PdPq6XIEiWsbKUmWFMFGU0MuEsY2YZC0kajGw4y5hNhkjVW+XovlTZfKCz/0LBzN9GmNMl2N/PHgRQVqlXm97Y+UJg3w0cjqnTZqy554HQmWtSijKIObQ8kff3EYgWH3VJIruvKEM2h/lWutnjItmh1i327X2z6vKlAFWgcBLsmjg7HfEJiZFR0SHqOER4BaqRI2tlwgsBCWUT1NEJnyP6O4ns5MhKD32ap2sRMWhADgWBbJVI1U7fra4s/7rwH4G/nwHDAQCovHwpJzfPaDSFsC+hKBFdPFXPU7UycAFAELJZj5QghCTS4aMqvEwJT1VLZBeA4k0+BlXLaHF2duzd9aosS2MDhyxLtdWVM2fPJTXYGBSKEtktUA0cVS3BfggIApkgGO+UICCLRBtHlXuYEp6qlYhuALU4LIznud2vvexxB3UwUlBwAAC8Xo+z0zEtd6Z2/Q0lmegRqAaeqpKIPoAAgcxwnB3/IANRJFs5qtzDnhaoeono1YaJq/L+3rdaW5qCDfuChGPAfNEUnZSiefkrlGWiV6CaOKqCJ5ololuGXgAABIz2rMhAlIhugWzlyRovddFHnxeoRonoBWAMjpw8fvTQuTPFwV+HQggF78IL/7E/3GbLmT5GO75BWSZ7eNBz9WdCtpJyBCXbCBRByREQ0CGgQZCIHonolmGvSHRLsG+cBEIXy85/XfiVKkESjIpNVOupFiwpWHrrSqXpSVrAg2iIDBCxELEEMBCIJYABIhbKLAQsgQw30oOAIEMfAhwiOAQ5GfhkyMnAhyCHIIegD8FxV64ny/KxwoMDS99qwAFgVGyCisF/SlrG2ns3GnSYskXIJggMACAEOJnw6K79Xq/ng3d2NdbXqTi8Ik1mq4pw9PZ0Xyo7n5qWYbZYdTbUhAKC3vFpEkaVjva2Xa++1OloV/eyKsMBAOA4X+m3Jbao6JhYvIekJkFG6bfv7Xld6e4po/tioLZbGSzJqekLFhcoLWXA4r9UV17+5viRxoa6UFxc/ZjjRomOsS9cujxn+oxxGKjqVGRZLr9QWvT14QBSNJSNVgJeeFMk4RG2BYuXzZg5h6Lx8ZyBiyDwZefOnjx+pM+/bLRgPUu0PREBpM08NEVTycnpyalpyWkZ8QmJASTFTEIRRbG1pampvraxvq6xsVYURC3Cc4AggDDanqjKPJjiSJiiEpNSUtIyklPSExKTsEUZYiFam5sa6msb6+uaG+slSdS4AQNIjBkcQ8RkNpvMFpPRNPAfo8lsNluMJpPJaAITYqX+pgrwej1ej8ftdnk9bo/b5XG73R631+P2uN1j3jYIIQUAgBCOOR8e99j3CJbBZAB8lj2WEYQYNOeBBct1MFyBA0KAEMK9ggUhdDW+uOZWIMTGA8t1GBBDqMG9M8nNxk1jDmw8sAwFYOhoBQFsPLDZGAYOiIct2GwMBwcWLKPBgSPTye1QRoQDR6aT26Fgt4IlMLeCBQuGAwuGA0vI4EAI4Zn1iTQ28VObfmVx4mn1yTA2wW4FiwIJYFNEhK2J3vwIGNgNWanOFMMxcIOrbgszMs7DCxjEqxxg5ciVmyGkWc0LFuUGHsLgXt/gyooghINm5rEVGTdYDKgDBJkarELN2VUmBpoFBzbyxqBoDwQEAKnZ82oWJF5r1g0jaXjlfAgMjQoQDDAArqVlDfIeqvbu/wMI8ODHZJWbHwAAAABJRU5ErkJggg==">
 <meta name="theme-color" content="#14171b">
 <meta name="application-name" content="Sinumerik Backplot">
+<meta name="version" content="1.8">
 <style>
 :root{
   --graphite:#15181c;
@@ -268,7 +269,14 @@ body.light .ht,body.light .hax{color:#8a5300}body.light .hvar{color:#a3246b}
 #msgs .info{color:var(--dim)}
 #view{flex:1;position:relative;background:var(--canvas);min-height:0;isolation:isolate}
 #mcv{position:absolute;inset:0;z-index:-1;pointer-events:none}
-#mcv[hidden],#showModelWrap[hidden]{display:none}
+#mcv[hidden],#showModelWrap[hidden],#collWrap[hidden]{display:none}
+#colmk{position:absolute;left:0;right:0;top:0;height:0;pointer-events:none;z-index:0;will-change:transform}
+#colmk .cmk{position:absolute;left:0;right:0;height:18px;background:rgba(255,59,59,.16);border-left:4px solid #ff3b3b}
+#colmk .cmk.hard{background:rgba(255,59,59,.28)}
+#collCount{margin-left:4px;font-weight:700;cursor:pointer}
+#collCount.collbad{color:#ff5a5a}
+#collCount.collok{color:var(--dim);font-weight:400}
+.mdl .mdlhead{font-weight:600;color:var(--text);margin:10px 0 6px;padding-top:8px;border-top:1px solid var(--edge)}
 .mdl{padding:10px 12px;font-size:13px}
 .mdl .mdlrow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin-bottom:9px}
 .mdl .mdlnum{width:64px}
@@ -477,42 +485,6 @@ tr[data-t].on>td:first-child{box-shadow:inset 3px 0 0 var(--amber);color:var(--a
 .stepdlg .ok{background:var(--amber);color:var(--onamber);border-color:var(--amber)}
 .stepdlg .err{color:var(--err)}
 /* right-click menu and explanation panel */
-.ctxm{position:fixed;z-index:60;min-width:230px;max-width:320px;background:var(--panel);border:1px solid var(--edge);border-radius:6px;
-  box-shadow:0 8px 24px rgba(0,0,0,.35);padding:4px;font-size:12.5px}
-.ctxm button{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:none;border:0;border-radius:4px;
-  color:var(--text);padding:6px 8px;cursor:pointer;font:inherit}
-.ctxm button:hover,.ctxm button:focus-visible{background:var(--seghover);outline:none}
-.ctxm button small{margin-left:auto;color:var(--dim);font:10.5px Consolas,monospace;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ctxm hr{border:0;border-top:1px solid var(--edge);margin:4px 2px}
-.ctxm .ai-mk{flex:none;width:18px;font:700 9px/14px Consolas,monospace;text-align:center;border-radius:3px;color:var(--onamber);background:var(--amber)}
-.ctxm .ai-mk.sp{background:none}
-.ctxm-foot{color:var(--dim);font-size:10.5px;padding:4px 8px 2px;border-top:1px solid var(--edge);margin-top:4px}
-#aipanel{position:fixed;z-index:55;right:14px;bottom:14px;width:min(440px,calc(100vw - 28px));max-height:min(62vh,560px);
-  display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--edge);border-left:3px solid var(--amber);
-  border-radius:6px;box-shadow:0 10px 30px rgba(0,0,0,.4);font-size:12.5px;color:var(--text)}
-#aipanel[hidden]{display:none}
-#aipanel header{display:flex;align-items:center;gap:6px;padding:8px 8px 8px 12px;border-bottom:1px solid var(--edge)}
-#aipanel header>div{flex:1;min-width:0}
-#aipanel .ai-t{display:block;font-size:13px}
-#aipanel .ai-s{display:block;color:var(--dim);font:11px Consolas,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#aipanel header button,#aipanel header select{font-size:12px;padding:3px 7px}
-#aipanel .ai-b{overflow:auto;padding:10px 12px 12px}
-#aipanel .ai-cfg{padding:8px 12px;border-bottom:1px solid var(--edge);color:var(--dim);font-size:11.5px}
-#aipanel .ai-cfg .row{display:flex;gap:6px;margin:6px 0}
-#aipanel .ai-cfg input{flex:1;min-width:0}
-.ai-dec{display:flex;flex-wrap:wrap;gap:4px 10px;margin-bottom:8px;font-size:11.5px;color:var(--dim)}
-.ai-dec code{color:var(--amber);font-weight:700;margin-right:4px}
-.ai-st{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
-.ai-st span{font:10.5px Consolas,monospace;background:var(--panel-2);border:1px solid var(--edge);border-radius:3px;padding:1px 5px}
-.ai-ans p{margin:0 0 7px;line-height:1.5}
-.ai-ans ul{margin:0 0 7px;padding-left:18px;line-height:1.5}
-.ai-ans code{font:11.5px Consolas,monospace;color:var(--amber)}
-.ai-wait{color:var(--dim)}
-.ai-wait i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--amber);margin-right:8px;animation:aipulse 1s ease-in-out infinite}
-@keyframes aipulse{50%{opacity:.25}}
-@media (prefers-reduced-motion:reduce){.ai-wait i{animation:none}}
-.ai-err{color:var(--err)}
-@media (max-width:600px){#aipanel{right:6px;left:6px;bottom:6px;width:auto;max-height:70vh}}
 
 /* ===================== keys: buttons drawn like an operator panel =====================
    Every button is a raised key with a ledge under it and travels down when pressed.
@@ -621,8 +593,8 @@ nav.tabs.top > button.on{color:var(--text);font-weight:600;transform:translateY(
   box-shadow:inset 0 2px 4px var(--trayin),inset 0 -2px 0 var(--lamp),0 1px 0 var(--capledge)}
 
 /* tabs and menus stay flat: they are places to go, not keys */
-.tabs:not(.top) button,nav.subtabs button,.ctxm button{transform:none!important}
-.tabs:not(.top) button:not(.on),nav.subtabs button,.ctxm button{box-shadow:none}
+.tabs:not(.top) button,nav.subtabs button{transform:none!important}
+.tabs:not(.top) button:not(.on),nav.subtabs button{box-shadow:none}
 .tabs:not(.top) button{border-color:var(--edge)}
 .tabs:not(.top) button:not(.on){background:var(--tabbg)}
 .tabs:not(.top) button:not(.on):hover{color:var(--text)}
@@ -747,6 +719,7 @@ input[type=range]{accent-color:var(--lamp)}
     <div class="editor">
       <div class="gutter" id="gutter"><div id="gmark">▶</div><div id="gnums">1</div></div>
       <div class="codewrap">
+        <div id="colmk"></div>
         <div id="hl"></div>
         <pre id="hlcode"><code id="hlinner"></code></pre>
         <textarea id="code" spellcheck="false" wrap="off"></textarea>
@@ -794,6 +767,7 @@ input[type=range]{accent-color:var(--lamp)}
       </select>
       <span class="sep"></span>
       <label class="chk" id="showModelWrap" hidden><input type="checkbox" id="showModel" checked> model</label>
+      <label class="chk" id="collWrap" hidden title="Check the tools against the 3D model; click the count to go to the first collision"><input type="checkbox" id="collOn" checked> collisions<b id="collCount"></b></label>
       <label class="chk"><input type="checkbox" id="showRapid" checked> rapids</label>
       <label class="chk"><input type="checkbox" id="showGrid" checked> grid</label>
       <label class="chk"><input type="checkbox" id="showtool" checked> tool</label>
@@ -4624,7 +4598,7 @@ async function loadModelFile(file){
     else{
       const occt=await loadOcct();
       await new Promise(r=>setTimeout(r,30));          /* let the message show before the reader blocks */
-      const params={linearUnit:'millimeter',linearDeflectionType:'bounding_box_ratio',linearDeflection:0.0015,angularDeflection:0.2};
+      const params={linearUnit:'millimeter',linearDeflectionType:'bounding_box_ratio',linearDeflection:0.0008,angularDeflection:0.1};
       const r=(ext==='stl')?null:(/^(iges|igs)$/.test(ext)?occt.ReadIgesFile(new Uint8Array(buf),params):occt.ReadStepFile(new Uint8Array(buf),params));
       mesh=meshFromOcct(r);
     }
@@ -4633,7 +4607,7 @@ async function loadModelFile(file){
     document.getElementById('showModelWrap').hidden=false;
     const b=mesh.bb, f=v=>(+v.toFixed(3)).toString();
     evt(file.name+': '+mesh.tris.toLocaleString('en-US')+' triangles, size '+f(b.x1-b.x0)+' × '+f(b.y1-b.y0)+' × '+f(b.z1-b.z0)+' mm. Placement: '+modelPlaceLabel()+'.','info');
-    modelPanel(); showTabName('model');
+    modelPanel(); showTabName('model'); collSchedule();
     if(!SEGS.length) fit(); else draw();
   }catch(err){ evt(file.name+': '+(err&&err.message||err),'err'); setMsgTab('events'); }
 }
@@ -4766,16 +4740,34 @@ function modelPanel(){
     '<div class="mdlrow"><label>Opacity <input type="range" id="mdlAlpha" min="0.15" max="1" step="0.05" value="'+MODEL.alpha+'"></label>'+
       ' <label>Colour <input type="color" id="mdlColor" value="'+MODEL.color+'"></label>'+
       ' <button id="mdlFit">Fit to model</button> <button id="mdlOpen2">Open another…</button> <button id="mdlRemove">Remove</button></div>'+
-    '<p class="dim">The toolpath is drawn over the model; lower the opacity to see the moves behind it.</p></div>';
+    '<p class="dim">The toolpath is drawn over the model; lower the opacity to see the moves behind it.</p>'+
+    '<div class="mdlhead">Collision check</div>'+
+    '<div class="mdlrow"><label class="chk"><input type="checkbox" id="collOn2"'+(COLL.on?' checked':'')+'> check the tools against the model</label>'+
+      ' <label>tolerance <input type="number" id="collTol" class="mdlnum" step="0.01" min="0" value="'+COLL.tol+'"> mm</label>'+
+      ' <label>holder Ø <input type="number" id="collHd" class="mdlnum" step="1" min="0" value="'+COLL.hd+'"></label>'+
+      ' <label>length <input type="number" id="collHl" class="mdlnum" step="5" min="0" value="'+COLL.hl+'"> mm</label>'+
+      ' <button id="collGo">Go to the first</button></div>'+
+    '<div class="mdlrow"><span class="dim" id="collStatus"></span></div>'+
+    '<p class="dim">Exact check: on every move the tool (shape from the Tools tab: cutting part, shank) and the holder are swept along '+
+      'the move and tested against every triangle of the model. Marked red: the cutting part in the model on a feed move (gouge), the '+
+      'shank or holder in the model, or a rapid move into the model. The tolerance ignores touching the surface (also the model\u2019s own '+
+      'facets on curved faces). Holder Ø 0 leaves the holder out.</p></div>';
   el.querySelector('.mdlrow b').textContent=MODEL.name;
+  const $c=id=>document.getElementById(id);
+  $c('collOn2').onchange=e=>{ COLL.on=e.target.checked; $c('collOn').checked=COLL.on; collSchedule(); draw(); };
+  $c('collTol').onchange=e=>{ COLL.tol=Math.max(0,+e.target.value||0); collSchedule(); };
+  $c('collHd').onchange=e=>{ COLL.hd=Math.max(0,+e.target.value||0); collSchedule(); };
+  $c('collHl').onchange=e=>{ COLL.hl=Math.max(0,+e.target.value||0); collSchedule(); };
+  $c('collGo').onclick=collFirst;
+  collShow();
   const pl=document.getElementById('mdlPlace'); pl.value=MODEL.place==='file'?'file':'auto';
   const now=()=>{ document.getElementById('mdlPlaceNow').textContent='now: '+modelPlaceLabel(); };
   now();
-  pl.onchange=()=>{ MODEL.place=pl.value; now(); draw(); };
+  pl.onchange=()=>{ MODEL.place=pl.value; now(); collSchedule(); draw(); };
   el.querySelectorAll('.mdlnum').forEach(inp=>inp.oninput=()=>{
     const v=parseFloat(inp.value)||0;
     if(inp.dataset.r!==undefined) MODEL.rot[+inp.dataset.r]=v; else MODEL.off[+inp.dataset.o]=v;
-    draw(); });
+    collSchedule(); draw(); });
   document.getElementById('mdlAlpha').oninput=e=>{ MODEL.alpha=+e.target.value; draw(); };
   document.getElementById('mdlColor').oninput=e=>{ MODEL.color=e.target.value; draw(); };
   document.getElementById('mdlFit').onclick=()=>{ const r=modelBBox(); if(r){ const keep=BBOX; BBOX=r; fit(); BBOX=keep; draw(); } };
@@ -4784,8 +4776,292 @@ function modelPanel(){
     if(MGL&&MGL.gl){ const gl=MGL.gl; gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
       if(MGL.vbo){ gl.deleteBuffer(MGL.vbo); MGL.vbo=null; } if(MGL.nbo){ gl.deleteBuffer(MGL.nbo); MGL.nbo=null; } MGL.ver=-1; }
     MODEL.drawn=''; evt('3D model removed.','info');
-    document.getElementById('showModelWrap').hidden=true; modelPanel(); draw(); };
+    document.getElementById('showModelWrap').hidden=true; COLL.mesh=null; collSchedule(); modelPanel(); draw(); };
 }
+
+/* ===================== collision check against the 3D model (exact) =====================
+   The tool is a set of convex solids along its axis: the cutting part (cylinder, ball, bull nose or
+   cone + cylinder, from the Tools tab), the shank above it and the holder. On every move each solid
+   is swept along the move (the swept solid is convex too) and tested against the model's triangles
+   with the GJK algorithm: an exact geometric intersection test, not a sampling. The tolerance shrinks
+   the tool (radius and tip) so that touching the finished surface is not reported. On 5-axis moves
+   the tool axis is turned in steps of at most 0.25 deg. Kinds: cutting part in the model on a feed
+   move = gouge; shank or holder in the model; any rapid move into the model.                       */
+const COLL={on:true,tol:0.05,hd:40,hl:60,res:null,run:0,busy:false,done:0,total:0,list:[],mesh:null,meshKey:'',t0:0};
+/* the model's triangles in the plot frame, in a grid of cells */
+function collMesh(){
+  if(!MODEL.pos) return null;
+  const X=modelMatrix(), key=[MODEL.ver,X.M.join(),X.T.join()].join('|');
+  if(COLL.mesh&&COLL.meshKey===key) return COLL.mesh;
+  const P=MODEL.pos, M=X.M, T=X.T, n=MODEL.tris;
+  const V=new Float64Array(P.length), B=new Float64Array(n*6);
+  for(let k=0;k<P.length;k+=3){ const x=P[k],y=P[k+1],z=P[k+2];
+    V[k]=M[0][0]*x+M[0][1]*y+M[0][2]*z+T[0]; V[k+1]=M[1][0]*x+M[1][1]*y+M[1][2]*z+T[1]; V[k+2]=M[2][0]*x+M[2][1]*y+M[2][2]*z+T[2]; }
+  const bb=[Infinity,Infinity,Infinity,-Infinity,-Infinity,-Infinity];
+  for(let t=0;t<n;t++){ const o=t*9, b=t*6;
+    for(let c=0;c<3;c++){ const a=V[o+c], e=V[o+3+c], f=V[o+6+c];
+      B[b+c]=Math.min(a,e,f); B[b+3+c]=Math.max(a,e,f);
+      if(B[b+c]<bb[c]) bb[c]=B[b+c]; if(B[b+3+c]>bb[3+c]) bb[3+c]=B[b+3+c]; } }
+  const ext=[bb[3]-bb[0],bb[4]-bb[1],bb[5]-bb[2]], diag=Math.hypot(...ext)||1;
+  let cs=Math.max(0.5,diag/120);
+  let g=ext.map(e=>Math.max(1,Math.ceil((e+1e-6)/cs)));
+  while(g[0]*g[1]*g[2]>1500000){ cs*=1.3; g=ext.map(e=>Math.max(1,Math.ceil((e+1e-6)/cs))); }
+  const cnt=new Int32Array(g[0]*g[1]*g[2]+1);
+  const rng=(t,f)=>{ const b=t*6;
+    const i0=Math.max(0,Math.floor((B[b]-bb[0])/cs)), i1=Math.min(g[0]-1,Math.floor((B[b+3]-bb[0])/cs));
+    const j0=Math.max(0,Math.floor((B[b+1]-bb[1])/cs)), j1=Math.min(g[1]-1,Math.floor((B[b+4]-bb[1])/cs));
+    const k0=Math.max(0,Math.floor((B[b+2]-bb[2])/cs)), k1=Math.min(g[2]-1,Math.floor((B[b+5]-bb[2])/cs));
+    for(let k=k0;k<=k1;k++) for(let j=j0;j<=j1;j++) for(let i=i0;i<=i1;i++) f((k*g[1]+j)*g[0]+i); };
+  for(let t=0;t<n;t++) rng(t,id=>cnt[id+1]++);
+  for(let i=1;i<cnt.length;i++) cnt[i]+=cnt[i-1];
+  const fill=cnt.slice(), list=new Int32Array(cnt[cnt.length-1]);
+  for(let t=0;t<n;t++) rng(t,id=>{ list[fill[id]++]=t; });
+  COLL.mesh={V,B,n,bb,cs,g,start:cnt,list,stamp:new Int32Array(n),mark:0}; COLL.meshKey=key;
+  return COLL.mesh;
+}
+/* the tool as convex solids, heights above the tip: cyl {h0,h1,r}, cone {h0,h1,r0,r1}, sph {h,r},
+   rdisc {h,rd,rs} (a flat disc of radius rd thickened by a sphere rs: the bull-nose corner)        */
+function collToolParts(n){
+  const t=TOOLS.get(n)||defaultTool(n,'mill');
+  const R=Math.max(0.05,(t.dia||10)/2), L=Math.max(R,t.len||40), cr=Math.min(R,Math.max(0,t.cr||0));
+  const cut=[];
+  switch(t.type){
+    case 'ball': cut.push({k:'sph',h:R,r:R},{k:'cyl',h0:R,h1:L,r:R}); break;
+    case 'bull': if(cr>1e-6) cut.push({k:'rdisc',h:cr,rd:R-cr,rs:cr},{k:'cyl',h0:cr,h1:L,r:R}); else cut.push({k:'cyl',h0:0,h1:L,r:R}); break;
+    case 'drill': { const tip=R/Math.tan(59*D2R); cut.push({k:'cone',h0:0,h1:tip,r0:0,r1:R},{k:'cyl',h0:tip,h1:L,r:R}); break; }
+    case 'chamfer': { const tip=R/Math.tan(Math.max(15,(t.ang||90)/2)*D2R); cut.push({k:'cone',h0:0,h1:tip,r0:R*0.15,r1:R},{k:'cyl',h0:tip,h1:L,r:R}); break; }
+    case 'endmill': case undefined: cut.push({k:'cyl',h0:0,h1:L,r:R}); break;
+    default: { const pr=toolProfile(t).filter(p=>p.h<=L+1e-9).sort((a,b)=>a.h-b.h);
+      for(let i=0;i+1<pr.length;i++){ const a=pr[i], b=pr[i+1]; if(b.h-a.h<1e-9) continue;
+        cut.push(Math.abs(a.r-b.r)<1e-9?{k:'cyl',h0:a.h,h1:b.h,r:a.r}:{k:'cone',h0:a.h,h1:b.h,r0:a.r,r1:b.r}); }
+      if(!cut.length) cut.push({k:'cyl',h0:0,h1:L,r:R}); }
+  }
+  cut.forEach(p=>p.part='tool');
+  const parts=cut.concat([{k:'cyl',h0:L,h1:L+3*R,r:R,part:'shank'}]);
+  if(COLL.hd>0&&COLL.hl>0) parts.push({k:'cyl',h0:L+3*R,h1:L+3*R+COLL.hl,r:COLL.hd/2,part:'holder'});
+  return parts;
+}
+/* the same solid made smaller by d all round (and its tip raised by d): touching within d is not a hit */
+function collShrink(p,d){
+  switch(p.k){
+    case 'cyl': return {k:'cyl',h0:p.h0===0?d:p.h0,h1:p.h1,r:Math.max(0,p.r-d),part:p.part};
+    case 'sph': return {k:'sph',h:p.h,r:Math.max(0,p.r-d),part:p.part};
+    case 'rdisc': return p.rs>d?{k:'rdisc',h:p.h,rd:p.rd,rs:p.rs-d,part:p.part}:{k:'cyl',h0:d,h1:p.h+p.rs,r:Math.max(0,p.rd+p.rs-d),part:p.part};
+    case 'cone': { const h0=p.h0===0?Math.min(p.h1,p.h0+d):p.h0, s=(p.r1-p.r0)/Math.max(1e-9,p.h1-p.h0);
+      return {k:'cone',h0,h1:p.h1,r0:Math.max(0,p.r0+s*(h0-p.h0)-d),r1:Math.max(0,p.r1-d),part:p.part}; }
+  }
+  return p;
+}
+/* support point of solid p (tip c, unit axis a) swept by D, in direction d -> out */
+function collSup(p,c,a,D,dx,dy,dz,out){
+  const da=dx*a[0]+dy*a[1]+dz*a[2];
+  let rx=dx-da*a[0], ry=dy-da*a[1], rz=dz-da*a[2]; const rl=Math.hypot(rx,ry,rz);
+  if(rl>1e-12){ rx/=rl; ry/=rl; rz/=rl; } else { rx=ry=rz=0; }
+  let h, r;
+  switch(p.k){
+    case 'cyl': h=da>=0?p.h1:p.h0; r=p.r; break;
+    case 'cone': { const s1=p.h1*da+p.r1*rl, s0=p.h0*da+p.r0*rl; if(s1>=s0){ h=p.h1; r=p.r1; } else { h=p.h0; r=p.r0; } break; }
+    case 'sph': { const dl=Math.hypot(dx,dy,dz)||1; out[0]=c[0]+a[0]*p.h+p.r*dx/dl; out[1]=c[1]+a[1]*p.h+p.r*dy/dl; out[2]=c[2]+a[2]*p.h+p.r*dz/dl; h=null; break; }
+    case 'rdisc': { const dl=Math.hypot(dx,dy,dz)||1;
+      out[0]=c[0]+a[0]*p.h+rx*p.rd+p.rs*dx/dl; out[1]=c[1]+a[1]*p.h+ry*p.rd+p.rs*dy/dl; out[2]=c[2]+a[2]*p.h+rz*p.rd+p.rs*dz/dl; h=null; break; }
+  }
+  if(h!==null){ out[0]=c[0]+a[0]*h+rx*r; out[1]=c[1]+a[1]*h+ry*r; out[2]=c[2]+a[2]*h+rz*r; }
+  if(dx*D[0]+dy*D[1]+dz*D[2]>0){ out[0]+=D[0]; out[1]+=D[1]; out[2]+=D[2]; }
+}
+/* GJK: does the swept solid touch triangle t? An exact test for two convex shapes: the Minkowski
+   difference contains the origin exactly when they overlap. */
+function sub3(a,b){ return [a[0]-b[0],a[1]-b[1],a[2]-b[2]]; }
+function cross(a,b){ return [a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]]; }
+function dot(a,b){ return a[0]*b[0]+a[1]*b[1]+a[2]*b[2]; }
+function gjkLine(s){            /* s = [B, A], A newest */
+  const A=s[1], B=s[0], ab=sub3(B,A), ao=[-A[0],-A[1],-A[2]];
+  if(dot(ab,ao)>0) return {s:[B,A],d:cross(cross(ab,ao),ab)};
+  return {s:[A],d:ao};
+}
+function gjkTri(s){             /* s = [C, B, A], A newest */
+  const A=s[2], B=s[1], C=s[0], ab=sub3(B,A), ac=sub3(C,A), ao=[-A[0],-A[1],-A[2]], abc=cross(ab,ac);
+  if(dot(cross(abc,ac),ao)>0){
+    if(dot(ac,ao)>0) return {s:[C,A],d:cross(cross(ac,ao),ac)};
+    return gjkLine([B,A]);
+  }
+  if(dot(cross(ab,abc),ao)>0) return gjkLine([B,A]);
+  const v=dot(abc,ao);
+  if(v>0) return {s:[C,B,A],d:abc};
+  if(v<0) return {s:[B,C,A],d:[-abc[0],-abc[1],-abc[2]]};
+  return {s,d:[0,0,0]};         /* the origin lies in the triangle */
+}
+function gjkTet(s){             /* s = [D, C, B, A], A newest */
+  const A=s[3], ao=[-A[0],-A[1],-A[2]];
+  const faces=[[s[2],s[1],s[0]],[s[1],s[0],s[2]],[s[0],s[2],s[1]]];   /* (B,C | D), (C,D | B), (D,B | C) */
+  for(const [P,Q,O] of faces){
+    let n=cross(sub3(P,A),sub3(Q,A)); if(dot(n,sub3(O,A))>0) n=[-n[0],-n[1],-n[2]];
+    if(dot(n,ao)>0) return gjkTri([Q,P,A]);
+  }
+  return null;                   /* the origin is inside */
+}
+function collGJK(p,c,a,D,V,t){
+  const o=t*9, tmp=[0,0,0];
+  const sup=d=>{ collSup(p,c,a,D,d[0],d[1],d[2],tmp);
+    let best=-Infinity, bi=0;
+    for(let v=0;v<3;v++){ const q=-(d[0]*V[o+v*3]+d[1]*V[o+v*3+1]+d[2]*V[o+v*3+2]); if(q>best){ best=q; bi=v; } }
+    return [tmp[0]-V[o+bi*3],tmp[1]-V[o+bi*3+1],tmp[2]-V[o+bi*3+2]]; };
+  const hm=(p.h0!==undefined?(p.h0+p.h1)/2:p.h);
+  let d=[c[0]+a[0]*hm+D[0]/2-(V[o]+V[o+3]+V[o+6])/3, c[1]+a[1]*hm+D[1]/2-(V[o+1]+V[o+4]+V[o+7])/3, c[2]+a[2]*hm+D[2]/2-(V[o+2]+V[o+5]+V[o+8])/3];
+  if(dot(d,d)<1e-18) d=[1,0,0];
+  let s=[sup(d)]; d=[-s[0][0],-s[0][1],-s[0][2]];
+  for(let it=0;it<64;it++){
+    if(dot(d,d)<1e-20) return true;
+    const w=sup(d);
+    if(dot(w,d)<=0) return false;
+    s.push(w);
+    let r;
+    if(s.length===2) r=gjkLine(s);
+    else if(s.length===3) r=gjkTri(s);
+    else { r=gjkTet(s); if(!r) return true; }
+    s=r.s; d=r.d;
+  }
+  return false;
+}
+/* the box of a swept solid */
+function collBox(p,c,a,D){
+  const o=[0,0,0], b=[0,0,0,0,0,0];
+  collSup(p,c,a,D,-1,0,0,o); b[0]=o[0]; collSup(p,c,a,D,1,0,0,o); b[3]=o[0];
+  collSup(p,c,a,D,0,-1,0,o); b[1]=o[1]; collSup(p,c,a,D,0,1,0,o); b[4]=o[1];
+  collSup(p,c,a,D,0,0,-1,o); b[2]=o[2]; collSup(p,c,a,D,0,0,1,o); b[5]=o[2];
+  return b;
+}
+/* the triangles the swept solid touches: the first one, or up to `max` of them */
+function collHit(p,c,a,D,M,max){
+  const b=collBox(p,c,a,D), bb=M.bb, cs=M.cs, g=M.g;
+  if(b[3]<bb[0]||b[0]>bb[3]||b[4]<bb[1]||b[1]>bb[4]||b[5]<bb[2]||b[2]>bb[5]) return max?[]:-1;
+  const i0=Math.max(0,Math.floor((b[0]-bb[0])/cs)), i1=Math.min(g[0]-1,Math.floor((b[3]-bb[0])/cs));
+  const j0=Math.max(0,Math.floor((b[1]-bb[1])/cs)), j1=Math.min(g[1]-1,Math.floor((b[4]-bb[1])/cs));
+  const k0=Math.max(0,Math.floor((b[2]-bb[2])/cs)), k1=Math.min(g[2]-1,Math.floor((b[5]-bb[2])/cs));
+  const mk=++M.mark, B=M.B, st=M.stamp, hits=[];
+  for(let k=k0;k<=k1;k++) for(let j=j0;j<=j1;j++) for(let i=i0;i<=i1;i++){
+    const id=(k*g[1]+j)*g[0]+i;
+    for(let q=M.start[id],qe=M.start[id+1];q<qe;q++){ const t=M.list[q]; if(st[t]===mk) continue; st[t]=mk;
+      const o=t*6;
+      if(B[o+3]<b[0]||B[o]>b[3]||B[o+4]<b[1]||B[o+1]>b[4]||B[o+5]<b[2]||B[o+2]>b[5]) continue;
+      if(collGJK(p,c,a,D,M.V,t)){ if(!max) return t; hits.push(t); if(hits.length>=max) return hits; } }
+  }
+  return max?hits:-1;
+}
+/* check move i: the first part of the tool found in the model (cutting part first), or null */
+function collSeg(i,M,toolCache){
+  const s=SEGS[i]; if(!s) return null;
+  let parts=toolCache.get(s.tool);
+  if(!parts){ parts=collToolParts(s.tool).map(p=>({p,q:collShrink(p,COLL.tol)})); toolCache.set(s.tool,parts); }
+  const ue=v=>{ const l=Math.hypot(v.x,v.y,v.z)||1; return [v.x/l,v.y/l,v.z/l]; };
+  const a1=ue(s.av||{x:0,y:0,z:1});
+  const pv=i>0?SEGS[i-1]:null;
+  const a0=(pv&&pv.tool===s.tool&&pv.av&&Math.hypot(pv.x2-s.x1,pv.y2-s.y1,pv.z2-s.z1)<1e-6)?ue(pv.av):a1;
+  const ang=Math.acos(Math.max(-1,Math.min(1,a0[0]*a1[0]+a0[1]*a1[1]+a0[2]*a1[2])))/D2R;
+  const steps=Math.max(1,Math.ceil(ang/0.25));
+  const dx=s.x2-s.x1, dy=s.y2-s.y1, dz=s.z2-s.z1;
+  for(let k=0;k<steps;k++){
+    const f0=k/steps, f1=(k+1)/steps, fm=(k+0.5)/steps;
+    let a=[a0[0]+(a1[0]-a0[0])*fm,a0[1]+(a1[1]-a0[1])*fm,a0[2]+(a1[2]-a0[2])*fm]; const al=Math.hypot(...a)||1; a=[a[0]/al,a[1]/al,a[2]/al];
+    const c=[s.x1+dx*f0,s.y1+dy*f0,s.z1+dz*f0], D=[dx*(f1-f0),dy*(f1-f0),dz*(f1-f0)];
+    for(const {p,q} of parts){
+      if((q.r!==undefined&&q.r<=0&&q.k==='cyl')) continue;
+      const t0=collHit(q,c,a,D,M);
+      if(t0>=0){
+        /* how far in: for each touching triangle the largest extra shrink that still touches (halving,
+           14 steps, to about 0.001 mm); the deepest triangle is reported */
+        const tris=collHit(q,c,a,D,M,24); let lo=COLL.tol, t=t0;
+        const top=COLL.tol+Math.max(p.r||0,p.r1||0,(p.rd||0)+(p.rs||0))+1;
+        for(const tt of tris){ if(!collGJK(collShrink(p,lo),c,a,D,M.V,tt)) continue;
+          let l=lo, h=top; for(let it=0;it<14;it++){ const m=(l+h)/2; if(collGJK(collShrink(p,m),c,a,D,M.V,tt)) l=m; else h=m; }
+          if(l>=lo){ lo=l; t=tt; } }
+        const V=M.V, o=t*9;
+        return {depth:lo,part:p.part,kind:(s.t==='rapid'||s.mach)?'rapid':(p.part==='tool'?'gouge':p.part),
+                x:(V[o]+V[o+3]+V[o+6])/3,y:(V[o+1]+V[o+4]+V[o+7])/3,z:(V[o+2]+V[o+5]+V[o+8])/3,tri:t};
+      }
+    }
+  }
+  return null;
+}
+/* run the check in slices so the page stays responsive; a new run cancels an old one */
+let COLL_TIMER=0;
+function collSchedule(){ clearTimeout(COLL_TIMER); COLL_TIMER=setTimeout(collStart,120); }
+function collStart(){
+  const my=++COLL.run;
+  COLL.res=null; COLL.list=[]; COLL.done=0; COLL.total=SEGS.length; COLL.busy=false;
+  if(!COLL.on||!MODEL.pos||!SEGS.length){ collShow(); return; }
+  COLL.busy=true; COLL.t0=performance.now(); collShow();
+  setTimeout(()=>{
+    if(my!==COLL.run) return;
+    const M=collMesh(); if(!M){ COLL.busy=false; collShow(); return; }
+    const res=new Array(SEGS.length), cache=new Map(); let i=0;
+    const slice=()=>{
+      if(my!==COLL.run) return;
+      const t0=performance.now();
+      while(i<SEGS.length&&performance.now()-t0<25){ const r=collSeg(i,M,cache); if(r){ res[i]=r; COLL.list.push(i); } i++; }
+      COLL.done=i;
+      if(i<SEGS.length){ collShow(); setTimeout(slice,0); return; }
+      COLL.res=res; COLL.busy=false; collShow(true); draw();
+    };
+    slice();
+  },20);
+}
+const COLL_TXT={gouge:'the tool cuts into the model',rapid:'rapid move into the model',shank:'the shank hits the model',holder:'the holder hits the model'};
+/* lines with collisions: the editor marks, the messages, the toolbar count, an event when done */
+function collLines(){
+  const by=new Map();
+  if(COLL.res) for(const i of COLL.list){ const r=COLL.res[i], l=SEGS[i].line; const o=by.get(l);
+    const sev={rapid:3,holder:3,shank:2,gouge:1}[r.kind];
+    if(!o||sev>o.sev||(sev===o.sev&&r.depth>o.r.depth)) by.set(l,{r,i,sev}); }
+  return [...by.entries()].sort((a,b)=>a[0]-b[0]);
+}
+function collShow(finished){
+  const lines=collLines();
+  /* toolbar */
+  const wrap=document.getElementById('collWrap'), cnt=document.getElementById('collCount');
+  if(wrap){ wrap.hidden=!MODEL.pos; }
+  if(cnt){ cnt.textContent=!COLL.on?'':(COLL.busy?' checking '+Math.round(100*COLL.done/Math.max(1,COLL.total))+'%':(COLL.res?(lines.length?' ⚠ '+lines.length:' ✓'):''));
+    cnt.className=lines.length?'collbad':'collok'; }
+  /* editor marks */
+  const mk=document.getElementById('colmk');
+  if(mk){ mk.innerHTML=''; if(COLL.on) lines.slice(0,3000).forEach(([l,o])=>{ const d=document.createElement('div');
+      d.className='cmk'+(o.sev>=2?' hard':''); d.style.top=(PAD+(l-1)*LH)+'px'; mk.appendChild(d); }); }
+  /* messages: the collisions first */
+  const m=document.getElementById('msgs');
+  if(m){ m.querySelectorAll('.coll').forEach(e=>e.remove());
+    if(COLL.on&&COLL.res&&MODEL.pos){
+      const f=v=>(+v.toFixed(2)).toString();
+      const items=lines.slice(0,60).map(([l,o])=>{ const d=document.createElement('div'); d.className='err coll';
+        d.dataset.line=l; d.title='Go to line '+l;
+        const R=((TOOLS.get(SEGS[o.i].tool)||{}).dia||10)/2;
+        d.textContent='line '+l+': collision – '+COLL_TXT[o.r.kind]+' ('+(o.r.depth>=R?'deep, more than '+f(R):f(o.r.depth))+' mm, T'+SEGS[o.i].tool+')'; return d; });
+      if(lines.length>60){ const d=document.createElement('div'); d.className='err coll'; d.textContent='… '+(lines.length-60)+' more lines with collisions'; items.push(d); }
+      if(!lines.length){ const d=document.createElement('div'); d.className='info coll'; d.textContent='Collision check: the tools do not touch the model (tolerance '+COLL.tol+' mm).'; items.push(d); }
+      items.reverse().forEach(d=>m.insertBefore(d,m.firstChild));
+    } }
+  /* the 3D model tab */
+  const stEl=document.getElementById('collStatus');
+  if(stEl) stEl.textContent=!COLL.on?'off':(!MODEL.pos?'needs a part model':(COLL.busy?'checking… '+Math.round(100*COLL.done/Math.max(1,COLL.total))+'%':
+    (COLL.res?(lines.length?lines.length+' line'+(lines.length>1?'s':'')+' with collisions':'no collisions')+(COLL.mesh?' · '+COLL.mesh.n.toLocaleString('en-US')+' triangles checked exactly':''):'')));
+  if(finished&&COLL.on&&MODEL.pos){
+    const sec=((performance.now()-COLL.t0)/1000).toFixed(1);
+    if(lines.length){ evt('Collision check: '+lines.length+' line'+(lines.length>1?'s':'')+' with collisions, first on line '+lines[0][0]+' ('+COLL_TXT[lines[0][1].r.kind]+'). See Messages; the lines are marked red. ('+sec+' s)','err'); setMsgTab('msgs'); }
+    else evt('Collision check: no collisions with the model ('+sec+' s).','info');
+  }
+}
+/* 3D: the colliding moves in red, with a dot where the tool meets the model */
+function drawCollisions(upto){
+  if(!COLL.on||!COLL.res||!COLL.list.length) return;
+  ctx2.save(); ctx2.strokeStyle='#ff3b3b'; ctx2.lineWidth=3; ctx2.setLineDash([]); ctx2.lineCap='round';
+  ctx2.beginPath();
+  for(const i of COLL.list){ if(i>=upto) break; if(i<PATH_FROM) continue; const s=SEGS[i];
+    const a=proj(s.x1,s.y1,s.z1), b=proj(s.x2,s.y2,s.z2); ctx2.moveTo(a[0],a[1]); ctx2.lineTo(b[0],b[1]); }
+  ctx2.stroke();
+  ctx2.fillStyle='#ff3b3b'; ctx2.strokeStyle='#fff'; ctx2.lineWidth=1.2;
+  for(const i of COLL.list){ if(i>=upto) break; if(i<PATH_FROM) continue; const r=COLL.res[i]; const p=proj(r.x,r.y,r.z);
+    ctx2.beginPath(); ctx2.arc(p[0],p[1],4.5,0,2*Math.PI); ctx2.fill(); ctx2.stroke(); }
+  ctx2.restore();
+}
+function collFirst(){ const L=collLines(); if(L.length){ const [l,o]=L[0]; seekToLine(l); setActiveLine(l,true,true); } }
 
 /* ===================== undock: the simulation in its own window =====================
    "Undock" opens a pop-up window of this page's origin and moves the simulation block (#simwrap:
@@ -4924,10 +5200,24 @@ document.getElementById('secVal').onchange=e=>{ const v=parseFloat(e.target.valu
 document.getElementById('secPath').onchange=e=>{ SECT.path=e.target.checked; draw(); };
 document.getElementById('secShow').onchange=e=>{ SECT.show=e.target.checked; draw(); };
 
-function setClFrame(fr){ MODEL_CLFRAME=fr||null; MODEL.drawn=''; if(document.getElementById('mdlPlaceNow')) modelPanel(); }
+/* the tool sizes from the CL (diameter, corner radius, length) go to the Tools tab, unless set by hand */
+function clTools(list){
+  if(!list) return;
+  for(const t of list){ if(!t||t.num==null||!(t.dia>0)) continue;
+    const have=TOOLS.get(t.num); if(have&&have.user) continue;
+    const cr=Math.min(t.dia/2,Math.max(0,t.cr||0));
+    const nt=Object.assign(defaultTool(t.num,'mill'),have?{color:have.color,hcolor:have.hcolor}:{},
+      {dia:t.dia,cr,len:t.len>0?t.len:Math.max(40,t.dia*3),type:(cr>=t.dia/2-1e-3)?'ball':(cr>0?'bull':'endmill'),fromCL:true});
+    TOOLS.set(t.num,nt);
+  }
+  TOOLS_CHANGED=true;
+}
+function setClFrame(fr){ MODEL_CLFRAME=fr||null; MODEL.drawn=''; if(MODEL.pos) collSchedule(); if(document.getElementById('mdlPlaceNow')) modelPanel(); }
 document.getElementById('modelBtn').onclick=()=>document.getElementById('modelFile').click();
 document.getElementById('modelFile').onchange=e=>{ const f=e.target.files&&e.target.files[0]; e.target.value=''; if(f) loadModelFile(f); };
 document.getElementById('showModel').onchange=e=>{ MODEL.show=e.target.checked; draw(); };
+document.getElementById('collOn').onchange=e=>{ COLL.on=e.target.checked; const c=document.getElementById('collOn2'); if(c) c.checked=COLL.on; collSchedule(); draw(); };
+document.getElementById('collCount').onclick=e=>{ e.preventDefault(); e.stopPropagation(); collFirst(); };
 modelPanel();
 { const vw=document.getElementById('view');
   vw.addEventListener('dragover',e=>{ if(e.dataTransfer&&[...e.dataTransfer.items||[]].some(i=>i.kind==='file')) e.preventDefault(); });
@@ -4944,6 +5234,7 @@ function draw(){
   if(document.getElementById('showGrid').checked) drawGrid();
   drawPlane(curIdx);
   drawPaths(upto,1);
+  drawCollisions(upto);
   drawSectionPlane();
   if(part){                                            // the move in progress, up to the tool
     const s=SEGS[part.k], q=partPoint();
@@ -5098,14 +5389,16 @@ cv.addEventListener('touchend',e=>{ if(!e.touches.length) tch=null;
 /* ------------------------- last update of the app -------------------------
    APP_UPDATED is the moment this version was published (UTC). build.js may replace the
    value on every deploy (see HANDOVER); it is shown in the viewer's own time zone.      */
-const APP_UPDATED=/*@BUILD_TIME*/'2026-10-17T17:42:52Z';
+/* the version of this release, shown in the header next to the date */
+const APP_VERSION='1.8';
+const APP_UPDATED=/*@BUILD_TIME*/'2026-10-25T20:13:41Z';
 (function(){
   const el=document.getElementById('updated'); if(!el) return;
   const d=new Date(APP_UPDATED); if(isNaN(d)) { el.hidden=true; return; }
   const day=d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
   const hr=d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
   el.dateTime=APP_UPDATED;
-  el.innerHTML='Last update: <b>'+day+', '+hr+'</b>';
+  el.innerHTML='Version <b>'+APP_VERSION+'</b> · Last update: <b>'+day+', '+hr+'</b>';
   el.title='Last update of CNC Tools: '+d.toLocaleString('en-GB',{dateStyle:'full',timeStyle:'short'});
 })();
 
@@ -5127,6 +5420,7 @@ function syncOverlay(){
   gnums.style.transform='translateY('+(-top)+'px)';
   const inner=document.getElementById('hlinner');
   if(inner) inner.style.transform='translate('+(-left)+'px,'+(-top)+'px)';
+  const cm=document.getElementById('colmk'); if(cm) cm.style.transform='translateY('+(-top)+'px)';
   if(activeLine>0){
     const y=PAD+(activeLine-1)*LH-top;
     hlEl.style.display='block'; hlEl.style.top=y+'px';
@@ -5430,6 +5724,9 @@ function espritToGrob(text){
       if(/^BEGIN TOOL CHANGE/.test(r.h)){ t={com:com.slice()}; continue; }
       if(t&&/^ToolID\(\d+\)/.test(r.h)) t.id=gStr(r.h).toUpperCase();
       if(t&&/^Tool Number\(\d+\)/.test(r.h)) t.num=Math.round(gVal(r.h));
+      if(t&&/^Tool Diameter\(\d+\)/.test(r.h)) t.dia=gVal(r.h);
+      if(t&&/^ChamferAngle\/Tool Radius\(\d+\)/.test(r.h)) t.cr=gVal(r.h);
+      if(t&&/^Tool Length\(\d+\)/.test(r.h)) t.len=gVal(r.h);
       if(t&&/^END TOOL CHANGE/.test(r.h)){ lt=t; t=null; }
       if(/^Link Type\(\d+\)/.test(r.h)&&/LinkFromToolChange/.test(r.h)&&lt&&!tools.some(x=>x.num===lt.num&&x.id===lt.id)) tools.push(lt);
     } }
@@ -5578,7 +5875,7 @@ function espritToGrob(text){
   }
   W.blank();
   if(mach&&!/GROB/i.test(mach)) notes.push('the CL is for "'+mach+'", not a GROB machine: the GROB start/end blocks and A/B kinematics were used');
-  return {text:W.out.join('\n'),notes,frame:gdml?{R:gdml.R,t:gdml.t.map((v,i)=>v-ms[i])}:null};
+  return {text:W.out.join('\n'),notes,tools,frame:gdml?{R:gdml.R,t:gdml.t.map((v,i)=>v-ms[i])}:null};
 }
 
 /* ---- APT CL (CLS) -> GROB Sinumerik ----
@@ -5748,7 +6045,7 @@ function clPlot(){
   const p=CL_PENDING; if(!p) return;
   const g=clGrob(p.kind,codeEl.value);
   if(g.err){ evt(g.err,'err'); setMsgTab('events'); return; }
-  CL_PLOT_SRC=g.text; setClFrame(g.frame);
+  CL_PLOT_SRC=g.text; setClFrame(g.frame); clTools(g.tools);
   document.getElementById('kin').value='ab';
   clSetButtons();
   evt(p.name+' - plotted (the editor keeps the CL text).'+(g.notes.length?' Notes: '+g.notes.join('; ')+'.':''),g.notes.length?'warn':'info');
@@ -5759,7 +6056,7 @@ function convertPendingCl(){
   const p=CL_PENDING; if(!p) return;
   const target=document.getElementById('dialect').value;
   const res=clConvertTo(p.kind,codeEl.value);
-  if(!res.err) setClFrame(res.frame);
+  if(!res.err){ setClFrame(res.frame); clTools(res.tools); }
   const info=document.getElementById('clInfo');
   if(res.err){ evt(res.err,'err'); setMsgTab('events'); return; }        /* keep the bar and the CL text */
   CL_PENDING=null; CL_PLOT_SRC=null;
@@ -5918,9 +6215,11 @@ function traceTime(i){
   return d;
 }
 function stopPlay(){ if(PLAYPART){ PLAYPART=null; if(SEGS.length) draw(); } playing=false; document.getElementById('play').textContent='\u25b6'; }
-function tick(ts){
+function tick(){
   if(!playing) return;
-  const dms=Math.min(250, ts-playPrev); playPrev=ts;
+  /* this window's clock: the frame time stamp of an undocked window counts from that window's start */
+  const ts=performance.now();
+  const dms=Math.max(0,Math.min(250, ts-playPrev)); playPrev=ts;
   playAcc += dms/1000*playSpeed();
   let i=TIDX, guard=0;
   const stop=(playTo===null)?TRACE.length-1:playTo;
@@ -6036,7 +6335,7 @@ function buildTools(res){
   nums.forEach(n=>{
     const want=res.toolUse.get(n).proc;
     const have=TOOLS.get(n), hint=hints.get(n);
-    if(hint&&!(have&&have.user)){
+    if(hint&&!(have&&(have.user||have.fromCL))){
       const nt=Object.assign(defaultTool(n,hint.proc||want),hint,{fromHint:true});
       if(have){ nt.color=have.color; nt.hcolor=have.hcolor; }
       if(nt.proc==='turn'){ nt.wf=estWF(nt.shank||25,nt.dia||12.7,nt.hand); nt.ohx=estOHX(nt.shank||25,nt.dia||12.7,nt.mount);
@@ -6167,7 +6466,7 @@ function buildTools(res){
         const dimsBefore=(f==='cr')?shadowDims(t):null;
         /* the lengths on screen are in the chosen unit, the model is always mm */
         const LENF=['dia','cr','cutlen','len','ic','re','sh','lf','wf','ohx','ohz','lu'];
-        if(el.type==='checkbox'){ t[f]=el.checked; STOCKVER++; draw(); return; }
+        if(el.type==='checkbox'){ t[f]=el.checked; STOCKVER++; collSchedule(); draw(); return; }
         t[f]=(el.type==='number')
              ? (LENF.includes(f)?fromU(el.value):(parseFloat(el.value)||0))
              : el.value;
@@ -6184,7 +6483,7 @@ function buildTools(res){
           buildTools(RESULT);
         }
         if(f==='mount'){ t.shankDir=(el.value==='id')?'+z':'+x'; buildTools(RESULT); }
-        if(f==='color'||f==='hcolor') STOCKVER++;
+        if(f==='color'||f==='hcolor') STOCKVER++; else collSchedule();
         if(f==='proc'){
           const keep=t.color, keepH=t.hcolor;
           const nt=defaultTool(n,el.value); nt.color=keep; nt.hcolor=keepH;
@@ -7072,7 +7371,7 @@ function plot(){
   catch(e){ res={segs:[],msgs:[{cls:'err',line:0,text:e.message}],cutLen:0,rapidLen:0,time:0,tools:[],hash:new Map(),rp:new Map(),named:new Map(),hhq:new Map(),vlog:[],trace:[],blocks:0,nTurn:0,nMill:0,mode:process,frames:[{at:0,W:matI(),label:'—'}],toolUse:new Map(),limitedMoves:0,freeTime:0}; }
   if(res.revFeed||(res.segs||[]).some(s=>s.proc==='turn')) turnTimes(res);
   applyWaits(res);
-  RESULT=res; SEGS=res.segs; BBOX=bbox(); showTo=-1; setPathFrom(0);
+  RESULT=res; SEGS=res.segs; BBOX=bbox(); showTo=-1; setPathFrom(0); COLL.res=null; COLL.list=[]; collSchedule();
   TIMES=new Array(SEGS.length); let acc=0;
   for(let i=0;i<SEGS.length;i++){ acc+=(res.W[i]||0)+(SEGS[i].dt||0); TIMES[i]=acc; }
 
@@ -7125,6 +7424,7 @@ function loadSample(id){
   codeEl.value=s.text; FILEH=null; setName(s.name);
   if(id==='frame') document.getElementById('toolaxis').checked=true;
   CL_PENDING=null; CL_PLOT_SRC=null; document.getElementById('clbar').hidden=true;
+  setClFrame(null);
   syncGutter(); plot();
 }
 /* one dropdown for all the examples; it goes back to "Examples…" so the same one can be loaded again */
@@ -7395,399 +7695,10 @@ document.querySelectorAll('#unitseg button').forEach(b=>b.onclick=()=>setUnits(b
 
 window.addEventListener('resize',resize);
 
-/* ========================= explain on right-click =========================
-   Right-click a line of NC code, a message or a point on an analytics graph to get
-   an explanation. A quick decode of the words is built here, offline, straight away;
-   the AI explanation is asked for with the machine state at that point, so it can
-   say what the block does in this program, not only what the codes mean.
-   The AI is Google Gemini, reached, in this order, through
-     1. a Gemini API key saved in this browser (\u2699 in the panel),
-     2. the site's own /api/explain function (GEMINI_API_KEY on Vercel).
-   Answers are cached per question, so asking again costs nothing.         */
-const AI={lang:'en',key:'',cache:new Map(),busy:0,last:null,route:null};
-try{ AI.lang=localStorage.getItem('bp.ai.lang')||'en'; AI.key=localStorage.getItem('bp.ai.gkey')||''; }catch(e){}
-const AI_SYS=lang=>
-  'You are a senior CNC applications engineer explaining NC programs to machinists and CAM programmers. '+
-  'Explain precisely what the given block(s) do on the named control, using that control\'s documented behaviour '+
-  '(Siemens SINUMERIK 840D sl, on GROB 5-axis universal machining centres). Use the machine state provided '+
-  '(tool, feed, spindle, work offset, compensation, plane) to say what happens here in this program. '+
-  'Point out anything risky or unusual (rapid moves near the part, missing coolant or spindle, comp not cancelled, '+
-  'feed or speed that looks wrong for the operation) only when there is a real reason. If a code is machine- or '+
-  'builder-specific, say so instead of guessing. Be concise: a single block in under 120 words, a section in under 250. '+
-  'Plain text, short paragraphs or "- " bullet lines, **bold** allowed, no headings, no tables. '+
-  'Answer in '+(lang==='ro'?'Romanian (technical terms as used in Romanian workshops)':'English')+'.';
-
-/* ---- offline decode: what each word means ---- */
-const DEC_ISO={
-  G0:'rapid positioning',G00:'rapid positioning',G1:'linear move at feed F',G2:'circular arc clockwise',G3:'circular arc counter-clockwise',
-  G4:'dwell (pause)',G9:'exact stop, this block',G10:'data setting (offsets)',G15:'polar coordinates off',G16:'polar coordinates on',
-  G17:'XY plane',G18:'ZX plane',G19:'YZ plane',G20:'inch input',G21:'metric input',G28:'return to reference (home) via point',
-  G40:'cutter radius compensation off',G41:'cutter compensation left',G42:'cutter compensation right',
-  G43:'tool length compensation +',G44:'tool length compensation \u2212',G49:'tool length compensation off',
-  G50:'scaling off / (lathe) spindle limit or coordinate setting',G51:'scaling on',G52:'local coordinate system',G53:'machine coordinates, this block',
-  G54:'work offset 1',G55:'work offset 2',G56:'work offset 3',G57:'work offset 4',G58:'work offset 5',G59:'work offset 6',
-  G61:'exact stop mode',G64:'continuous cutting mode',G65:'macro call',G66:'modal macro call',G67:'modal macro call off',
-  G68:'coordinate rotation',G69:'rotation / tilted plane off',G73:'high-speed peck drilling',G74:'left-hand tapping',
-  G76:'fine boring',G80:'canned cycle off',G81:'drilling cycle',G82:'drilling with dwell at bottom',G83:'peck drilling',
-  G84:'tapping cycle',G85:'boring, feed out',G86:'boring, spindle stop, rapid out',G87:'back boring',G88:'boring, dwell, manual out',
-  G89:'boring, dwell, feed out',G90:'absolute coordinates',G91:'incremental coordinates',G92:'set coordinate system / spindle limit',
-  G94:'feed per minute',G95:'feed per revolution',G96:'constant surface speed',G97:'constant spindle rpm',
-  G98:'return to initial level (mill) / feed per minute (lathe)',G99:'return to R level (mill) / feed per revolution (lathe)',
-  'G68.2':'tilted working plane (3+2)','G43.4':'tool centre point control (TCP)','G54.1':'additional work offset',
-  M0:'program stop',M1:'optional stop',M2:'program end',M3:'spindle on clockwise',M4:'spindle on counter-clockwise',M5:'spindle stop',
-  M6:'tool change',M7:'mist coolant',M8:'coolant on',M9:'coolant off',M19:'spindle orientation',M30:'program end and rewind',
-  M97:'local subprogram call (Haas)',M98:'subprogram call',M99:'subprogram end / return'};
-const DEC_LATHE={G70:'finishing cycle',G71:'stock removal, turning',G72:'stock removal, facing',G73:'pattern repeating',
-  G74:'face grooving / peck drilling',G75:'OD/ID grooving',G76:'threading cycle',G32:'thread cutting',G92:'threading cycle / spindle limit',
-  G98:'feed per minute',G99:'feed per revolution',G50:'maximum spindle speed (with S)'};
-const DEC_SINU={G0:'rapid',G1:'linear at feed',G2:'arc CW',G3:'arc CCW',G4:'dwell (F seconds / S revolutions)',G17:'XY plane',G18:'ZX plane',G19:'YZ plane',
-  G40:'cutter comp off',G41:'cutter comp left',G42:'cutter comp right',G53:'suppress frames, this block',G54:'work offset 1',G55:'work offset 2',
-  G56:'work offset 3',G57:'work offset 4',G90:'absolute',G91:'incremental',G94:'feed per minute',G95:'feed per revolution',G96:'constant cutting speed',
-  G97:'constant rpm',G450:'outside corners with an arc',G451:'outside corners at the intersection',G500:'work offsets off',G64:'continuous-path mode',
-  G60:'exact stop',G70:'inch',G71:'metric',M3:'spindle CW',M4:'spindle CCW',M5:'spindle stop',M6:'tool change',M8:'coolant on',M9:'coolant off',
-  M17:'subprogram end',M30:'program end',
-  TRANS:'programmable offset, replaces',ATRANS:'programmable offset, additive',ROT:'rotation, replaces',AROT:'rotation, additive',
-  MIRROR:'mirroring',SCALE:'scaling',SUPA:'suppress all frames, this block',TRAORI:'5-axis transformation on',TRAFOOF:'transformations off',
-  CYCLE800:'swivel plane (3+2)',CYCLE81:'drilling',CYCLE82:'drilling with dwell',CYCLE83:'deep-hole drilling',CYCLE84:'rigid tapping',
-  CYCLE85:'boring 1',CYCLE86:'boring 2',CYCLE95:'stock removal (turning)',CYCLE97:'thread cutting',CYCLE832:'high-speed settings',
-  LIMS:'spindle speed limit for G96',DIAMON:'X in diameter',DIAMOF:'X in radius',CIP:'arc through an intermediate point',
-  CT:'tangential arc',RND:'rounding',CHF:'chamfer',GOTOF:'jump forward',GOTOB:'jump back',NORM:'straight approach with comp',
-  KONT:'approach round the contour with comp',OFFN:'contour offset'};
-const DEC_HH={L:'straight line',C:'circle about CC',CC:'circle centre',CR:'circle with radius',CT:'tangential arc',RND:'rounding',CHF:'chamfer',
-  FMAX:'rapid',R0:'no radius compensation',RL:'radius compensation left',RR:'radius compensation right',
-  'TOOL CALL':'tool call (number, axis, spindle speed)','CYCL DEF':'cycle definition','CYCL CALL':'call the cycle','LBL':'label',
-  'CALL LBL':'call a label (subprogram)','CALL PGM':'call a program',PLANE:'tilted working plane','M91':'coordinates in machine datum',
-  'M92':'coordinates in machine-builder datum','M128':'tool centre point (TCPM)','FUNCTION TCPM':'tool centre point',
-  'APPR':'approach the contour','DEP':'depart the contour','STOP':'program stop','BLK FORM':'workpiece blank',
-  M3:'spindle CW',M4:'spindle CCW',M5:'spindle stop',M8:'coolant on',M9:'coolant off',M30:'program end'};
-const DEC_ADDR={X:'X coordinate',Y:'Y coordinate',Z:'Z coordinate',U:'incremental X / dwell',W:'incremental Z',A:'A rotary',B:'B rotary',C:'C rotary',
-  I:'arc centre X',J:'arc centre Y',K:'arc centre Z',R:'radius / R level',F:'feed',S:'spindle speed',T:'tool',D:'radius offset number',
-  H:'length offset number',P:'dwell / program / parameter',Q:'peck depth / parameter',L:'repeat count',N:'block number',O:'program number'};
-
-function decodeLine(code,dialect,proc){
-  const out=[];
-  let up=String(code||'').toUpperCase();
-  up=up.replace(/\([^)]*\)/g,' ');
-  if(dialect==='sinumerik'||dialect==='hhiso') up=up.replace(/;.*$/,'');
-  if(dialect==='heidenhain'){
-    up=up.replace(/;.*$/,'');
-    ['TOOL CALL','CYCL DEF','CYCL CALL','CALL LBL','CALL PGM','BLK FORM','FUNCTION TCPM','PLANE','APPR','DEP','LBL','STOP'].forEach(k=>{
-      if(up.includes(k)){ out.push([k,DEC_HH[k]]); up=up.replace(k,' '); }
-    });
-    (up.match(/\b(L|CC|CR|CT|C|RND|CHF|FMAX|R0|RL|RR|M\d+)\b/g)||[]).forEach(k=>{ if(DEC_HH[k]&&!out.some(o=>o[0]===k)) out.push([k,DEC_HH[k]]); });
-    (up.match(/\b([XYZIJKABC])\s*([+-]?[\d.]+)/g)||[]).forEach(t=>out.push([t.replace(/\s/g,''),DEC_ADDR[t[0]]]));
-    const f=/\bF\s*([\d.]+)/.exec(up); if(f) out.push(['F'+f[1],'feed']);
-    return out;
-  }
-  const lathe=(proc==='turn');
-  const dict=dialect==='sinumerik'?DEC_SINU:DEC_ISO;
-  /* Sinumerik spindle numbers: S<n>= is the speed of spindle n, M<n>=3/4/5 starts spindle n CW / CCW or stops it,
-     SETMS(n) makes spindle n the master. They are taken out first so that M2=3 is not read as a program end. */
-  if(dialect==='sinumerik'){
-    const spRe=/\b([SM])(\d+)\s*=\s*([+-]?\d*\.?\d+)/g; let sm;
-    while((sm=spRe.exec(up))){
-      const n=+sm[2], v=+sm[3];
-      const d=sm[1]==='S'?'speed of spindle '+n:v===3?'spindle '+n+' CW':v===4?'spindle '+n+' CCW':v===5?'spindle '+n+' stop':'spindle '+n+' function '+v;
-      out.push([sm[1]+n+'='+sm[3],d]);
-    }
-    up=up.replace(spRe,' ');
-    /* the parentheses were removed above, so SETMS(n) is read from the original text */
-    const smx=/\bSETMS\s*(?:\(\s*(\d+)\s*\))?/i.exec(String(code||''));
-    if(smx){ out.push(['SETMS'+(smx[1]?'('+smx[1]+')':''),'master spindle = spindle '+(smx[1]||1)+' (plain S and M go to it)']); up=up.replace(/\bSETMS\b/g,' '); }
-  }
-  (up.match(/\b[A-Z_][A-Z0-9_]{2,}\b/g)||[]).forEach(k=>{ if(DEC_SINU[k]&&dialect==='sinumerik'&&!out.some(o=>o[0]===k)) out.push([k,DEC_SINU[k]]); });
-  const re=/(?:^|[^A-Z0-9_])([A-Z])\s*=?\s*([+-]?\d*\.?\d+)/g; let m;
-  while((m=re.exec(up))){
-    const A=m[1], v=m[2], n=parseFloat(v);
-    if(A==='G'||A==='M'){
-      const key=A+(Number.isInteger(n)?n:v.replace(/^0+(?=\d)/,''));
-      const k2=A+String(+n);
-      const d=(A==='G'&&lathe&&DEC_LATHE[k2])||dict[key]||dict[k2]||DEC_ISO[k2];
-      out.push([A+v,d||(A==='G'?'G code (control- or machine-specific)':'M code (machine-specific)')]);
-    }else if(DEC_ADDR[A]) out.push([A+v,DEC_ADDR[A]]);
-  }
-  return out;
-}
-
-/* ---- the machine state at a line, from the simulation ---- */
-/* rows of a Sinumerik spindle table; the master's speed and CSS flag come from the segment (they change with G96 too) */
+/* rows of a Sinumerik spindle table (used by the spindle display) */
 function spindleRows(spx,s){
   return spx.map(e=>{ const m=e.master;
     return {n:e.n,master:m,v:(m?s.s:e.s)||0,css:!!(m?s.css:e.css),dir:e.dir}; });
-}
-function stateAtLine(line){
-  if(!RESULT||!TRACE.length) return null;
-  let i=TRACE.findIndex(t=>t.l===line);
-  if(i<0) return null;
-  const at=TRACE[i].at, from=i>0?TRACE[i-1].at:0;
-  const moves=at-from, s=SEGS[Math.max(0,Math.min(SEGS.length-1,at-1))];
-  if(!s) return {moves:0,passes:TRACE.filter(t=>t.l===line).length};
-  let pos=null;
-  try{ const q=matApply(matInv(s.Wm),{x:s.x2,y:s.y2,z:s.z2}); pos=q; }catch(e){}
-  const fr=(RESULT.frames||[])[s.fi];
-  const ws=(RESULT.waits||[]).filter(w=>w.l===line&&w.t>0);
-  return {moves,passes:TRACE.filter(t=>t.l===line).length,tool:s.tool,f:s.f,fm:s.fm,s:s.s,css:s.css,rpm:s.rpm,spx:(s.spx&&s.spx.length>1?s.spx:null),
-    wcs:s.wcs,comp:s.comp,cr:s.cr,plane:fr?fr.label:'',t:s.t,pos,proc:s.proc,time:(TIMES[Math.max(0,at-1)]||0),
-    waits:ws.map(w=>(w.k==='tc'?'tool change':'dwell')+' '+(+w.t.toFixed(2))+' s')};
-}
-function stateText(st){
-  if(!st) return 'not reached by the simulation (skipped, or not a motion/modal block)';
-  const f=v=>(+(+v).toFixed(3));
-  const p=[];
-  if(st.passes>1) p.push('executed '+st.passes+' times (loop or subprogram)');
-  p.push('moves generated by this block: '+st.moves);
-  if(st.tool!==undefined) p.push('tool in spindle: T'+st.tool);
-  if(st.t) p.push('last move type: '+st.t);
-  p.push('feed: '+(st.f>0?f(st.f)+(st.fm==='rev'?' mm/rev':' mm/min'):'none/rapid'));
-  p.push('spindle: '+(st.s>0?(st.css?Math.round(st.s)+' m/min CSS'+(st.rpm?' (\u2248'+Math.round(st.rpm)+' rpm here)':''):Math.round(st.s)+' rpm'):'off'));
-  if(st.spx&&st.spx.length>1) p.push('spindles: '+spindleRows(st.spx,st).map(r=>'S'+r.n+(r.master?' (master)':'')+' '+
-    (r.v>0?Math.round(r.v)+(r.css?' m/min':' rpm'):'off')+(r.dir==='cw'?' CW':r.dir==='ccw'?' CCW':'')).join('; '));
-  if(st.wcs) p.push('work offset: '+st.wcs);
-  p.push('radius compensation: '+(st.comp?(st.comp===41||st.comp==='L'||st.comp<0?'left':'right')+', r='+f(st.cr):'off'));
-  if(st.plane) p.push('plane/frame: '+st.plane);
-  if(st.pos) p.push('position after block (program coords, mm): X'+f(st.pos.x)+' Y'+f(st.pos.y)+' Z'+f(st.pos.z));
-  p.push('elapsed time at end of block: '+anaTm(st.time));
-  if(st.waits.length) p.push('standing time: '+st.waits.join(', '));
-  return p.join('; ');
-}
-function dialectName(){ const s=document.getElementById('dialect'); return s.options[s.selectedIndex].text; }
-function procName(){ const m=(RESULT&&RESULT.mode)||'mill'; return PROCNAME[m]||m; }
-function codeLines(){ return codeEl.value.split(/\r?\n/); }
-function msgsFor(a,b){ return RESULT?(RESULT.msgs||[]).filter(m=>m.line>=a&&m.line<=b).map(m=>'line '+m.line+': '+m.text):[]; }
-
-/* ---- building the question ---- */
-function askLine(line){
-  const L=codeLines(), code=(L[line-1]||'').trim();
-  const a=Math.max(1,line-8), b=Math.min(L.length,line+4);
-  const ctx=L.slice(a-1,b).map((t,k)=>(a+k===line?'>> ':'   ')+(a+k)+': '+t).join('\n');
-  const st=stateAtLine(line), ms=msgsFor(line,line);
-  const prompt='Control: '+dialectName()+'. Process: '+procName()+'.\nExplain line '+line+': '+code+
-    '\n\nSurrounding code (>> marks the line):\n'+ctx+
-    '\n\nSimulation state at this line: '+stateText(st)+
-    (ms.length?'\nBackplotter messages for this line: '+ms.join(' | '):'');
-  aiOpen({title:'Line '+line,sub:code,decode:decodeLine(code,document.getElementById('dialect').value,st&&st.proc),state:st,prompt,line});
-}
-function askRange(a,b,title){
-  const L=codeLines(); b=Math.min(b,L.length); if(b<a) return;
-  const cut=Math.min(b,a+149);
-  const body=L.slice(a-1,cut).map((t,k)=>(a+k)+': '+t).join('\n');
-  const st0=stateAtLine(a), st1=stateAtLine(cut), ms=msgsFor(a,cut);
-  const prompt='Control: '+dialectName()+'. Process: '+procName()+'.\nExplain what this section does, step by step '+
-    '(group the blocks; do not explain every line separately):\n'+body+(cut<b?'\n... ('+(b-cut)+' more lines not shown)':'')+
-    '\n\nState at the start: '+stateText(st0)+'\nState at the end: '+stateText(st1)+
-    (ms.length?'\nBackplotter messages: '+ms.slice(0,12).join(' | '):'');
-  aiOpen({title:title||('Lines '+a+'\u2013'+b),sub:(b-a+1)+' lines',prompt,line:a});
-}
-function askProgram(){
-  const L=codeLines(), n=L.length, r=RESULT||{};
-  const head=L.slice(0,Math.min(n,220)).map((t,k)=>(k+1)+': '+t).join('\n');
-  const tools=(r.waits||[]).filter(w=>w.k==='tc').map(w=>'T'+w.tool+' at line '+w.l).join(', ');
-  const prompt='Control: '+dialectName()+'. Process: '+procName()+'.\nGive an overview of this NC program: what part/features it seems to make, '+
-    'the sequence of operations per tool, and anything that looks risky or unusual.\n\nStats: '+n+' lines, '+
-    'cycle time '+anaTm(r.time||0)+', tool changes: '+(tools||'none')+', cutting '+fmtLen(r.cutLen||0)+', rapid '+fmtLen(r.rapidLen||0)+'.'+
-    ((r.msgs||[]).length?'\nBackplotter messages: '+r.msgs.slice(0,15).map(m=>'line '+m.line+': '+m.text).join(' | '):'')+
-    '\n\nProgram'+(n>220?' (first 220 lines)':'')+':\n'+head;
-  aiOpen({title:'Whole program',sub:n+' lines',prompt});
-}
-function askMsg(text,line){
-  const L=codeLines();
-  const ctx=line?L.slice(Math.max(0,line-6),Math.min(L.length,line+3)).map((t,k)=>(Math.max(1,line-5)+k)+': '+t).join('\n'):'';
-  const prompt='Control: '+dialectName()+'. Process: '+procName()+'.\nThe backplotter reported: "'+text+'"'+(line?' at line '+line:'')+
-    '. Explain what it means, whether it matters on a real machine, and how to fix the code if needed.'+
-    (ctx?'\n\nCode around it:\n'+ctx:'')+(line?'\n\nSimulation state: '+stateText(stateAtLine(+line)):'');
-  aiOpen({title:'Message'+(line?' \u00b7 line '+line:''),sub:text,prompt,line});
-}
-function toolSection(line){
-  const tcs=(RESULT&&RESULT.waits||[]).filter(w=>w.k==='tc').map(w=>w.l).sort((a,b)=>a-b);
-  if(!tcs.length) return null;
-  let a=tcs.filter(l=>l<=line).pop(); if(a===undefined) a=tcs[0];
-  const nx=tcs.find(l=>l>a);
-  return {a,b:nx?nx-1:codeLines().length};
-}
-
-/* ---- the context menu ---- */
-let ctxEl=null;
-function ctxClose(){ if(ctxEl){ ctxEl.remove(); ctxEl=null; } }
-function ctxOpen(x,y,items){
-  ctxClose();
-  const m=document.createElement('div'); m.className='ctxm'; m.setAttribute('role','menu');
-  items.forEach(it=>{
-    if(it==='-'){ const h=document.createElement('hr'); m.appendChild(h); return; }
-    const b=document.createElement('button'); b.type='button'; b.setAttribute('role','menuitem');
-    b.innerHTML=(it.ai?'<span class="ai-mk">AI</span>':'<span class="ai-mk sp"></span>')+esc(it.label)+(it.hint?'<small>'+esc(it.hint)+'</small>':'');
-    b.onclick=()=>{ ctxClose(); it.run(); };
-    m.appendChild(b);
-  });
-  const foot=document.createElement('div'); foot.className='ctxm-foot'; foot.textContent='Shift + right-click: browser menu';
-  m.appendChild(foot);
-  document.body.appendChild(m); ctxEl=m;
-  const r=m.getBoundingClientRect();
-  m.style.left=Math.max(4,Math.min(x,innerWidth-r.width-4))+'px';
-  m.style.top=Math.max(4,Math.min(y,innerHeight-r.height-4))+'px';
-  const f=m.querySelector('button'); if(f) f.focus();
-}
-window.addEventListener('pointerdown',e=>{ if(ctxEl&&!ctxEl.contains(e.target)) ctxClose(); },true);
-window.addEventListener('keydown',e=>{ if(e.key==='Escape'){ ctxClose(); } });
-window.addEventListener('blur',ctxClose);
-window.addEventListener('resize',ctxClose);
-
-codeEl.addEventListener('contextmenu',e=>{
-  if(e.shiftKey) return;
-  e.preventDefault();
-  const r=codeEl.getBoundingClientRect(), L=codeLines();
-  const line=Math.max(1,Math.min(L.length,Math.floor((e.clientY-r.top-PAD+codeEl.scrollTop)/LH)+1));
-  const s0=codeEl.selectionStart, s1=codeEl.selectionEnd;
-  const la=codeEl.value.slice(0,s0).split('\n').length, lb=codeEl.value.slice(0,Math.max(s0,s1-1)).split('\n').length;
-  const items=[{label:'Explain line '+line,hint:(L[line-1]||'').trim().slice(0,28),ai:true,run:()=>askLine(line)}];
-  if(s1>s0&&lb>la) items.push({label:'Explain selected lines '+la+'\u2013'+lb,ai:true,run:()=>askRange(la,lb)});
-  const ts=toolSection(line);
-  if(ts&&ts.b-ts.a>0) items.push({label:'Explain this tool\u2019s section',hint:'lines '+ts.a+'\u2013'+ts.b,ai:true,run:()=>askRange(ts.a,ts.b,'Tool section \u00b7 lines '+ts.a+'\u2013'+ts.b)});
-  items.push({label:'Explain the whole program',ai:true,run:askProgram});
-  items.push('-');
-  items.push({label:'Show line '+line+' in the simulation',run:()=>{ seekToLine(line); setActiveLine(line,true,true); }});
-  items.push({label:'Copy line',run:()=>{ try{ navigator.clipboard.writeText(L[line-1]||''); }catch(err){} }});
-  ctxOpen(e.clientX,e.clientY,items);
-});
-document.getElementById('msgs').addEventListener('contextmenu',e=>{
-  const el=e.target.closest('#msgs > div'); if(!el||e.shiftKey) return;
-  e.preventDefault();
-  const line=el.dataset.line?+el.dataset.line:0;
-  const text=el.textContent.replace(/^line \d+:\s*/,'');
-  const items=[{label:'Explain this message',ai:true,run:()=>askMsg(text,line)}];
-  if(line) items.push({label:'Explain line '+line,ai:true,run:()=>askLine(line)},'-',{label:'Go to line '+line,run:()=>gotoLine(line)});
-  ctxOpen(e.clientX,e.clientY,items);
-});
-document.addEventListener('contextmenu',e=>{
-  const cv2=e.target.closest&&e.target.closest('.ana-g canvas'); if(!cv2||e.shiftKey) return;
-  e.preventDefault();
-  const g=cv2.parentNode.dataset.g, i=anaIdxAt(g,cv2,e.clientX); if(i<0) return;
-  const s=SEGS[i], A=ANA.data;
-  const inWait=(ANA.xmode==='time'&&ANA.lastX<A.TS[i]&&ANA.lastX>=A.T[i]);
-  const items=[{label:'Explain line '+s.line,hint:inWait?'standing time':(g==='feed'?anaFeedTxt(s):anaSpinTxt(s)),ai:true,run:()=>askLine(s.line)}];
-  const ts=toolSection(s.line);
-  if(ts) items.push({label:'Explain this tool\u2019s section',hint:'lines '+ts.a+'\u2013'+ts.b,ai:true,run:()=>askRange(ts.a,ts.b,'Tool section \u00b7 lines '+ts.a+'\u2013'+ts.b)});
-  items.push('-',{label:'Go to line '+s.line,run:()=>anaJump(i)});
-  ctxOpen(e.clientX,e.clientY,items);
-});
-
-/* ---- the panel ---- */
-let aiEl=null;
-function aiPanel(){
-  if(aiEl) return aiEl;
-  const p=document.createElement('section'); p.id='aipanel'; p.setAttribute('aria-label','Explanation');
-  p.innerHTML='<header><div><b class="ai-t"></b><code class="ai-s"></code></div>'+
-    '<select class="ai-lang" title="Answer language"><option value="en">English</option><option value="ro">Română</option></select>'+
-    '<button type="button" class="ai-set" title="AI connection">\u2699</button><button type="button" class="ai-x" title="Close (Esc)">\u2715</button></header>'+
-    '<div class="ai-cfg" hidden><p>Explanations come from Google Gemini. On cnctool.vercel.app they go through the site\u2019s '+
-    '<code>/api/explain</code> function; set <code>GEMINI_API_KEY</code> in the Vercel project. Or keep a Gemini API key '+
-    '(from aistudio.google.com) in this browser only:</p>'+
-    '<div class="row"><input type="password" class="ai-key" placeholder="AIza\u2026" autocomplete="off"><button type="button" class="ai-save">Save</button>'+
-    '<button type="button" class="ai-clear">Forget</button></div><p class="ai-route"></p></div>'+
-    '<div class="ai-b"></div>';
-  document.body.appendChild(p); aiEl=p;
-  const lang=p.querySelector('.ai-lang'); lang.value=AI.lang;
-  lang.onchange=()=>{ AI.lang=lang.value; try{ localStorage.setItem('bp.ai.lang',AI.lang); }catch(e){} if(AI.last) aiRun(AI.last); };
-  p.querySelector('.ai-x').onclick=()=>{ p.hidden=true; };
-  p.querySelector('.ai-set').onclick=()=>{ const c=p.querySelector('.ai-cfg'); c.hidden=!c.hidden; aiRouteText(); };
-  const key=p.querySelector('.ai-key'); key.value=AI.key?'\u2022'.repeat(12):'';
-  p.querySelector('.ai-save').onclick=()=>{ const v=key.value.trim(); if(v&&!/^\u2022+$/.test(v)){ AI.key=v; try{ localStorage.setItem('bp.ai.gkey',v); }catch(e){} key.value='\u2022'.repeat(12); AI.route=null; aiRouteText(); if(AI.last) aiRun(AI.last); } };
-  p.querySelector('.ai-clear').onclick=()=>{ AI.key=''; key.value=''; try{ localStorage.removeItem('bp.ai.gkey'); }catch(e){} AI.route=null; aiRouteText(); };
-  window.addEventListener('keydown',e=>{ if(e.key==='Escape'&&aiEl&&!aiEl.hidden&&!ctxEl) aiEl.hidden=true; });
-  return p;
-}
-function aiRouteText(){
-  const r=aiEl&&aiEl.querySelector('.ai-route'); if(!r) return;
-  r.textContent=AI.key?'Using the Gemini key saved in this browser.':(AI.route==='site'?'Using the site\u2019s /api/explain function.':
-    'No connection tested yet.');
-}
-function aiOpen(q){
-  const p=aiPanel(); p.hidden=false;
-  AI.last=q;
-  p.querySelector('.ai-t').textContent=q.title;
-  p.querySelector('.ai-s').textContent=q.sub||'';
-  let h='';
-  if(q.decode&&q.decode.length) h+='<div class="ai-dec">'+q.decode.map(d=>'<span><code>'+esc(d[0])+'</code>'+esc(d[1]||'')+'</span>').join('')+'</div>';
-  if(q.state) h+='<div class="ai-st">'+aiStateHtml(q.state)+'</div>';
-  h+='<div class="ai-ans"></div>';
-  p.querySelector('.ai-b').innerHTML=h;
-  aiRun(q);
-}
-function aiStateHtml(st){
-  const f=v=>(+(+v).toFixed(3)), bits=[];
-  if(st.tool!==undefined) bits.push('T'+st.tool);
-  if(st.f>0) bits.push('F '+f(toU(st.f,st.fm==='rev'?4:0))+(st.fm==='rev'?' '+ul()+'/rev':' '+ulf()));
-  if(st.s>0) bits.push(st.css?'Vc '+Math.round(st.s)+(st.rpm?' \u2192 '+Math.round(st.rpm)+' rpm':''):'S '+Math.round(st.s)+' rpm');
-  if(st.wcs) bits.push(st.wcs);
-  if(st.comp) bits.push('comp r'+f(st.cr));
-  bits.push('t '+anaTm(st.time));
-  st.waits.forEach(w=>bits.push(w));
-  if(st.passes>1) bits.push('runs '+st.passes+'\u00d7');
-  return bits.map(b=>'<span>'+esc(b)+'</span>').join('');
-}
-function aiMd(t){
-  let h=esc(t);
-  h=h.replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>').replace(/`([^`]+)`/g,'<code>$1</code>');
-  const lines=h.split(/\n/); let out='', inL=false;
-  lines.forEach(l=>{
-    const m=/^\s*[-*\u2022]\s+(.*)$/.exec(l);
-    if(m){ if(!inL){ out+='<ul>'; inL=true; } out+='<li>'+m[1]+'</li>'; return; }
-    if(inL){ out+='</ul>'; inL=false; }
-    if(l.trim()) out+='<p>'+l+'</p>';
-  });
-  if(inL) out+='</ul>';
-  return out;
-}
-async function aiRun(q){
-  const box=aiEl&&aiEl.querySelector('.ai-ans'); if(!box) return;
-  const ck=AI.lang+'|'+q.prompt;
-  if(AI.cache.has(ck)){ box.innerHTML=aiMd(AI.cache.get(ck)); return; }
-  const my=++AI.busy;
-  box.innerHTML='<p class="ai-wait"><i></i>Asking Gemini\u2026</p>';
-  try{
-    const txt=await aiCall(q.prompt,AI.lang);
-    AI.cache.set(ck,txt);
-    if(my===AI.busy&&AI.last===q) box.innerHTML=aiMd(txt);
-  }catch(err){
-    if(my!==AI.busy) return;
-    box.innerHTML='<p class="ai-err">'+esc(err.message||String(err))+'</p>'+
-      '<p class="hint">The quick decode above works offline. To get AI explanations, open \u2699 and set up the connection.</p>';
-  }
-}
-const GEMINI_MODELS=['gemini-3.1-flash-lite','gemini-3.8-flash','gemini-2.5-flash'];
-async function aiDirect(prompt,lang,key){
-  let lastErr=null;
-  for(const model of GEMINI_MODELS){
-    const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+model+':generateContent',{method:'POST',
-      headers:{'Content-Type':'application/json','x-goog-api-key':key},
-      body:JSON.stringify({systemInstruction:{parts:[{text:AI_SYS(lang)}]},
-        contents:[{role:'user',parts:[{text:prompt}]}],generationConfig:{maxOutputTokens:1500,temperature:0.3}})});
-    const j=await r.json().catch(()=>({}));
-    if(r.status===404){ lastErr=new Error('Gemini model '+model+' is not available'); continue; }   // retired: try the next
-    if(!r.ok) throw new Error('Gemini API: '+((j.error&&j.error.message)||('HTTP '+r.status)));
-    const c=(j.candidates||[])[0];
-    const t=c&&c.content&&(c.content.parts||[]).map(p=>p.text||'').join('').trim();
-    if(!t) throw new Error('Gemini returned no text'+(c&&c.finishReason?' ('+c.finishReason+')':''));
-    return t;
-  }
-  throw lastErr||new Error('No Gemini model answered');
-}
-async function aiSite(prompt,lang){
-  const r=await fetch('/api/explain',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt,lang})});
-  if(r.status===404||r.status===405) { const e=new Error('no site function'); e.skip=true; throw e; }
-  const j=await r.json().catch(()=>({}));
-  if(r.status===501){ const e=new Error(j.error||'GEMINI_API_KEY is not set on the server'); e.skip=true; throw e; }
-  if(!r.ok) throw new Error((j.error)||('Explain function: HTTP '+r.status));
-  return String(j.text||'').trim();
-}
-async function aiCall(prompt,lang){
-  if(AI.key) return aiDirect(prompt,lang,AI.key);
-  if(/^https?:$/.test(location.protocol)){
-    try{ const t=await aiSite(prompt,lang); AI.route='site'; return t; }
-    catch(e){ if(!e.skip) throw e;
-      throw new Error('AI is not connected here'+(e.message!=='no site function'?' ('+e.message+')':'')+
-        '. Set GEMINI_API_KEY in Vercel for /api/explain, or save a Gemini API key under \u2699.'); }
-  }
-  throw new Error('AI is not connected here. Save a Gemini API key under \u2699 (get one free at aistudio.google.com).');
 }
 
 /* the page opens on the parametric milling macro */
