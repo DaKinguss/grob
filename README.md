@@ -3,9 +3,9 @@
 Live: https://sosgrob.vercel.app
 
 A browser tool for GROB machining centres with a SINUMERIK 840D sl control:
-- 3D backplot of Sinumerik programs (playback, measure, DXF, tools, analytics, right-click explanations)
+- 3D backplot of Sinumerik programs (playback, measure, DXF, tools, analytics, right-click line decode)
 - ESPRIT ListCL (`.lst`, `.cl`) and APT CLS (`.cls`) → Sinumerik program
-- 3D model (STEP, IGES, STL) shown under the toolpath
+- 3D model (STEP, IGES, STL) shown under the toolpath, section view, collision check against the model
 
 Single-file app: `src/cnc-backplot.html`. All edits are made there.
 
@@ -16,7 +16,6 @@ Single-file app: `src/cnc-backplot.html`. All edits are made there.
 | `src/cnc-backplot.html` | The application source, readable. Never served. |
 | `build.js` | Stamps the build time, minifies the script with terser → `public/index.html`. |
 | `protect.mjs` | Domain lock + obfuscation of `public/*.html`. |
-| `api/explain.mjs` | Vercel function for the right-click AI explanations (Google Gemini). |
 | `vercel.json` | Build command, output folder `public`, security headers. |
 | `assets/` | Icon sources (SVG, 180 px PNG); the page carries them inline. |
 | `local/GROB-Backplot.bat` | Opens the source in a browser on your PC. Not protected, not to be distributed. |
@@ -46,9 +45,6 @@ Single-file app: `src/cnc-backplot.html`. All edits are made there.
      default in `protect.mjs`. Set it only to add or change addresses (comma-separated, wildcards
      like `*.gearmoto.ro`); a value here replaces the default, so include `sosgrob.vercel.app`.
      Any other address (including Vercel's preview URLs) shows "This copy is not licensed to run here".
-   - `GEMINI_API_KEY` = key from aistudio.google.com/apikey (put a spend limit on it). Optional:
-     without it the offline decode still works, the AI part says it is not connected.
-   - `GEMINI_MODEL` optional, tried first.
 4. **Deploy**. Every push to `main` deploys again.
 
 Custom domain (e.g. `backplot.gearmoto.ro`): add it to `CNC_ALLOWED_HOSTS` **first**, redeploy,

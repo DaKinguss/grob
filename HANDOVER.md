@@ -1,6 +1,6 @@
 # Sinumerik Backplot · GROB — technical handover
 
-Version 1.4.1 · October 2026 · derived from CNC Tools 3.41 · live: https://sosgrob.vercel.app
+Version 1.7 · 25 October 2026 · derived from CNC Tools 3.41 · live: https://sosgrob.vercel.app
 Application: `src/cnc-backplot.html` (single file, same layout and build as CNC Tools)
 
 ## 1. Scope
@@ -188,3 +188,69 @@ another host and a file:// copy are refused.
 ## 14. Version 1.4.1
 
 - The "Tool axis: GROB A/B" label is removed from the view toolbar (the GROB A/B tool axis is still used).
+
+## 15. Version 1.5: blank and material removal
+
+- **▣ Blank…** (view toolbar) opens a menu: *Open blank file (STEP / IGES / STL)…*, *Block around the
+  part*, *Cylinder around the part*. The 3D model tab has a **Blank** section: the same three, the
+  allowance per side (mm), the cylinder axis (automatic = the shortest side, or X / Y / Z), show,
+  opacity, colour, Remove. A blank from a file is placed like the part (CL part frame or as in the
+  file); a generated blank is made around the part, or around the cutting moves when there is no part.
+  The blank is drawn see-through (it does not hide the part or the path).
+- **material removal** (toolbar switch, also in the 3D model tab with the detail Coarse / Normal / Fine
+  = 120 / 180 / 260 cells on the longest side). The blank becomes a voxel grid (filled by casting
+  columns through the blank's surface); every cutting move removes the cells inside the tool swept
+  along it, with that move's tool axis, so 3-axis, 3+2 and 5-axis all cut. Tool shape from the Tools
+  tab (diameter, corner radius; the cutting length is the tool length, at most 2 x diameter). Rapid
+  moves and SUPA moves do not cut. The surface is rebuilt as cell faces: cut faces light blue, the
+  untouched blank in its colour; the section view cuts it too. It follows the simulation: playing
+  forward cuts incrementally (time-sliced, the page stays responsive), going back restarts from the
+  blank. A new plot, a tool change in the Tools tab, or a new blank restarts it.
+  Measured on the GROB sample (19,174 moves, 180 cells): about 1.2 s of cutting in total, 0.3 s per
+  surface rebuild.
+- Tool sizes from the ESPRIT CL (Tool Diameter, ChamferAngle/Tool Radius, Tool Length) go to the Tools
+  tab when the CL is plotted / converted (they win over sizes guessed from comments; tools set by hand
+  are kept). Note: the sample CL uses T5 for two different tools; the tool table holds one per number.
+- Fix: playback in the undocked window did not advance (the frame time stamps of the other window run
+  on that window's clock); the playback now times itself with `performance.now()`.
+
+## 16. Version 1.6 (25 October 2026)
+
+- **Blank and material removal removed** (everything from 1.5: the Blank button and menu, the blank
+  section of the 3D model tab, the material-removal switch and the voxel code). The 3D view is back to
+  the part model, the toolpath and the section view, as in 1.4.1.
+- Kept from 1.5: tool sizes from the ESPRIT CL go to the Tools tab; the playback fix for the undocked
+  window.
+- **AI removed.** No Gemini, no API key, no `/api/explain`: `api/explain.mjs` is deleted, its entry in
+  `vercel.json` is gone, the Content-Security-Policy no longer allows `generativelanguage.googleapis.com`,
+  `GEMINI_API_KEY` / `GEMINI_MODEL` are no longer used (they can be deleted in Vercel). The right-click
+  menu on a line now offers **Decode line N** (the offline meaning of each word and the machine state at
+  that line, from the simulation), Show in the simulation, Copy line. Sections 5, 7 and 8 above that
+  mention the AI function are out of date on this point.
+- **Version stamp**: `APP_VERSION='1.6'`, shown in the header as "Version 1.6 · Last update: …"
+  (the date and time are stamped by build.js at each build); also `<meta name="version">`.
+- Checked: the GROB CL output is unchanged, Grob.nc and the examples plot without errors, the 3D model,
+  section, undock with playback and Clear path work; the protected build runs on sosgrob.vercel.app
+  with the security headers and refuses other hosts.
+
+## 17. Version 1.7: collision check against the 3D model
+
+- With a part model loaded, every move is checked against it (switch **collisions** in the view
+  toolbar, with the count; settings in the 3D model tab → **Collision check**: on/off, tolerance
+  (default 0.05 mm), holder Ø and length (default Ø40 × 60 mm, Ø 0 leaves it out), Go to the first).
+- How: the model (placed as shown) is sampled into points on its surface, spacing about 1/450 of its
+  size (0.35–2 mm, at most 2.5 million points), sorted into a grid. The tool profile of the Tools tab
+  (cutting part up to the tool length, shank above) plus the holder is moved along each move with the
+  move's tool axis, in steps of at most half the tool radius; a surface point inside the tool, beyond
+  the tolerance, marks the move. Kinds: cutting part in the model on a feed move = **gouge**; shank or
+  holder in the model = **shank / holder**; any rapid (or SUPA) move into the model = **rapid**.
+- Shown: the lines get a red band in the editor; Messages lists them first ("line N: collision – …",
+  click to go there); the moves are drawn red in 3D with a dot where the tool meets the model; an
+  event gives the count and the first line. The check runs in slices after every plot, model load,
+  placement change or tool change, with a progress figure, and does not block the page.
+- STEP / IGES are now tessellated finer (bounding-box ratio 0.0008, 0.1 rad) so curved faces are
+  closer to the true surface and finishing passes are not reported as gouges.
+- Fixes: loading an example resets the CL part frame (a model was placed with the last CL's frame);
+  1.6 had lost the key styles of the buttons when the AI panel styles were removed (restored).
+- Times (headless test machine): basic example + model 2 s; the GROB sample (19,174 moves) with a box
+  around the whole part (every move inside it, worst case) 15 s.
