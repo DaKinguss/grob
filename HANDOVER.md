@@ -1,6 +1,6 @@
 # Sinumerik Backplot · GROB — technical handover
 
-Version 1.7 · 25 October 2026 · derived from CNC Tools 3.41 · live: https://sosgrob.vercel.app
+Version 1.8 · 25 October 2026 · derived from CNC Tools 3.41 · live: https://sosgrob.vercel.app
 Application: `src/cnc-backplot.html` (single file, same layout and build as CNC Tools)
 
 ## 1. Scope
@@ -254,3 +254,26 @@ another host and a file:// copy are refused.
   1.6 had lost the key styles of the buttons when the AI panel styles were removed (restored).
 - Times (headless test machine): basic example + model 2 s; the GROB sample (19,174 moves) with a box
   around the whole part (every move inside it, worst case) 15 s.
+
+## 18. Version 1.8: exact collision check, no line menu
+
+- **Exact collision check** (replaces the surface-point sampling of 1.7). The tool is built from convex
+  solids: the cutting part by type (end mill = cylinder; ball = sphere + cylinder; bull nose = disc
+  thickened by the corner radius + cylinder; drill / chamfer = cone + cylinder; other types: cones and
+  cylinders from the tool profile), the shank (tool Ø, 3 × radius above the tool length) and the
+  holder (Ø and length from the 3D model tab). Each solid is swept along the move (the swept solid
+  is still convex: support point + the move where it points forward) and tested against every
+  triangle near it with GJK (Gilbert-Johnson-Keerthi), an exact intersection test between convex
+  shapes. Triangles are found through a grid of cells and a box test first.
+- 5-axis moves: the tool axis is turned from the previous move's axis to this move's in steps of at
+  most 0.25 deg (each step swept exactly with the mid axis).
+- Tolerance: the tool is shrunk by the tolerance (radius, corner radius, tip raised), so touching the
+  surface within the tolerance is not reported. Depth: for each touching triangle the largest shrink
+  that still touches is found by halving to about 0.001 mm; the deepest is reported ("deep, more than
+  R" when it is beyond the tool radius).
+- Tested: GJK against brute force on 3,000 random tool / triangle / move cases, all agree. An end mill
+  0.03 mm into a face (tolerance 0.05) is not reported, 0.06 mm is reported as 0.060 mm.
+- Speed (headless test machine): basic example 0.3 s; the GROB sample with an 80,000-triangle model
+  in the middle of every move (worst case) 18 s, in the background with a progress figure.
+- **No questioning on lines**: the right-click menu on the program lines, the messages and the
+  analytics graphs is removed with its decode panel; right-click gives the browser's normal menu.
